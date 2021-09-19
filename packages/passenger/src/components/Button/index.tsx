@@ -6,9 +6,7 @@ import {
   ViewStyle,
   StyleProp,
 } from 'react-native';
-import theme from '@theme';
-
-const { colors, layout, font, border } = theme;
+import { colors, layout, border, font } from '@dagdag/common/theme';
 
 interface IButton {
   text: string;

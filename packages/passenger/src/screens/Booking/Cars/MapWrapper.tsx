@@ -11,10 +11,8 @@ import DepIcon from '@assets/icons/ic_dest.svg';
 import ArrIcon from '@assets/icons/ic_dropoff.svg';
 import { metadataRouteState } from '@stores/route.atom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import theme from '@theme';
 import { StyleSheet } from 'react-native';
-
-const { colors } = theme;
+import { colors } from '@dagdag/common/theme';
 
 interface IMetadataRoute {
   distance: number;

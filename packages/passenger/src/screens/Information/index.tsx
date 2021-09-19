@@ -6,8 +6,7 @@ import {
   Platform,
   View,
 } from 'react-native';
-import theme from '@theme';
-import globalStyles from '@theme/styles';
+import globalStyles from '@theme/globalStyles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@internalTypes/navigation';
 import { useForm } from 'react-hook-form';
@@ -19,8 +18,7 @@ import { createUser } from '@services/user';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
-const { layout, font } = theme;
+import { layout, font } from '@dagdag/common/theme';
 
 interface IData {
   firstName: string;

@@ -8,7 +8,6 @@ import {
   Platform,
 } from 'react-native';
 import Button from '@components/Button';
-import theme from '@theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@internalTypes/navigation';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
@@ -19,12 +18,11 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import auth from '@react-native-firebase/auth';
-import globalStyles from '@theme/styles';
+import globalStyles from '@theme/globalStyles';
 import parsePhoneNumber from 'libphonenumber-js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
-
-const { layout, font, colors } = theme;
+import { colors, layout, font } from '@dagdag/common/theme';
 
 const Verification: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'verification'>

@@ -2,7 +2,6 @@ import CustomBottomSheet from '@components/CustomBottomSheet';
 import Button from '@components/Button';
 import React, { useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
-import theme from '@theme';
 import Car from './Car';
 import { CarType } from '@constants/car';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -14,10 +13,9 @@ import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import MapWrapper from './MapWrapper';
 import { metadataRouteState } from '@stores/route.atom';
+import { colors, layout, font } from '@dagdag/common/theme';
 
-const { colors, font, layout } = theme;
-
-const snapPoints = [380, '80%'];
+const snapPoints = [400, '80%'];
 
 const CarsImages = {
   economic: require('@assets/images/standard.png'),

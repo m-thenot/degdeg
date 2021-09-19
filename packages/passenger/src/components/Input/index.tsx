@@ -1,10 +1,8 @@
 import React from 'react';
 import { Text, TextInput, StyleSheet } from 'react-native';
-import theme from '@theme';
 import { Controller, Control, FieldValues } from 'react-hook-form';
 import { TextInputProps } from 'react-native';
-
-const { colors, layout, font, border } = theme;
+import { colors, layout, border, font } from '@dagdag/common/theme';
 
 interface IInput extends TextInputProps {
   label: string;

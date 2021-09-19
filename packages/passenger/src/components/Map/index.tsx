@@ -9,11 +9,9 @@ import {
 } from '@constants/maps';
 import React from 'react';
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
-import theme from '@theme';
 import { useRecoilValue } from 'recoil';
 import { currentPositionState } from '@stores/address.atom';
-
-const { layout } = theme;
+import { layout } from '@dagdag/common/theme';
 
 Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'fr' });
 
@@ -39,7 +37,7 @@ const Map: React.FC<IMap> = React.memo(
           }
         }
         provider={PROVIDER_GOOGLE}
-        mapPadding={{ top: 20, right: 20, bottom: 145, left: 20 }}
+        mapPadding={{ top: 20, right: 20, bottom: 165, left: 20 }}
         {...props}>
         {children}
       </MapView>

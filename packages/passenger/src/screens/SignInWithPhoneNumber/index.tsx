@@ -12,12 +12,10 @@ import auth from '@react-native-firebase/auth';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@internalTypes/navigation';
-import globalStyles from '@theme/styles';
+import globalStyles from '@theme/globalStyles';
 import { useHeaderHeight } from '@react-navigation/elements';
-import theme from '@theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const { layout, font, colors } = theme;
+import { colors, layout, font } from '@dagdag/common/theme';
 
 const SignInWithPhoneNumber: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'signInWithPhoneNumber'>

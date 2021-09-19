@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import theme from '@theme';
-
-const { colors, font } = theme;
+import { colors, font } from '@dagdag/common/theme';
 
 interface ILinkButton {
   text: string;

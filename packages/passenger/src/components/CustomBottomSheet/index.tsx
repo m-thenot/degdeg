@@ -1,9 +1,7 @@
 import React from 'react';
 import BottomSheet, { BottomSheetProps } from '@gorhom/bottom-sheet';
 import { View, StyleSheet } from 'react-native';
-import theme from '@theme';
-
-const { colors, border } = theme;
+import { colors, border } from '@dagdag/common/theme';
 
 const BottomSheetBackground = ({ style }) => {
   return <View style={[styles.bottomSheetBackground, { ...style }]} />;

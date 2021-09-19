@@ -1,11 +1,8 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import BackButton from './../../../assets/icons/left-arrow.svg';
-import MenuButton from './../../../assets/icons/ic_menu.svg';
-
-import theme from '@theme';
-
-const { colors, layout } = theme;
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import BackButton from '@assets/icons/left-arrow.svg';
+import MenuButton from '@assets/icons/ic_menu.svg';
+import { colors, layout } from '@dagdag/common/theme';
 
 interface IHeaderLeftProps {
   navigation: any;
@@ -25,7 +22,7 @@ export const BackHeader: React.FC<IBackHeaderProps> = ({
     <TouchableOpacity
       style={[styles.button, hasMargin && styles.margin]}
       onPress={() => (onPress ? onPress() : navigation.goBack())}>
-      <BackButton style={styles.icon} width={20} height={20} />
+      <BackButton style={styles.icon} width={18} height={18} />
     </TouchableOpacity>
   );
 };
@@ -44,9 +41,9 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 40,
-    width: 40,
-    height: 40,
+    borderRadius: 35,
+    width: 35,
+    height: 35,
     shadowColor: colors.grey3,
     shadowOffset: {
       width: 0,

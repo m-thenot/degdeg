@@ -7,13 +7,11 @@ import {
   ImageSourcePropType,
   Dimensions,
 } from 'react-native';
-import theme from '@theme';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { CarType } from '@constants/car';
 import { useRecoilState } from 'recoil';
 import { carState } from '@stores/car.atom';
-
-const { colors, font, layout, border } = theme;
+import { colors, layout, font, border } from '@dagdag/common/theme';
 
 interface ICarProps {
   price: number;

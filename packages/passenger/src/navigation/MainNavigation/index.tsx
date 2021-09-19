@@ -2,14 +2,12 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from '../CustomDrawerContent';
 import { MenuHeader } from '@navigation/HeaderLeft';
-import theme from '@theme';
 import Payment from '@screens/Payment';
 import Help from '@screens/Help';
 import MyRides from '@screens/MyRides';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import BookingNavigation from '@navigation/BookingNavigation';
-
-const { colors, layout } = theme;
+import { colors, layout } from '@dagdag/common/theme';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 

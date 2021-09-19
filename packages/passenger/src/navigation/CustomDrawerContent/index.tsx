@@ -6,14 +6,12 @@ import {
 } from '@react-navigation/drawer';
 import { Text, StyleSheet, View } from 'react-native';
 import LinkButton from '@components/LinkButton';
-import theme from '@theme';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import EditIcon from '@assets/icons/ic_edit.svg';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import parsePhoneNumber from 'libphonenumber-js';
 import { logout } from '@services/user';
-
-const { layout, colors, font } = theme;
+import { layout, colors, font } from '@dagdag/common/theme';
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
   const { user } = useFirebaseAuthentication();

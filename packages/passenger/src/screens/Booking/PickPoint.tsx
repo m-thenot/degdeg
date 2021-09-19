@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
-import theme from '@theme';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import {
   arrivalAddressState,
@@ -20,8 +19,8 @@ import {
 } from '@constants/maps';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
-const { layout, colors, font } = theme;
+import { colors, layout, font } from '@dagdag/common/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface IDraggablePosition {
   coordinates: LatLng;
@@ -126,7 +125,7 @@ const styles = StyleSheet.create({
   top: {
     position: 'absolute',
     backgroundColor: colors.white,
-    top: 50,
+    top: Platform.OS === 'ios' ? 91 : 50,
     width: '100%',
     paddingHorizontal: layout.spacer5,
     shadowColor: colors.black,

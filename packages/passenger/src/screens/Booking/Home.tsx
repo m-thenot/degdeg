@@ -6,7 +6,6 @@ import {
   Text,
   TouchableHighlight,
 } from 'react-native';
-import theme from '@theme';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { MenuHeader } from '@navigation/HeaderLeft';
 import Map from '@components/Map';
@@ -20,8 +19,7 @@ import {
   currentPositionState,
   defaultAddress,
 } from '@stores/address.atom';
-
-const { border, colors, layout, font } = theme;
+import { colors, layout, font, border } from '@dagdag/common/theme';
 
 const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
   navigation,
@@ -97,7 +95,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: border.radius4,
     backgroundColor: colors.white,
     paddingHorizontal: layout.spacer5,
-    paddingTop: layout.spacer4,
+    paddingVertical: layout.spacer5,
   },
   firstName: {
     marginBottom: layout.spacer1,

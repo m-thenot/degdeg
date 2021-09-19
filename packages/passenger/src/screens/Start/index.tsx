@@ -1,11 +1,9 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import Button from '@components/Button';
-import theme from '@theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@internalTypes/navigation';
-
-const { layout } = theme;
+import { layout } from '@dagdag/common/theme';
 
 const Start: React.FC<NativeStackScreenProps<AuthStackParamList, 'start'>> = ({
   navigation,

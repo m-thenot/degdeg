@@ -9,7 +9,6 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import theme from '@theme';
 
 import axios from 'axios';
 import { GOOGLE_MAPS_API_KEY } from '@constants/maps';
@@ -25,9 +24,10 @@ import LocIcon from '@assets/icons/ic_loc.svg';
 import PlaceIcon from '@assets/icons/ic_place.svg';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { colors, layout } from '@dagdag/common/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const GOOGLE_PACES_API_BASE_URL = 'https://maps.googleapis.com/maps/api/place';
-const { layout, colors } = theme;
 
 type PredictionType = {
   description: string;
@@ -129,7 +129,7 @@ const Addresses: React.FC<
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.shadow}>
         <View style={styles.addresses}>
           <View style={styles.elements}>
@@ -191,7 +191,7 @@ const Addresses: React.FC<
         renderItem={renderItem}
         keyExtractor={item => item.place_id}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -4,15 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignInWithPhoneNumber from '@screens/SignInWithPhoneNumber';
 import Start from '@screens/Start';
 import { AuthStackParamList } from '@internalTypes/navigation';
-import theme from '@theme';
 import { BackHeader } from '@navigation/HeaderLeft';
 import Verification from '@screens/Verification/index';
 import MainNavigation from '@navigation/MainNavigation';
 import Information from '@screens/Information';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import SplashScreen from '@screens/SplashScreen';
-
-const { colors } = theme;
+import { colors } from '@dagdag/common/theme';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
