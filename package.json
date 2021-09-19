@@ -3,8 +3,11 @@
   "private": true,
   "scripts": {
     "android:passenger": "lerna --scope='@dagdag/passenger' run android --stream --",
-    "ios:passenger":"lerna --scope='@dagdag/passenger' run ios --stream --",
-    "start:passenger": "lerna --scope='@dagdag/passenger' run start --stream --"
+    "ios:passenger": "lerna --scope='@dagdag/passenger' run ios --stream --",
+    "start:passenger": "lerna --scope='@dagdag/passenger' run start --stream --",
+    "android:driver": "lerna --scope='@dagdag/driver' run android --stream --",
+    "ios:driver": "lerna --scope='@dagdag/driver' run ios --stream --",
+    "start:driver": "lerna --scope='@dagdag/driver' run start --stream --"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
