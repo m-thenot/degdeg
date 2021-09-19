@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "246871164241",
+    "project_id": "staging-zegzeg",
+    "storage_bucket": "staging-zegzeg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246871164241:android:91f8820002b87e30c0bf70",
+        "android_client_info": {
+          "package_name": "com.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246871164241-8of34jpg8dm5eer2gnuje3k4raiv66ar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAklapsbb2TrObrtt-Eo0bfQyhERvTXzG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246871164241-8of34jpg8dm5eer2gnuje3k4raiv66ar.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

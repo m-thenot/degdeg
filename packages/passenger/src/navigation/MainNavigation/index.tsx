@@ -1,0 +1,51 @@
+import React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import CustomDrawerContent from '../CustomDrawerContent';
+import { MenuHeader } from '@navigation/HeaderLeft';
+import theme from '@theme';
+import Payment from '@screens/Payment';
+import Help from '@screens/Help';
+import MyRides from '@screens/MyRides';
+import { DrawerNavigatorParamList } from '@internalTypes/navigation';
+import BookingNavigation from '@navigation/BookingNavigation';
+
+const { colors, layout } = theme;
+
+const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
+
+const MainNavigation: React.FC = () => {
+  return (
+    <Drawer.Navigator
+      initialRouteName="booking"
+      drawerContent={props => <CustomDrawerContent {...props} />}
+      screenOptions={({ navigation }) => {
+        return {
+          headerBackTitleVisible: false,
+          headerTitle: '',
+          headerShadowVisible: false,
+          headerTransparent: true,
+          headerTitleStyle: {
+            marginTop: layout.spacer4,
+          },
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
+          contentStyle: {
+            backgroundColor: colors.white,
+          },
+          headerLeft: () => <MenuHeader navigation={navigation} />,
+        };
+      }}>
+      <Drawer.Screen
+        name="booking"
+        component={BookingNavigation}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen name="myRides" component={MyRides} />
+      <Drawer.Screen name="payment" component={Payment} />
+      <Drawer.Screen name="help" component={Help} />
+    </Drawer.Navigator>
+  );
+};
+
+export default MainNavigation;

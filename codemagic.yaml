@@ -1,0 +1,83 @@
+# Check out https://docs.codemagic.io/yaml/building-a-react-native-app/ for more information
+# Please review and update values
+
+workflows:
+  mobile-build-check:
+    name: Mobile Build Check (Android Only)
+    max_build_duration: 120
+    instance_type: mac_mini
+    environment:
+      vars:
+        ANDROID_APP_DIR: '$FCI_BUILD_DIR/android'
+      node: latest
+    triggering:
+      events:
+        - push
+        - pull_request
+    when:
+      changeset:
+        includes:
+          - '/'
+    cache:
+      cache_paths:
+        - $FCI_BUILD_DIR/node_modules
+        - $HOME/.gradle/caches
+    scripts:
+      - name: Install yarn dependencies
+        script: |
+          yarn
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$ANDROID_APP_DIR/local.properties"
+      - name: Build Android release
+        script: |
+          yarn android
+    publishing:
+      email:
+        recipients:
+          - martinthenot@gmail.com
+        notify:
+          success: false
+          failure: true
+
+  publish-android-staging:
+    name: Publish Android Staging App
+    max_build_duration: 120
+    instance_type: mac_mini
+    environment:
+      vars:
+        ANDROID_APP_DIR: '$FCI_BUILD_DIR/android'
+        FIREBASE_TOKEN: $FIREBASE_TOKEN
+      node: latest
+      groups:
+        - staging
+    cache:
+      cache_paths:
+        - $FCI_BUILD_DIR/node_modules
+        - $HOME/.gradle/caches
+    scripts:
+      - name: Install yarn dependencies
+        script: |
+          yarn
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$ANDROID_APP_DIR/local.properties"
+      - name: Build Android App (APK - Staging)
+        script: |
+          cd $ANDROID_APP_DIR && ./gradlew assembleStaging
+    artifacts:
+      - $ANDROID_APP_DIR/app/build/outputs/apk/**/*.apk
+      - $ANDROID_APP_DIR/app/build/outputs/bundle/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - martinthenot@gmail.com
+        notify:
+          success: false
+          failure: true
+      firebase:
+        firebase_token: $FIREBASE_TOKEN
+        android:
+          app_id: 1:246871164241:android:91f8820002b87e30c0bf70
+          groups:
+            - android
