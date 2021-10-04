@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
 } from 'react-native';
-import Button from '@components/Button';
+import { Button } from '@dagdag/common/components';
 import PhoneInput from 'react-native-phone-number-input';
 import auth from '@react-native-firebase/auth';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';

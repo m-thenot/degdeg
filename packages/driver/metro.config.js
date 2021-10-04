@@ -11,8 +11,6 @@ const { getMetroTools } = require('react-native-monorepo-tools');
 
 const monorepoMetroTools = getMetroTools();
 
-const path = require('path');
-
 module.exports = (async () => {
   const {
     resolver: { sourceExts, assetExts },

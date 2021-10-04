@@ -6,12 +6,10 @@
  */
 
 const { getDefaultConfig } = require('metro-config');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+const { getMetroTools } = require('react-native-monorepo-tools');
 
-const path = require('path');
-const watchFolders = [
-  path.resolve(__dirname + '/..'), //Relative path to packages directory
-  path.resolve(__dirname + '/../../node_modules'), //Relative path to packages directory
-];
+const monorepoMetroTools = getMetroTools();
 
 module.exports = (async () => {
   const {
@@ -24,7 +22,10 @@ module.exports = (async () => {
     resolver: {
       assetExts: assetExts.filter(ext => ext !== 'svg'),
       sourceExts: [...sourceExts, 'svg'],
+      blockList: exclusionList(monorepoMetroTools.blockList),
+      extraNodeModules: monorepoMetroTools.extraNodeModules,
     },
-    watchFolders,
+
+    watchFolders: monorepoMetroTools.watchFolders,
   };
 })();

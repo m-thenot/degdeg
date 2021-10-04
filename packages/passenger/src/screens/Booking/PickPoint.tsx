@@ -7,7 +7,7 @@ import {
   departureAddressState,
 } from '@stores/address.atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import Button from '@components/Button';
+import { Button } from '@dagdag/common/components';
 import { DEPARTURE } from '@constants/address';
 import Map from '@components/Map';
 import { LatLng, Marker } from 'react-native-maps';

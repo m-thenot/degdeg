@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import Button from '@components/Button';
+import { Button } from '@dagdag/common/components';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@internalTypes/navigation';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';

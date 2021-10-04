@@ -1,5 +1,5 @@
 import CustomBottomSheet from '@components/CustomBottomSheet';
-import Button from '@components/Button';
+import { Button } from '@dagdag/common/components';
 import React, { useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import Car from './Car';

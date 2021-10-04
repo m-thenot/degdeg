@@ -6,17 +6,17 @@ import {
   Platform,
   View,
 } from 'react-native';
-//import globalStyles from '@theme/globalStyles';
+import globalStyles from '@theme/globalStyles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@internalTypes/navigation';
 import { useForm } from 'react-hook-form';
-//import { Button, Input } from '@dagdag/common/components';
-//import { EMAIL_REGEX } from '@dagdag/common/constants';
+import { Button, Input } from '@dagdag/common/components';
+import { EMAIL_REGEX } from '@dagdag/common/constants';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { createUser } from '@services/user';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
-//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { layout, font } from '@dagdag/common/theme';
 
 interface IData {
@@ -52,7 +52,7 @@ const Information: React.FC<
 
   return (
     <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.container}>
-      {/* <KeyboardAvoidingView
+      <KeyboardAvoidingView
         style={styles.keyboardContainer}
         keyboardVerticalOffset={
           Platform.OS === 'ios' ? headerHeight + 5 : headerHeight + 105
@@ -113,7 +113,7 @@ const Information: React.FC<
           </View>
           <Button text="Suivant" onPress={handleSubmit(onSubmit)} />
         </KeyboardAwareScrollView>
-      </KeyboardAvoidingView> */}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
