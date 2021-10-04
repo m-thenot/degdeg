@@ -21,7 +21,8 @@
       "**/react-native",
       "**/react-native/**",
       "**/react-native-codegen",
-      "**/react-native-dev-menu"
+      "**/react-native-dev-menu",
+      "**/react-native-svg"
     ]
   }
 }

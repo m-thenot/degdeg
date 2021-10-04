@@ -7,9 +7,13 @@
 
 const { getDefaultConfig } = require('metro-config');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
-const { getMetroTools } = require('react-native-monorepo-tools');
+const {
+  getMetroTools,
+  getMetroAndroidAssetsResolutionFix,
+} = require('react-native-monorepo-tools');
 
 const monorepoMetroTools = getMetroTools();
+const androidAssetsResolutionFix = getMetroAndroidAssetsResolutionFix();
 
 module.exports = (async () => {
   const {
@@ -17,7 +21,13 @@ module.exports = (async () => {
   } = await getDefaultConfig();
   return {
     transformer: {
+      publicPath: androidAssetsResolutionFix.publicPath,
       babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    },
+    server: {
+      enhanceMiddleware: middleware => {
+        return androidAssetsResolutionFix.applyMiddleware(middleware);
+      },
     },
     resolver: {
       assetExts: assetExts.filter(ext => ext !== 'svg'),

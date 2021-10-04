@@ -1,7 +1,7 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from '../CustomDrawerContent';
-import { MenuHeader } from '@navigation/HeaderLeft';
+import { MenuHeader } from '@dagdag/common/components';
 import Payment from '@screens/Payment';
 import Help from '@screens/Help';
 import MyRides from '@screens/MyRides';

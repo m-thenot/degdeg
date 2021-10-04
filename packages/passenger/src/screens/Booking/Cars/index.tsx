@@ -7,7 +7,7 @@ import { CarType } from '@constants/car';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { carState } from '@stores/car.atom';
 import { useNavigation } from '@react-navigation/core';
-import { BackHeader } from '@navigation/HeaderLeft';
+import { BackHeader } from '@dagdag/common/components';
 import { arrivalAddressState, defaultAddress } from '@stores/address.atom';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
