@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "246871164241",
+    "project_id": "staging-zegzeg",
+    "storage_bucket": "staging-zegzeg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246871164241:android:0e374d98292f051ac0bf70",
+        "android_client_info": {
+          "package_name": "com.dagdag.driver.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246871164241-1g0e35joptiks1jj1s3tkq7j6u77v1b7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dagdag.driver.staging",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "246871164241-8of34jpg8dm5eer2gnuje3k4raiv66ar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAklapsbb2TrObrtt-Eo0bfQyhERvTXzG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246871164241-8of34jpg8dm5eer2gnuje3k4raiv66ar.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "246871164241-lrfnbcbt733s74kiu0gg65tq8jjj7nio.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.MyApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246871164241:android:91f8820002b87e30c0bf70",
+        "android_client_info": {
+          "package_name": "com.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246871164241-8of34jpg8dm5eer2gnuje3k4raiv66ar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAklapsbb2TrObrtt-Eo0bfQyhERvTXzG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246871164241-8of34jpg8dm5eer2gnuje3k4raiv66ar.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "246871164241-lrfnbcbt733s74kiu0gg65tq8jjj7nio.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.MyApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

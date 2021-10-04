@@ -1,29 +1,33 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
-import { Test } from '@dagdag/common/components';
-import { colors, layout } from '@dagdag/common/theme';
-import TestB from '@components/TestB';
-import globalStyles from '@theme/globalStyles';
+
+import messaging from '@react-native-firebase/messaging';
+import { AuthProvider } from '@context/auth';
+import AuthNavigation from './navigation/AuthNavigation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Setting a timer']);
+
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
 
 const App = () => {
+  console.log('oooooook');
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Bienvenue sur driver</Text>
-      <Test />
-      <TestB />
-      <Text style={globalStyles.error}>Je suis une erreur</Text>
-    </SafeAreaView>
+    <AuthProvider>
+      <SafeAreaProvider>
+        <AuthNavigation />
+      </SafeAreaProvider>
+    </AuthProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: layout.marginHorizontal,
-  },
-  text: {
-    color: colors.primary,
-  },
-});
 
 export default App;

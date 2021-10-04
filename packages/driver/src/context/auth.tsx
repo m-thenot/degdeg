@@ -60,7 +60,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const userSubscriber = firestore()
-      .collection('users')
+      .collection('drivers')
       .doc(user?.uid)
       .onSnapshot(documentSnapshot => {
         documentSnapshot?.data() && setUser(documentSnapshot.data());
