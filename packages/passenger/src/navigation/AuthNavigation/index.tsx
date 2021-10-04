@@ -54,8 +54,6 @@ const AuthNavigation: React.FC = () => {
           )
         ) : (
           <>
-            <Stack.Screen name="information" component={Information} />
-
             <Stack.Screen
               name="start"
               component={Start}
