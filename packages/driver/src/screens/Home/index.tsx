@@ -1,13 +1,13 @@
 import { Button } from '@dagdag/common/components';
-import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
-import { logout } from '@services/user';
-import React from 'react';
+import { logout, requestUserPermission } from '@services/user';
+import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 
 const Home: React.FC = () => {
-  const { user } = useFirebaseAuthentication();
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
 
-  console.log(user);
   return (
     <View>
       <Text>Home</Text>
