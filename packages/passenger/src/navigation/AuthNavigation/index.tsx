@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignInWithPhoneNumber from '@screens/SignInWithPhoneNumber';
 import Start from '@screens/Start';
 import { AuthStackParamList } from '@internalTypes/navigation';
-import { BackHeader } from '@navigation/HeaderLeft';
+import { BackHeader } from '@dagdag/common/components';
 import Verification from '@screens/Verification/index';
 import MainNavigation from '@navigation/MainNavigation';
 import Information from '@screens/Information';

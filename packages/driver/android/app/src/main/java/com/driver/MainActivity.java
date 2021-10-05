@@ -1,4 +1,4 @@
-package com.driver;
+package com.dagdag.driver.staging;
 
 import com.facebook.react.ReactActivity;
 

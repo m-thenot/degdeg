@@ -14,7 +14,7 @@ interface IInput extends TextInputProps {
   rules: any;
 }
 
-const Input: React.FC<IInput> = ({
+export const Input: React.FC<IInput> = ({
   label,
   name,
   control,
@@ -22,6 +22,7 @@ const Input: React.FC<IInput> = ({
   rules,
   ...props
 }) => {
+  const styles = createStyles();
   return (
     <Controller
       control={control}
@@ -43,29 +44,29 @@ const Input: React.FC<IInput> = ({
   );
 };
 
-export default Input;
-
-const styles = StyleSheet.create({
-  label: {
-    textTransform: 'uppercase',
-    fontWeight: '700',
-    marginTop: layout.spacer3,
-    marginBottom: layout.spacer2,
-  },
-  input: {
-    backgroundColor: colors.grey4,
-    borderRadius: border.radius3,
-    paddingVertical: layout.spacer3,
-    paddingHorizontal: layout.spacer3,
-    fontSize: font.fontSize2,
-    borderWidth: 1,
-    borderColor: colors.grey1,
-  },
-  inputError: {
-    borderColor: colors.error,
-  },
-  error: {
-    marginTop: layout.spacer1,
-    color: colors.error,
-  },
-});
+const createStyles = () => {
+  return StyleSheet.create({
+    label: {
+      textTransform: 'uppercase',
+      fontWeight: '700',
+      marginTop: layout.spacer3,
+      marginBottom: layout.spacer2,
+    },
+    input: {
+      backgroundColor: colors.grey4,
+      borderRadius: border.radius3,
+      paddingVertical: layout.spacer3,
+      paddingHorizontal: layout.spacer3,
+      fontSize: font.fontSize2,
+      borderWidth: 1,
+      borderColor: colors.grey1,
+    },
+    inputError: {
+      borderColor: colors.error,
+    },
+    error: {
+      marginTop: layout.spacer1,
+      color: colors.error,
+    },
+  });
+};

@@ -6,7 +6,7 @@ import {
   ViewStyle,
   StyleProp,
 } from 'react-native';
-import { colors, layout, border, font } from '@dagdag/common/theme';
+import { colors, layout, border, font } from '../theme';
 
 interface IButton {
   text: string;
@@ -17,7 +17,7 @@ interface IButton {
   type?: 'primary' | 'secondary';
 }
 
-const Button: React.FC<IButton> = ({
+export const Button: React.FC<IButton> = ({
   text,
   onPress,
   style,
@@ -25,6 +25,7 @@ const Button: React.FC<IButton> = ({
   type = 'primary',
   disabled = false,
 }) => {
+  const styles = createStyles();
   return (
     <TouchableOpacity
       style={[
@@ -48,33 +49,35 @@ const Button: React.FC<IButton> = ({
   );
 };
 
-export default Button;
+const createStyles = () => {
+  const styles = StyleSheet.create({
+    button: {
+      borderRadius: border.radius3,
+      padding: layout.spacer4,
+    },
+    text: {
+      textAlign: 'center',
+      fontWeight: '700',
+      fontSize: font.fontSize3,
+    },
+    disabled: {
+      opacity: 0.4,
+    },
+    primary: {
+      backgroundColor: colors.primary,
+    },
+    textPrimary: {
+      color: colors.white,
+    },
+    secondary: {
+      backgroundColor: colors.white,
+      borderWidth: 2,
+      borderColor: colors.primary,
+    },
+    textSecondary: {
+      color: colors.primary,
+    },
+  });
 
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: border.radius3,
-    padding: layout.spacer4,
-  },
-  text: {
-    textAlign: 'center',
-    fontWeight: '700',
-    fontSize: font.fontSize3,
-  },
-  disabled: {
-    opacity: 0.4,
-  },
-  primary: {
-    backgroundColor: colors.primary,
-  },
-  textPrimary: {
-    color: colors.white,
-  },
-  secondary: {
-    backgroundColor: colors.white,
-    borderWidth: 2,
-    borderColor: colors.primary,
-  },
-  textSecondary: {
-    color: colors.primary,
-  },
-});
+  return styles;
+};

@@ -6,12 +6,14 @@
  */
 
 const { getDefaultConfig } = require('metro-config');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+const {
+  getMetroTools,
+  getMetroAndroidAssetsResolutionFix,
+} = require('react-native-monorepo-tools');
 
-const path = require('path');
-const watchFolders = [
-  path.resolve(__dirname + '/..'), //Relative path to packages directory
-  path.resolve(__dirname + '/../../node_modules'), //Relative path to packages directory
-];
+const monorepoMetroTools = getMetroTools();
+const androidAssetsResolutionFix = getMetroAndroidAssetsResolutionFix();
 
 module.exports = (async () => {
   const {
@@ -19,12 +21,21 @@ module.exports = (async () => {
   } = await getDefaultConfig();
   return {
     transformer: {
+      publicPath: androidAssetsResolutionFix.publicPath,
       babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    },
+    server: {
+      enhanceMiddleware: middleware => {
+        return androidAssetsResolutionFix.applyMiddleware(middleware);
+      },
     },
     resolver: {
       assetExts: assetExts.filter(ext => ext !== 'svg'),
       sourceExts: [...sourceExts, 'svg'],
+      blockList: exclusionList(monorepoMetroTools.blockList),
+      extraNodeModules: monorepoMetroTools.extraNodeModules,
     },
-    watchFolders,
+
+    watchFolders: monorepoMetroTools.watchFolders,
   };
 })();

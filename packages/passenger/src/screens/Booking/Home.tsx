@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import { BookingStackParamList } from '@internalTypes/navigation';
-import { MenuHeader } from '@navigation/HeaderLeft';
+import { MenuHeader } from '@dagdag/common/components';
 import Map from '@components/Map';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';

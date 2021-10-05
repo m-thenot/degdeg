@@ -63,7 +63,7 @@ const AuthProvider: React.FC = ({ children }) => {
       .collection('users')
       .doc(user?.uid)
       .onSnapshot(documentSnapshot => {
-        documentSnapshot.data() && setUser(documentSnapshot.data());
+        documentSnapshot?.data() && setUser(documentSnapshot.data());
       });
 
     return () => userSubscriber();

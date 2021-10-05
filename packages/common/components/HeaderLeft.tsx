@@ -1,7 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
-import BackButton from '@assets/icons/left-arrow.svg';
-import MenuButton from '@assets/icons/ic_menu.svg';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import BackButton from './../assets/icons/left-arrow.svg';
+import MenuButton from './../assets/icons/ic_menu.svg';
 import { colors, layout } from '@dagdag/common/theme';
 
 interface IHeaderLeftProps {
@@ -18,6 +18,7 @@ export const BackHeader: React.FC<IBackHeaderProps> = ({
   hasMargin = false,
   onPress,
 }) => {
+  const styles = createStyles();
   return (
     <TouchableOpacity
       style={[styles.button, hasMargin && styles.margin]}
@@ -28,6 +29,7 @@ export const BackHeader: React.FC<IBackHeaderProps> = ({
 };
 
 export const MenuHeader: React.FC<IHeaderLeftProps> = ({ navigation }) => {
+  const styles = createStyles();
   return (
     <TouchableOpacity
       style={[styles.button, styles.margin]}
@@ -37,30 +39,32 @@ export const MenuHeader: React.FC<IHeaderLeftProps> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 35,
-    width: 35,
-    height: 35,
-    shadowColor: colors.grey3,
-    shadowOffset: {
-      width: 0,
-      height: 3,
+const createStyles = () => {
+  return StyleSheet.create({
+    button: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 35,
+      width: 35,
+      height: 35,
+      shadowColor: colors.grey3,
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.29,
+      shadowRadius: 4.65,
+      elevation: 7,
+      backgroundColor: colors.white,
+      zIndex: 999,
     },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-    backgroundColor: colors.white,
-    zIndex: 999,
-  },
-  icon: {
-    marginLeft: -3,
-  },
-  margin: {
-    marginLeft: layout.spacer1,
-    marginTop: layout.spacer1,
-    marginRight: layout.spacer2,
-  },
-});
+    icon: {
+      marginLeft: -3,
+    },
+    margin: {
+      marginLeft: layout.spacer1,
+      marginTop: layout.spacer1,
+      marginRight: layout.spacer2,
+    },
+  });
+};

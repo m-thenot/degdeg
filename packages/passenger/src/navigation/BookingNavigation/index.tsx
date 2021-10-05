@@ -5,7 +5,7 @@ import Home from '@screens/Booking/Home';
 import Cars from '@screens/Booking/Cars';
 import Addresses from '@screens/Booking/Addresses';
 import PickPoint from '@screens/Booking/PickPoint';
-import { BackHeader } from '@navigation/HeaderLeft';
+import { BackHeader } from '@dagdag/common/components';
 import { colors } from '@dagdag/common/theme';
 
 const BookingStack = createNativeStackNavigator<BookingStackParamList>();
