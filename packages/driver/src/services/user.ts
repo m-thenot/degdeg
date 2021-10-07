@@ -37,3 +37,14 @@ export const requestUserPermission = async () => {
     console.log('Authorization status:', authStatus);
   }
 };
+
+export const saveTokenToDatabase = async token => {
+  const userId = auth()?.currentUser?.uid;
+
+  await firestore()
+    .collection(DRIVERS_COLLECTION)
+    .doc(userId)
+    .update({
+      tokens: firestore.FieldValue.arrayUnion(token),
+    });
+};
