@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableHighlight,
+  Platform,
 } from 'react-native';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { MenuHeader } from '@dagdag/common/components';
@@ -20,6 +21,7 @@ import {
   defaultAddress,
 } from '@stores/address.atom';
 import { colors, layout, font, border } from '@dagdag/common/theme';
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 
 const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
   navigation,
@@ -37,28 +39,36 @@ const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
     // Reset arrival address
     setArrivalAddress(defaultAddress);
 
-    Geolocation.getCurrentPosition(
-      position => {
-        const { latitude, longitude } = position.coords;
-        Geocoder.from({
-          latitude: latitude,
-          longitude: longitude,
-        }).then(res => {
-          setCurrentPosition({
-            formattedAddress: res.results[0].formatted_address,
-            coords: position.coords,
-          });
-        });
-      },
-      error => {
-        console.log(error.code, error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-      },
-    );
+    request(
+      Platform.OS === 'ios'
+        ? PERMISSIONS.IOS.LOCATION_ALWAYS
+        : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    ).then(result => {
+      if (result == RESULTS.GRANTED) {
+        Geolocation.getCurrentPosition(
+          position => {
+            const { latitude, longitude } = position.coords;
+            Geocoder.from({
+              latitude: latitude,
+              longitude: longitude,
+            }).then(res => {
+              setCurrentPosition({
+                formattedAddress: res.results[0].formatted_address,
+                coords: position.coords,
+              });
+            });
+          },
+          error => {
+            console.log(error.code, error.message);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 10000,
+          },
+        );
+      }
+    });
   }, []);
 
   return (

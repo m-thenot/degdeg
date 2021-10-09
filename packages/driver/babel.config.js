@@ -33,6 +33,8 @@ plugins.push([
   },
 ]);
 
+plugins.push('react-native-reanimated/plugin');
+
 module.exports = {
   presets,
   plugins,

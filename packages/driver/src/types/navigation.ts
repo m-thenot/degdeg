@@ -5,3 +5,7 @@ export type AuthStackParamList = {
   information: undefined;
   main: undefined;
 };
+
+export type DrawerNavigatorParamList = {
+  home: undefined;
+};

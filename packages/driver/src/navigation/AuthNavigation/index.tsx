@@ -10,7 +10,7 @@ import Information from '@screens/Information';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import SplashScreen from '@screens/SplashScreen';
 import { colors } from '@dagdag/common/theme';
-import Home from '@screens/Home';
+import MainNavigation from '@navigation/MainNavigation';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -41,12 +41,9 @@ const AuthNavigation: React.FC = () => {
           user.displayName ? (
             <Stack.Screen
               name="main"
-              component={Home}
+              component={MainNavigation}
               options={{
                 headerShown: false,
-                headerStyle: {
-                  backgroundColor: 'transparent',
-                },
               }}
             />
           ) : (
