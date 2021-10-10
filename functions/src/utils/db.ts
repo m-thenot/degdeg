@@ -12,6 +12,7 @@ const dataPoint = <T>(collectionPath: string) =>
 
 const db = {
   drivers: dataPoint<IDriver>('drivers'),
+  cars: dataPoint('cars'),
 };
 
 export { db };
