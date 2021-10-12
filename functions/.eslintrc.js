@@ -15,6 +15,7 @@ module.exports = {
   parserOptions: {
     project: ['tsconfig.json', 'tsconfig.dev.json'],
     sourceType: 'module',
+    tsconfigRootDir: __dirname,
   },
   ignorePatterns: [
     '/lib/**/*', // Ignore built files.
@@ -24,5 +25,8 @@ module.exports = {
     'import/no-unresolved': 0,
     'object-curly-spacing': ['error', 'always'],
     'import/no-named-as-default': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };

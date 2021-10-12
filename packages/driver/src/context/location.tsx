@@ -27,35 +27,43 @@ const LocationProvider: React.FC = ({ children }) => {
   }, [location, user?.uid]);
 
   useEffect(() => {
+    console.log('********');
     request(
       Platform.OS === 'ios'
-        ? PERMISSIONS.IOS.LOCATION_ALWAYS
+        ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
         : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-    ).then(result => {
-      if (result == RESULTS.GRANTED) {
-        const _watchId = Geolocation.watchPosition(
-          position => {
-            const { latitude, longitude } = position.coords;
-            setLocation({ latitude, longitude });
-          },
-          error => {
-            console.log(error);
-          },
-          {
-            enableHighAccuracy: true,
-            distanceFilter: 100,
-            interval: 10000,
-            fastestInterval: 5000,
-          },
-        );
+    )
+      .then(result => {
+        console.log('XXXXXXXXXXX');
+        console.log('result', result);
+        if (result == RESULTS.GRANTED) {
+          const _watchId = Geolocation.watchPosition(
+            position => {
+              const { latitude, longitude } = position.coords;
+              setLocation({ latitude, longitude });
+            },
+            error => {
+              console.log(error);
+            },
+            {
+              enableHighAccuracy: true,
+              distanceFilter: 100,
+              interval: 10000,
+              fastestInterval: 5000,
+            },
+          );
 
-        return () => {
-          if (_watchId) {
-            Geolocation.clearWatch(_watchId);
-          }
-        };
-      }
-    });
+          return () => {
+            if (_watchId) {
+              Geolocation.clearWatch(_watchId);
+            }
+          };
+        }
+      })
+      .catch(error => {
+        console.log('errrrrroooor');
+        console.log(error);
+      });
   }, []);
 
   return (

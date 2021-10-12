@@ -14,6 +14,7 @@ interface newDriver {
 
 export const createDriver = async (newUser: newDriver) => {
   const user = auth().currentUser;
+  console.log('***********', user);
   user?.updateProfile({
     displayName: newUser.firstName,
   });

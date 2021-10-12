@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import { IDriver } from '../types/driver';
+import { IOrder } from '../types/order';
 
 const converter = <T>() => ({
   toFirestore: (data: Partial<T>) => data,
@@ -13,6 +14,7 @@ const dataPoint = <T>(collectionPath: string) =>
 const db = {
   drivers: dataPoint<IDriver>('drivers'),
   cars: dataPoint('cars'),
+  orders: dataPoint<IOrder>('orders'),
 };
 
 export { db };

@@ -7,50 +7,28 @@ admin.initializeApp();
 import db from './utils/db';
 import { generateRandomLocation } from './utils/generateRandomLocation';
 import { isApiError } from './utils/error';
+import { IOrder } from './types/order';
+import { sendMessages } from './services/sendMessages';
 
 const REGION = 'asia-south1';
 const CARS_COLLECTION = 'cars';
 
 const GeoFirestore = geofirestore.initializeApp(admin.firestore() as any);
 
-export const sendMessage = functions.region(REGION).https.onCall(async data => {
-  const { userId } = data;
-  const doc = await db.drivers.doc(userId).get();
-  const driver = doc.data();
-
-  await admin
-    .messaging()
-    .sendToDevice(
-      driver!.tokens,
-      {
-        data: {
-          driver: JSON.stringify(driver),
-          message: 'Hello from cloud function',
-        },
-      },
-      {
-        contentAvailable: true,
-        priority: 'high',
-      },
-    )
-    .catch(error => {
-      throw new functions.https.HttpsError('unknown', 'CLOUD MESSAGING ERROR', {
-        message: error.message,
-      });
-    });
-
-  functions.logger.info(`Message has been sent to ${userId}`);
-  return {
-    success: true,
-  };
-});
-
 export const createOrder = functions.region(REGION).https.onCall(async data => {
-  const { location } = data;
+  const order: IOrder = data.order;
+
+  // Create order
+  db.orders.add(order);
+
+  // Notify drivers for this order within a radius of 4km
   const geocollection = GeoFirestore.collection(CARS_COLLECTION);
 
   const query = geocollection.near({
-    center: new admin.firestore.GeoPoint(location.latitude, location.longitude),
+    center: new admin.firestore.GeoPoint(
+      order.departureAddress.coordinates.latitude,
+      order.departureAddress.coordinates.longitude,
+    ),
     radius: 4,
   });
 
@@ -64,6 +42,15 @@ export const createOrder = functions.region(REGION).https.onCall(async data => {
     }
     throw new functions.https.HttpsError('unknown', 'Create order failed');
   }
+
+  const tokens = result.docs
+    .slice(0, 15)
+    .map(doc => doc.data().tokens)
+    .flat()
+    .filter(token => typeof token === 'string');
+
+  functions.logger.info(tokens);
+  sendMessages(tokens, { order: JSON.stringify(order) });
 
   return {
     nbCars: result.size,

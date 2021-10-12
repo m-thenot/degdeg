@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Input } from '@dagdag/common/components';
 import { EMAIL_REGEX } from '@dagdag/common/constants';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
-import { createUser } from '@services/user';
+import { createDriver } from '@services/user';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -39,7 +39,7 @@ const Information: React.FC<
 
   const onSubmit = (data: IData) => {
     if (Object.keys(errors).length === 0 && errors.constructor === Object) {
-      createUser({ ...data, phoneNumber: user?.phoneNumber, uid: user?.uid })
+      createDriver({ ...data, phoneNumber: user?.phoneNumber, uid: user?.uid })
         .then(() => {
           navigation.navigate('main');
         })

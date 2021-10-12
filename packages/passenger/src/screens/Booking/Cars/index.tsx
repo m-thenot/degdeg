@@ -3,17 +3,23 @@ import { Button } from '@dagdag/common/components';
 import React, { useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import Car from './Car';
-import { CarType } from '@constants/car';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { carState } from '@stores/car.atom';
 import { useNavigation } from '@react-navigation/core';
 import { BackHeader } from '@dagdag/common/components';
-import { arrivalAddressState, defaultAddress } from '@stores/address.atom';
+import {
+  arrivalAddressState,
+  defaultAddress,
+  departureAddressState,
+} from '@stores/address.atom';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import MapWrapper from './MapWrapper';
 import { metadataRouteState } from '@stores/route.atom';
 import { colors, layout, font } from '@dagdag/common/theme';
+import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
+import { OrderStatus, RideType, CarType } from '@dagdag/common/constants';
+import { createOrder } from '@services/order';
 
 const snapPoints = [400, '80%'];
 
@@ -27,8 +33,11 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> =
   () => {
     const selectedCar = useRecoilValue(carState);
     const navigation = useNavigation();
-    const setArrivalAddress = useSetRecoilState(arrivalAddressState);
+    const [arrivalAddress, setArrivalAddress] =
+      useRecoilState(arrivalAddressState);
     const metadataRoute = useRecoilValue(metadataRouteState);
+    const departureAddress = useRecoilValue(departureAddressState);
+    const { user } = useFirebaseAuthentication();
 
     useEffect(() => {
       navigation.setOptions({
@@ -46,6 +55,29 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> =
       });
     }, [navigation]);
 
+    const handleOrder = (rideType: RideType) => {
+      const order = {
+        createdDate: Date.now(),
+        arrivalAddress: {
+          formattedAddress: arrivalAddress.text,
+          coordinates: metadataRoute!.coordinates[1],
+        },
+        departureAddress: {
+          formattedAddress: departureAddress.text,
+          coordinates: metadataRoute!.coordinates[0],
+        },
+        status: OrderStatus.NEW,
+        userId: user!.uid,
+        metadataRoute: metadataRoute!,
+        car: selectedCar!,
+        rideType,
+        departureAt: Date.now(), // TODO: get departure at
+        price: null, // TODO: add pricig
+      };
+
+      createOrder(order);
+    };
+
     return (
       <>
         <MapWrapper />
@@ -55,21 +87,21 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> =
             <View style={styles.list}>
               <Car
                 label="économique"
-                type={CarType.economic}
+                type={CarType.ECONOMIC}
                 description="Économique, rapide et fiable"
                 image={CarsImages.economic}
                 price={25}
               />
               <Car
                 label="premium"
-                type={CarType.premium}
+                type={CarType.PREMIUM}
                 description="Voitures spacieuses et chauffeurs les mieux notés"
                 image={CarsImages.premium}
                 price={33}
               />
               <Car
                 label="van"
-                type={CarType.van}
+                type={CarType.VAN}
                 description="Véhicules haut de gamme jusqu'à 6 passagers"
                 image={CarsImages.van}
                 price={40}
@@ -83,7 +115,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> =
             <View style={styles.buttons}>
               <Button
                 text="Commander maintenant"
-                onPress={() => console.log('Réserver !')}
+                onPress={() => handleOrder(RideType.NOW)}
                 style={[styles.button, styles.nowButton]}
                 textStyle={styles.textButton}
                 disabled={!selectedCar}
@@ -92,7 +124,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> =
                 text="Plus tard"
                 type="secondary"
                 textStyle={styles.textButton}
-                onPress={() => console.log('Réserver !')}
+                onPress={() => handleOrder(RideType.LATER)}
                 style={[styles.button, styles.laterButton]}
                 disabled={!selectedCar}
               />

@@ -11,6 +11,7 @@ interface IUser {
   firstName?: string;
   lastName?: string;
   email?: string;
+  tokens?: string[];
 }
 
 interface IContextProps {
