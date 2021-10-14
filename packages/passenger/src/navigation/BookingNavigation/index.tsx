@@ -7,6 +7,7 @@ import Addresses from '@screens/Booking/Addresses';
 import PickPoint from '@screens/Booking/PickPoint';
 import { BackHeader } from '@dagdag/common/components';
 import { colors } from '@dagdag/common/theme';
+import SelectDate from '@screens/Booking/SelectDate';
 
 const BookingStack = createNativeStackNavigator<BookingStackParamList>();
 
@@ -32,6 +33,14 @@ const BookingNavigation = () => {
         }}
       />
       <BookingStack.Screen name="cars" component={Cars} />
+      <BookingStack.Screen
+        name="selectDate"
+        component={SelectDate}
+        options={{
+          headerTransparent: false,
+          headerStyle: { backgroundColor: colors.white },
+        }}
+      />
     </BookingStack.Navigator>
   );
 };

@@ -15,6 +15,7 @@ export type BookingStackParamList = {
   pickPoint: {
     type: AddressType;
   };
+  selectDate: undefined;
 };
 
 export type DrawerNavigatorParamList = {
