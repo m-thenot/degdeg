@@ -54,6 +54,7 @@ const createStyles = () => {
     button: {
       borderRadius: border.radius3,
       padding: layout.spacer4,
+      justifyContent: 'center',
     },
     text: {
       textAlign: 'center',

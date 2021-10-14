@@ -38,6 +38,6 @@ export interface IOrder {
   metadataRoute: IMetadataRoute;
   car: ICar;
   rideType: RideType;
-  departureAt: number;
+  departureAt: Date;
   price: any;
 }
