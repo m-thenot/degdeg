@@ -24,13 +24,15 @@ export const createOrder = functions.region(REGION).https.onCall(async data => {
   // Notify drivers for this order within a radius of 4km
   const geocollection = GeoFirestore.collection(CARS_COLLECTION);
 
-  const query = geocollection.near({
-    center: new admin.firestore.GeoPoint(
-      order.departureAddress.coordinates.latitude,
-      order.departureAddress.coordinates.longitude,
-    ),
-    radius: 4,
-  });
+  const query = geocollection
+    .near({
+      center: new admin.firestore.GeoPoint(
+        order.departureAddress.coordinates.latitude,
+        order.departureAddress.coordinates.longitude,
+      ),
+      radius: 4,
+    })
+    .where('isAvailable', '==', true);
 
   let result;
 

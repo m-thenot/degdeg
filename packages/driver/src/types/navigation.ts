@@ -8,4 +8,7 @@ export type AuthStackParamList = {
 
 export type DrawerNavigatorParamList = {
   home: undefined;
+  history: undefined;
+  wallet: undefined;
+  help: undefined;
 };

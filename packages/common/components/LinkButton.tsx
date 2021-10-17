@@ -9,12 +9,13 @@ interface ILinkButton {
   style?: any;
 }
 
-const LinkButton: React.FC<ILinkButton> = ({
+export const LinkButton: React.FC<ILinkButton> = ({
   text,
   onPress,
   disabled = false,
   style,
 }) => {
+  const styles = createStyles();
   return (
     <TouchableOpacity
       disabled={disabled}
@@ -26,12 +27,12 @@ const LinkButton: React.FC<ILinkButton> = ({
   );
 };
 
-export default LinkButton;
-
-const styles = StyleSheet.create({
-  text: {
-    color: colors.primary,
-    fontSize: font.fontSize2,
-    textDecorationLine: 'underline',
-  },
-});
+const createStyles = () => {
+  return StyleSheet.create({
+    text: {
+      color: colors.primary,
+      fontSize: font.fontSize2,
+      textDecorationLine: 'underline',
+    },
+  });
+};

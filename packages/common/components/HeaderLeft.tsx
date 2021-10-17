@@ -62,7 +62,7 @@ const createStyles = () => {
       marginLeft: -3,
     },
     margin: {
-      marginLeft: layout.spacer1,
+      marginLeft: layout.spacer2,
       marginTop: layout.spacer1,
       marginRight: layout.spacer2,
     },

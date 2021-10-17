@@ -1,17 +1,17 @@
 import MapView, { PROVIDER_GOOGLE, MapViewProps } from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
-import { GOOGLE_MAPS_API_KEY } from '@constants/maps';
-import React from 'react';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
-import { useRecoilValue } from 'recoil';
-import { currentPositionState } from '@stores/address.atom';
-import { layout } from '@dagdag/common/theme';
 import {
-  INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
+  INITIAL_LATITUDE,
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
 } from '@dagdag/common/constants';
+import React from 'react';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+
+import { layout } from '@dagdag/common/theme';
+import { useLocation } from '@context/location';
+import { GOOGLE_MAPS_API_KEY } from '@env';
 
 Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'fr' });
 
@@ -22,16 +22,15 @@ interface IMap extends MapViewProps {
 
 const Map: React.FC<IMap> = React.memo(
   ({ children, mapRef = null, customStyle, region, ...props }) => {
-    const currentPosition = useRecoilValue(currentPositionState);
-
+    const { location } = useLocation();
     return (
       <MapView
         ref={mapRef}
         style={[styles.map, customStyle]}
         region={
           region || {
-            latitude: currentPosition?.coords.latitude || INITIAL_LATITUDE,
-            longitude: currentPosition?.coords.longitude || INITIAL_LONGITUDE,
+            latitude: location?.latitude || INITIAL_LATITUDE,
+            longitude: location?.longitude || INITIAL_LONGITUDE,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }

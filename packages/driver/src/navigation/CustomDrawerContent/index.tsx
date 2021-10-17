@@ -30,19 +30,19 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
       </View>
       <View style={styles.menu}>
         <DrawerItem
-          label="Mes courses"
+          label="Historique"
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {
-            props.navigation.navigate('myRides');
+            props.navigation.navigate('history');
           }}
         />
         <DrawerItem
-          label="Paiement"
+          label="Mon portefeuille"
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {
-            props.navigation.navigate('payment');
+            props.navigation.navigate('wallet');
           }}
         />
         <DrawerItem

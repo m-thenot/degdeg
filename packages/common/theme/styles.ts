@@ -5,6 +5,9 @@ export const styles = {
     color: colors.error,
     fontSize: font.fontSize2,
   },
+  bold: {
+    fontWeight: 'bold',
+  },
 };
 
 export default styles;

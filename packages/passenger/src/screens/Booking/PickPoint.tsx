@@ -16,7 +16,7 @@ import {
   INITIAL_LONGITUDE,
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
-} from '@constants/maps';
+} from '@dagdag/common/constants';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, layout, font } from '@dagdag/common/theme';

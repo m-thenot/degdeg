@@ -5,6 +5,10 @@ import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import { colors, layout } from '@dagdag/common/theme';
 import Home from '@screens/Home';
 import { LocationProvider } from '@context/location';
+import CustomDrawerContent from '@navigation/CustomDrawerContent';
+import History from '@screens/History';
+import Help from '@screens/Help';
+import Wallet from '@screens/Wallet';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
@@ -13,6 +17,7 @@ const MainNavigation: React.FC = () => {
     <LocationProvider>
       <Drawer.Navigator
         initialRouteName="home"
+        drawerContent={props => <CustomDrawerContent {...props} />}
         screenOptions={({ navigation }) => {
           return {
             headerBackTitleVisible: false,
@@ -31,9 +36,20 @@ const MainNavigation: React.FC = () => {
             headerLeft: () => <MenuHeader navigation={navigation} />,
           };
         }}>
+        <Drawer.Screen name="home" component={Home} />
         <Drawer.Screen
-          name="home"
-          component={Home}
+          name="history"
+          component={History}
+          options={{ headerShown: false }}
+        />
+        <Drawer.Screen
+          name="help"
+          component={Help}
+          options={{ headerShown: false }}
+        />
+        <Drawer.Screen
+          name="wallet"
+          component={Wallet}
           options={{ headerShown: false }}
         />
       </Drawer.Navigator>

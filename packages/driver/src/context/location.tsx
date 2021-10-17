@@ -27,15 +27,12 @@ const LocationProvider: React.FC = ({ children }) => {
   }, [location, user?.uid]);
 
   useEffect(() => {
-    console.log('********');
     request(
       Platform.OS === 'ios'
         ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
         : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
     )
       .then(result => {
-        console.log('XXXXXXXXXXX');
-        console.log('result', result);
         if (result == RESULTS.GRANTED) {
           const _watchId = Geolocation.watchPosition(
             position => {
@@ -61,7 +58,6 @@ const LocationProvider: React.FC = ({ children }) => {
         }
       })
       .catch(error => {
-        console.log('errrrrroooor');
         console.log(error);
       });
   }, []);

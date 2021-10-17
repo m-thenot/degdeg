@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { BookingStackParamList } from '@internalTypes/navigation';
-import { MenuHeader } from '@dagdag/common/components';
+import { MenuHeader, RoundBottom } from '@dagdag/common/components';
 import Map from '@components/Map';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
@@ -74,7 +74,7 @@ const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
   return (
     <SafeAreaView style={styles.container}>
       <Map showsMyLocationButton showsUserLocation />
-      <View style={styles.bottom}>
+      <RoundBottom>
         <Text style={styles.firstName}>Bonjour {user?.firstName} !</Text>
         <Text style={styles.title}>Où allez-vous ?</Text>
         <View style={styles.shadow}>
@@ -86,7 +86,7 @@ const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
             <Text style={styles.fakeInput}>Saisir votre destination</Text>
           </TouchableHighlight>
         </View>
-      </View>
+      </RoundBottom>
     </SafeAreaView>
   );
 };
@@ -96,16 +96,6 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  bottom: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopLeftRadius: border.radius4,
-    borderTopRightRadius: border.radius4,
-    backgroundColor: colors.white,
-    paddingHorizontal: layout.spacer5,
-    paddingVertical: layout.spacer5,
   },
   firstName: {
     marginBottom: layout.spacer1,
