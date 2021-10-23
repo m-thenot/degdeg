@@ -7,6 +7,8 @@ import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 
 import { ILocation } from '@internalTypes/geo';
 import { updatePosition } from '@services/cars';
+import { useRecoilValue } from 'recoil';
+import { isAvailableState } from '@stores/driver.atom';
 
 interface IContextProps {
   location: ILocation;
@@ -19,12 +21,13 @@ const LocationContext = createContext<Partial<IContextProps>>({
 const LocationProvider: React.FC = ({ children }) => {
   const { user } = useFirebaseAuthentication();
   const [location, setLocation] = useState<ILocation | undefined>();
+  const isAvailable = useRecoilValue(isAvailableState);
 
   useEffect(() => {
     if (location && user?.uid) {
-      updatePosition(user?.uid, location);
+      updatePosition(user?.uid, location, isAvailable);
     }
-  }, [location, user?.uid]);
+  }, [location, user?.uid, isAvailable]);
 
   useEffect(() => {
     request(

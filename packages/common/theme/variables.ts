@@ -33,6 +33,7 @@ export const border = {
 
 export const font = {
   fontSize1: 12,
+  fontSize1_5: 14,
   fontSize2: 16,
   fontSize3: 18,
   fontSize4: 22,

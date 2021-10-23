@@ -4,16 +4,19 @@ import { AuthProvider } from '@context/auth';
 import AuthNavigation from './navigation/AuthNavigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LogBox } from 'react-native';
+import { RecoilRoot } from 'recoil';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
 const App = () => {
   return (
-    <AuthProvider>
-      <SafeAreaProvider>
-        <AuthNavigation />
-      </SafeAreaProvider>
-    </AuthProvider>
+    <RecoilRoot>
+      <AuthProvider>
+        <SafeAreaProvider>
+          <AuthNavigation />
+        </SafeAreaProvider>
+      </AuthProvider>
+    </RecoilRoot>
   );
 };
 

@@ -6,12 +6,16 @@ import { FIREBASE_REGION } from '@dagdag/common/constants';
 
 const GeoFirestore = geofirestore.initializeApp(firestore() as any);
 
-export const updatePosition = (driverId: string, location: ILocation) => {
+export const updatePosition = (
+  driverId: string,
+  location: ILocation,
+  isAvailable: boolean,
+) => {
   const geocollection = GeoFirestore.collection('cars');
 
   geocollection.doc(driverId).update({
     driverId: driverId,
-    isAvailable: true,
+    isAvailable: isAvailable,
     coordinates: new firestore.GeoPoint(location.latitude, location.longitude),
   });
 };
