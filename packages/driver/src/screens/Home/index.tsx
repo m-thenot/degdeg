@@ -11,14 +11,18 @@ import Status from './Status';
 import BottomStatus from './BottomStatus';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isAvailableState } from '@stores/driver.atom';
-import { ordersState } from '@stores/orders.atom';
+import { ordersState, currentOrderState } from '@stores/orders.atom';
 import MapWithRoute from './MapWithRoute';
+import { OrderStatus } from '@dagdag/common/types';
+import PickUp from './PickUp';
+import { CurrentOrderProvider } from '@context/currentOrder';
 
 const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
 }) => {
   const [orders, setOrders] = useRecoilState(ordersState);
   const isAvailable = useRecoilValue(isAvailableState);
+  const currentOrder = useRecoilValue(currentOrderState);
 
   useEffect(() => {
     navigation.setOptions({
@@ -58,10 +62,20 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <MapWithRoute />
-      {orders.length > 0 && isAvailable ? <RideRequest /> : <BottomStatus />}
-    </SafeAreaView>
+    <CurrentOrderProvider>
+      <SafeAreaView style={styles.container}>
+        <MapWithRoute />
+        {orders.length > 0 && isAvailable ? (
+          currentOrder?.status === OrderStatus.NEW ? (
+            <RideRequest />
+          ) : (
+            <PickUp />
+          )
+        ) : (
+          <BottomStatus />
+        )}
+      </SafeAreaView>
+    </CurrentOrderProvider>
   );
 };
 

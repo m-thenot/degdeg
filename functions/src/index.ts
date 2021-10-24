@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as geofirestore from 'geofirestore';
 import * as admin from 'firebase-admin';
+import { v4 as uuidv4 } from 'uuid';
 
 admin.initializeApp();
 
@@ -19,7 +20,9 @@ export const createOrder = functions.region(REGION).https.onCall(async data => {
   const order: IOrder = data.order;
 
   // Create order
-  db.orders.add(order);
+  const orderUid = uuidv4();
+  order.uid = orderUid;
+  db.orders.doc(orderUid).set(order);
 
   // Notify drivers for this order within a radius of 4km
   const geocollection = GeoFirestore.collection(CARS_COLLECTION);

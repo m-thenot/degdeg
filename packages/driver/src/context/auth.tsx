@@ -3,6 +3,7 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
+import { DRIVERS_COLLECTION } from '@dagdag/common/constants';
 
 interface IUser {
   phoneNumber: string | null;
@@ -61,7 +62,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const userSubscriber = firestore()
-      .collection('drivers')
+      .collection(DRIVERS_COLLECTION)
       .doc(user?.uid)
       .onSnapshot(documentSnapshot => {
         documentSnapshot?.data() && setUser(documentSnapshot.data());

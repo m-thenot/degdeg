@@ -11,6 +11,7 @@ interface ICar {
 
 enum OrderStatus {
   NEW = 'NEW',
+  ACCEPTED = 'ACCEPTED',
   IN_PROGRESS = 'IN_PROGRESS',
   FINISHED = 'FINISHED',
   CANCELED_BY_CUSTOMER = 'CANCELED_BY_CUSTOMER',
@@ -41,9 +42,11 @@ interface IMetadataRoute {
 interface IUser {
   id: string;
   firstName: string;
+  phoneNumber: string;
 }
 
 export interface IOrder {
+  uid: string;
   createdDate: number;
   arrivalAddress: IAddress;
   departureAddress: IAddress;

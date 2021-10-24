@@ -60,6 +60,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
 
   const handleOrder = () => {
     const order = {
+      uid: '',
       createdDate: Date.now(),
       arrivalAddress: {
         formattedAddress: arrivalAddress.text,
@@ -73,6 +74,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       user: {
         id: user!.uid,
         firstName: user?.firstName,
+        phoneNumber: user?.phoneNumber,
       },
       metadataRoute: metadataRoute!,
       car: selectedCar!,

@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ViewStyle,
+  View,
   StyleProp,
 } from 'react-native';
 import { colors, layout, border, font } from '../theme';
@@ -13,6 +14,7 @@ interface IButton {
   style?: StyleProp<ViewStyle>;
   textStyle?: any;
   onPress: () => void;
+  icon?: any;
   disabled?: boolean;
   type?: 'primary' | 'secondary';
 }
@@ -24,6 +26,7 @@ export const Button: React.FC<IButton> = ({
   textStyle,
   type = 'primary',
   disabled = false,
+  icon,
 }) => {
   const styles = createStyles();
   return (
@@ -37,6 +40,7 @@ export const Button: React.FC<IButton> = ({
       disabled={disabled}
       activeOpacity={0.4}
       onPress={onPress}>
+      {icon && <View style={styles.icon}>{icon}</View>}
       <Text
         style={[
           styles.text,
@@ -55,6 +59,8 @@ const createStyles = () => {
       borderRadius: border.radius3,
       padding: layout.spacer4,
       justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     text: {
       textAlign: 'center',
@@ -72,11 +78,20 @@ const createStyles = () => {
     },
     secondary: {
       backgroundColor: colors.white,
-      borderWidth: 2,
-      borderColor: colors.primary,
+      shadowColor: colors.grey3,
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.29,
+      shadowRadius: 4.65,
+      elevation: 7,
     },
     textSecondary: {
-      color: colors.primary,
+      color: colors.black,
+    },
+    icon: {
+      marginRight: layout.spacer2,
     },
   });
 

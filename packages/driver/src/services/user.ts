@@ -1,9 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
-
-const DRIVERS_COLLECTION = 'drivers';
-const CARS_COLLECTION = 'cars';
+import { CARS_COLLECTION, DRIVERS_COLLECTION } from '@dagdag/common/constants';
 
 interface newDriver {
   firstName: string;
@@ -15,7 +13,6 @@ interface newDriver {
 
 export const createDriver = async (newUser: newDriver) => {
   const user = auth().currentUser;
-  console.log('***********', user);
   user?.updateProfile({
     displayName: newUser.firstName,
   });

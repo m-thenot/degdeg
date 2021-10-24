@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import Start from '@dagdag/common/assets/icons/star.svg';
-import Cross from '@dagdag/common/assets/icons/cross.svg';
+import Cross from '@dagdag/common/assets/icons/white_cross.svg';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import { Circle, Svg, Line, Polygon } from 'react-native-svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -13,17 +13,16 @@ import {
 } from '@dagdag/common/utils';
 import { useRecoilState } from 'recoil';
 import { ordersState } from '@stores/orders.atom';
+import { updateOrderStatus } from '@services/order';
+import { OrderStatus } from '@dagdag/common/types';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
   const orderRequest = orders[0];
 
-  console.log(orders.length);
-
   const handlePressDecline = () => {
     const newOrders = [...orders];
     newOrders.shift();
-    console.log(newOrders);
     setOrders(newOrders);
   };
 
@@ -33,7 +32,7 @@ const RideRequest: React.FC = () => {
         <TouchableOpacity
           style={styles.ignoreButton}
           onPress={handlePressDecline}>
-          <Cross width={12} height={12} fill={colors.white} />
+          <Cross width={11} height={11} />
           <Text style={styles.ignoreText}>Décliner</Text>
         </TouchableOpacity>
       </View>
@@ -93,7 +92,12 @@ const RideRequest: React.FC = () => {
             <Text> {orderRequest.arrivalAddress.formattedAddress}</Text>
           </View>
         </View>
-        <Button text="Accepter" onPress={() => 0} />
+        <Button
+          text="Accepter"
+          onPress={() =>
+            updateOrderStatus(OrderStatus.ACCEPTED, orderRequest.uid)
+          }
+        />
       </RoundBottom>
     </>
   );
@@ -186,5 +190,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: font.fontSize1_5,
     marginLeft: layout.spacer1,
+    transform: [{ translateY: -0.6 }],
   },
 });

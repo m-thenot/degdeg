@@ -1,7 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-
-const USERS_COLLECTION = 'users';
+import { USERS_COLLECTION } from '@dagdag/common/constants';
 
 interface newUser {
   firstName: string;
