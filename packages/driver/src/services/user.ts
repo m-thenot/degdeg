@@ -3,6 +3,7 @@ import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 
 const DRIVERS_COLLECTION = 'drivers';
+const CARS_COLLECTION = 'cars';
 
 interface newDriver {
   firstName: string;
@@ -44,6 +45,13 @@ export const saveTokenToDatabase = async token => {
 
   await firestore()
     .collection(DRIVERS_COLLECTION)
+    .doc(userId)
+    .update({
+      tokens: firestore.FieldValue.arrayUnion(token),
+    });
+
+  await firestore()
+    .collection(CARS_COLLECTION)
     .doc(userId)
     .update({
       tokens: firestore.FieldValue.arrayUnion(token),

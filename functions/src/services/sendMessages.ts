@@ -7,7 +7,7 @@ export const sendMessages = async (tokens: string[], data: any) => {
       tokens,
       {
         data: {
-          order: JSON.stringify(data),
+          order: data.order,
         },
       },
       {

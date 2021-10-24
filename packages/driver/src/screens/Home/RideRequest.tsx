@@ -7,12 +7,32 @@ import Cross from '@dagdag/common/assets/icons/cross.svg';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import { Circle, Svg, Line, Polygon } from 'react-native-svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  getFormattedTime,
+  getFormattedTimeArrival,
+} from '@dagdag/common/utils';
+import { useRecoilState } from 'recoil';
+import { ordersState } from '@stores/orders.atom';
 
 const RideRequest: React.FC = () => {
+  const [orders, setOrders] = useRecoilState(ordersState);
+  const orderRequest = orders[0];
+
+  console.log(orders.length);
+
+  const handlePressDecline = () => {
+    const newOrders = [...orders];
+    newOrders.shift();
+    console.log(newOrders);
+    setOrders(newOrders);
+  };
+
   return (
     <>
       <View style={styles.ignore}>
-        <TouchableOpacity style={styles.ignoreButton}>
+        <TouchableOpacity
+          style={styles.ignoreButton}
+          onPress={handlePressDecline}>
           <Cross width={12} height={12} fill={colors.white} />
           <Text style={styles.ignoreText}>Décliner</Text>
         </TouchableOpacity>
@@ -22,7 +42,7 @@ const RideRequest: React.FC = () => {
           <View style={styles.customer}>
             <PhotoUser height={50} width={50} />
             <View style={styles.customerText}>
-              <Text style={styles.name}>Martin</Text>
+              <Text style={styles.name}>{orderRequest.user.firstName}</Text>
               <View style={styles.scoreContainer}>
                 <Start height={13} width={13} />
                 <Text style={styles.score}>4.8</Text>
@@ -30,14 +50,23 @@ const RideRequest: React.FC = () => {
             </View>
           </View>
           <View>
-            <Text style={styles.price}>25€</Text>
-            <Text style={styles.distance}>5 km</Text>
+            <Text style={styles.price}>{orderRequest.car.price}€</Text>
+            <Text style={styles.distance}>
+              {Math.round(orderRequest.metadataRoute.distance)} km
+            </Text>
           </View>
         </View>
         <View style={styles.middle}>
           <View>
-            <Text style={[styles.timeDeparture, styles.time]}>11:24</Text>
-            <Text style={styles.time}>11:56</Text>
+            <Text style={[styles.timeDeparture, styles.time]}>
+              {getFormattedTime(new Date(orders[0].departureAt))}
+            </Text>
+            <Text style={styles.time}>
+              {getFormattedTimeArrival(
+                new Date(orders[0].departureAt),
+                orderRequest.metadataRoute.duration,
+              )}
+            </Text>
           </View>
           <View style={styles.elements}>
             <Svg height="10" width="10">
@@ -59,9 +88,9 @@ const RideRequest: React.FC = () => {
           </View>
           <View style={styles.addresses}>
             <Text style={styles.departureAddress}>
-              1, Thrale Street, London, SE19HW, UK
+              {orderRequest.departureAddress.formattedAddress}
             </Text>
-            <Text>Ealing Broadway Shopping Centre, London, W55JY, UK</Text>
+            <Text> {orderRequest.arrivalAddress.formattedAddress}</Text>
           </View>
         </View>
         <Button text="Accepter" onPress={() => 0} />

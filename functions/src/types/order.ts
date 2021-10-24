@@ -38,12 +38,17 @@ interface IMetadataRoute {
   coordinates: ILocation[];
 }
 
+interface IUser {
+  id: string;
+  firstName: string;
+}
+
 export interface IOrder {
   createdDate: number;
   arrivalAddress: IAddress;
   departureAddress: IAddress;
   status: OrderStatus;
-  userId: string;
+  user: IUser;
   metadataRoute: IMetadataRoute;
   car: ICar;
   rideType: RideType;

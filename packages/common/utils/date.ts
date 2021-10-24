@@ -1,4 +1,4 @@
-import { format, isToday, isTomorrow } from 'date-fns';
+import { addMinutes, format, isToday, isTomorrow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 export const formatMinutes = (minutes: number) =>
@@ -18,3 +18,9 @@ export const getFormateDate = (date: Date) => {
     return format(date, 'eeee à HH:mm', { locale: fr });
   }
 };
+
+export const getFormattedTime = (date: Date) =>
+  format(date, 'HH:mm', { locale: fr });
+
+export const getFormattedTimeArrival = (date: Date, duration: number) =>
+  getFormattedTime(addMinutes(date, duration));

@@ -1,12 +1,15 @@
 import { colors, font, layout } from '@dagdag/common/theme';
 import { isAvailableState } from '@stores/driver.atom';
+import { ordersState } from '@stores/orders.atom';
 import React, { useEffect, useState } from 'react';
 import { Switch, StyleSheet, View, Text } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 const Status: React.FC = () => {
   const [isAvailable, setIsAvailable] = useRecoilState(isAvailableState);
   const [isEnabled, setIsEnabled] = useState(isAvailable);
+  const setOrders = useSetRecoilState(ordersState);
+
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
     setIsAvailable(previousState => !previousState);
@@ -15,6 +18,9 @@ const Status: React.FC = () => {
   useEffect(() => {
     if (isEnabled !== isAvailable) {
       setIsEnabled(isAvailable);
+    }
+    if (!isAvailable) {
+      setOrders([]);
     }
   }, [isAvailable]);
 

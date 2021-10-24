@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { CarType } from '@dagdag/common/constants';
+import { CarType } from '@dagdag/common/types';
 import { useRecoilState } from 'recoil';
 import { carState } from '@stores/car.atom';
 import { colors, layout, font, border } from '@dagdag/common/theme';

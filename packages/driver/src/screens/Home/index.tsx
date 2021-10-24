@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Alert } from 'react-native';
-import Map from '@components/Map';
 import { requestUserPermission, saveTokenToDatabase } from '@services/user';
 import messaging from '@react-native-firebase/messaging';
-import { useLocation } from '@context/location';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
@@ -11,15 +9,15 @@ import { colors } from '@dagdag/common/theme';
 import RideRequest from './RideRequest';
 import Status from './Status';
 import BottomStatus from './BottomStatus';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { isAvailableState } from '@stores/driver.atom';
+import { ordersState } from '@stores/orders.atom';
+import MapWithRoute from './MapWithRoute';
 
 const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
 }) => {
-  const { location } = useLocation();
-  const [order, setOrder] = useState<any>();
-  const [hasRequests, setHasRequests] = useState(true);
+  const [orders, setOrders] = useRecoilState(ordersState);
   const isAvailable = useRecoilValue(isAvailableState);
 
   useEffect(() => {
@@ -43,13 +41,17 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      setOrder(remoteMessage.data);
-
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      const newOrder = remoteMessage?.data?.order;
+      if (newOrder) {
+        setOrders(orders => [...orders, JSON.parse(newOrder)]);
+      }
     });
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
+      Alert.alert(
+        'Message handled in the background!',
+        JSON.stringify(remoteMessage),
+      );
     });
 
     return unsubscribe;
@@ -57,8 +59,8 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <Map showsUserLocation />
-      {hasRequests && isAvailable ? <RideRequest /> : <BottomStatus />}
+      <MapWithRoute />
+      {orders.length > 0 && isAvailable ? <RideRequest /> : <BottomStatus />}
     </SafeAreaView>
   );
 };

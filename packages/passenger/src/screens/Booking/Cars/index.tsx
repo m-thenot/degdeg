@@ -70,7 +70,10 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
         coordinates: metadataRoute!.coordinates[0],
       },
       status: OrderStatus.NEW,
-      userId: user!.uid,
+      user: {
+        id: user!.uid,
+        firstName: user?.firstName,
+      },
       metadataRoute: metadataRoute!,
       car: selectedCar!,
       rideType: isOrderNow ? RideType.NOW : RideType.LATER,
