@@ -26,11 +26,16 @@ const SignInWithPhoneNumber: React.FC<
   const [valid, setValid] = useState<boolean | null>();
   const phoneInput = useRef<PhoneInput>(null);
   const { setConfirmation } = useFirebaseAuthentication();
+  const [isLoading, setIsLoading] = useState(false);
 
   const signInWithPhoneNumber = async (phoneNumber: string) => {
-    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    setConfirmation?.(confirmation);
-    navigation.navigate('verification', { phoneNumber });
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      setConfirmation?.(confirmation);
+      navigation.navigate('verification', { phoneNumber });
+    } catch (e) {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -75,11 +80,15 @@ const SignInWithPhoneNumber: React.FC<
         </Text>
         <Button
           text="Suivant"
+          isLoading={isLoading}
           onPress={() => {
+            setIsLoading(true);
             const checkValid = phoneInput.current?.isValidNumber(value);
             setValid(checkValid ? checkValid : false);
             if (checkValid) {
               signInWithPhoneNumber(formattedValue);
+            } else {
+              setIsLoading(false);
             }
           }}
         />

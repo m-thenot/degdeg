@@ -6,6 +6,7 @@ import {
   ViewStyle,
   View,
   StyleProp,
+  ActivityIndicator,
 } from 'react-native';
 import { colors, layout, border, font } from '../theme';
 
@@ -17,6 +18,7 @@ interface IButton {
   icon?: any;
   disabled?: boolean;
   type?: 'primary' | 'secondary';
+  isLoading?: boolean;
 }
 
 export const Button: React.FC<IButton> = ({
@@ -26,6 +28,7 @@ export const Button: React.FC<IButton> = ({
   textStyle,
   type = 'primary',
   disabled = false,
+  isLoading = false,
   icon,
 }) => {
   const styles = createStyles();
@@ -40,15 +43,24 @@ export const Button: React.FC<IButton> = ({
       disabled={disabled}
       activeOpacity={0.4}
       onPress={onPress}>
-      {icon && <View style={styles.icon}>{icon}</View>}
-      <Text
-        style={[
-          styles.text,
-          textStyle,
-          type === 'primary' ? styles.textPrimary : styles.textSecondary,
-        ]}>
-        {text}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator
+          size="small"
+          color={type === 'primary' ? colors.white : colors.black}
+        />
+      ) : (
+        <>
+          {icon && <View style={styles.icon}>{icon}</View>}
+          <Text
+            style={[
+              styles.text,
+              textStyle,
+              type === 'primary' ? styles.textPrimary : styles.textSecondary,
+            ]}>
+            {text}
+          </Text>
+        </>
+      )}
     </TouchableOpacity>
   );
 };
@@ -61,6 +73,14 @@ const createStyles = () => {
       justifyContent: 'center',
       flexDirection: 'row',
       alignItems: 'center',
+      shadowColor: colors.grey3,
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.29,
+      shadowRadius: 4.65,
+      elevation: 7,
     },
     text: {
       textAlign: 'center',
@@ -78,14 +98,6 @@ const createStyles = () => {
     },
     secondary: {
       backgroundColor: colors.white,
-      shadowColor: colors.grey3,
-      shadowOffset: {
-        width: 0,
-        height: 3,
-      },
-      shadowOpacity: 0.29,
-      shadowRadius: 4.65,
-      elevation: 7,
     },
     textSecondary: {
       color: colors.black,

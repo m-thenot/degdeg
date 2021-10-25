@@ -45,7 +45,7 @@ const createStyles = (size: number) => {
       shadowRadius: 4.65,
       elevation: 7,
       backgroundColor: colors.white,
-      zIndex: 999,
+      zIndex: 15,
     },
   });
 };

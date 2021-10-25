@@ -1,5 +1,5 @@
-import { Button, RoundBottom } from '@dagdag/common/components';
-import React from 'react';
+import { Button, Modal, RoundBottom } from '@dagdag/common/components';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import RouteIcon from '@assets/icons/route.svg';
 import CallIcon from '@dagdag/common/assets/icons/call.svg';
@@ -18,48 +18,61 @@ import { callNumber } from '@dagdag/common/utils';
 const PickUp: React.FC = () => {
   const currentOrder = useRecoilValue(currentOrderState);
   const { location } = useLocation();
+  const [isCancelModalOpened, setIsCancelModalOpened] = useState(false);
 
   return (
-    <RoundBottom>
-      <Text style={styles.pickup}>
-        Récupérer {currentOrder?.user.firstName} à{' '}
-      </Text>
-      <Text style={styles.address}>
-        {currentOrder?.departureAddress.formattedAddress}
-      </Text>
+    <>
+      <RoundBottom>
+        <Text style={styles.pickup}>
+          Récupérer {currentOrder?.user.firstName} à{' '}
+        </Text>
+        <Text style={styles.address}>
+          {currentOrder?.departureAddress.formattedAddress}
+        </Text>
 
-      <View style={styles.actions}>
-        <Button
-          icon={<CallIcon width={18} height={18} />}
-          text="Appeler"
-          type="secondary"
-          onPress={() => callNumber(currentOrder?.user.phoneNumber!)}
-        />
-        <Button
-          text="Itinéraire"
-          type="secondary"
-          icon={<RouteIcon width={24} height={24} />}
-          onPress={() =>
-            openMap({
-              travelType: 'drive',
-              navigate: true,
-              start: `${location?.latitude}, ${location?.longitude}`,
-              end: `${currentOrder?.departureAddress.coordinates!.latitude}, ${
-                currentOrder?.departureAddress.coordinates!.longitude
-              }`,
-            })
-          }
-        />
-        <RoundIconButton
-          onPress={() =>
+        <View style={styles.actions}>
+          <Button
+            icon={<CallIcon width={18} height={18} />}
+            text="Appeler"
+            type="secondary"
+            onPress={() => callNumber(currentOrder?.user.phoneNumber!)}
+          />
+          <Button
+            text="Itinéraire"
+            type="secondary"
+            icon={<RouteIcon width={24} height={24} />}
+            onPress={() =>
+              openMap({
+                travelType: 'drive',
+                navigate: true,
+                start: `${location?.latitude}, ${location?.longitude}`,
+                end: `${
+                  currentOrder?.departureAddress.coordinates!.latitude
+                }, ${currentOrder?.departureAddress.coordinates!.longitude}`,
+              })
+            }
+          />
+          <RoundIconButton onPress={() => setIsCancelModalOpened(true)}>
+            <CloseIcon width={13} height={13} fill="red" stroke="red" />
+          </RoundIconButton>
+        </View>
+
+        <Button text="Je suis arrivé" onPress={() => 0} />
+      </RoundBottom>
+
+      {isCancelModalOpened && (
+        <Modal
+          question="Êtes-vous sûr de vouloir annuler cette course ?"
+          primaryText="Oui"
+          secondaryText="Non"
+          onPressPrimary={() =>
             updateOrderStatus(OrderStatus.CANCELED_BY_DRIVER, currentOrder!.uid)
-          }>
-          <CloseIcon width={13} height={13} fill="red" stroke="red" />
-        </RoundIconButton>
-      </View>
-
-      <Button text="Je suis arrivé" onPress={() => 0} />
-    </RoundBottom>
+          }
+          onPressSecondary={() => setIsCancelModalOpened(false)}
+          onPressOutside={() => setIsCancelModalOpened(false)}
+        />
+      )}
+    </>
   );
 };
 

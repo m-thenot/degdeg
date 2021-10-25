@@ -3,3 +3,4 @@ export * from './Button';
 export * from './HeaderLeft';
 export * from './LinkButton';
 export * from './RoundBottom';
+export * from './Modal';

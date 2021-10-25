@@ -1,10 +1,17 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { border, colors, layout } from '@dagdag/common/theme';
 
-export const RoundBottom: React.FC = ({ children }) => {
+interface IRoundBottomProps {
+  customStyle?: StyleProp<ViewStyle>;
+}
+
+export const RoundBottom: React.FC<IRoundBottomProps> = ({
+  children,
+  customStyle,
+}) => {
   const styles = createStyles();
-  return <View style={styles.bottom}>{children}</View>;
+  return <View style={[styles.bottom, customStyle]}>{children}</View>;
 };
 
 const createStyles = () => {

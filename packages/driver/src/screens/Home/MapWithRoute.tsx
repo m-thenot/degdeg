@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Map from '@components/Map';
 import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_API_KEY } from '@env';
@@ -9,46 +9,73 @@ import { useRecoilValue } from 'recoil';
 import { StyleSheet } from 'react-native';
 import { colors } from '@dagdag/common/theme';
 import { currentOrderState } from '@stores/orders.atom';
+import { useLocation } from '@context/location';
+import { IMetadataRoute, OrderStatus } from '@dagdag/common/types';
+import { LATITUDE_DELTA, LONGITUDE_DELTA } from '@dagdag/common/constants';
+
+const marginBottomMap = {
+  [OrderStatus.NEW]: 280,
+  [OrderStatus.ACCEPTED]: 230,
+};
 
 const MapWithRoute: React.FC = React.memo(() => {
   const mapRef = useRef<any | undefined>();
   const order = useRecoilValue(currentOrderState);
-  const styles = createStyles(Boolean(order?.metadataRoute));
+  const styles = createStyles(
+    order?.metadataRoute ? marginBottomMap[order.status] : 0,
+  );
 
-  const traceRoute = () => {
-    if (order?.metadataRoute?.coordinates) {
-      const { coordinates } = order?.metadataRoute;
+  const { location } = useLocation();
+  const [metadataRoute, setMetadaRoute] = useState<IMetadataRoute>();
+
+  useEffect(() => {
+    if (metadataRoute?.coordinates) {
+      const { coordinates } = metadataRoute;
       const startStopCoords = [
         coordinates[0],
         coordinates[coordinates.length - 1],
       ];
       mapRef?.current.fitToCoordinates(startStopCoords, {
         edgePadding: {
-          top: 80,
+          top: 30,
           left: 50,
           right: 50,
-          bottom: 80,
+          bottom: 30,
         },
-        animated: true,
+        animated: false,
       });
+    } else if (location) {
+      mapRef?.current.animateToRegion(
+        {
+          latitude: location?.latitude,
+          longitude: location?.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+        100,
+      );
     }
-  };
-
-  useEffect(() => {
-    traceRoute();
-  }, [order]);
+  }, [metadataRoute?.coordinates, location]);
 
   return (
     <Map mapRef={mapRef} customStyle={styles.map}>
       {order?.metadataRoute && (
         <>
           <MapViewDirections
-            destination={order?.arrivalAddress.coordinates}
-            origin={order?.departureAddress.coordinates}
+            destination={
+              order.status === OrderStatus.ACCEPTED
+                ? order?.departureAddress.coordinates
+                : order?.arrivalAddress.coordinates
+            }
+            origin={
+              order.status === OrderStatus.ACCEPTED
+                ? location
+                : order?.departureAddress.coordinates
+            }
             apikey={GOOGLE_MAPS_API_KEY}
             strokeWidth={3}
             strokeColor={colors.black}
-            onReady={traceRoute}
+            onReady={metadata => setMetadaRoute(metadata)}
           />
 
           <Marker
@@ -73,10 +100,10 @@ const MapWithRoute: React.FC = React.memo(() => {
 
 export default MapWithRoute;
 
-const createStyles = (hasRoute: boolean) => {
+const createStyles = (marginBottom: number) => {
   return StyleSheet.create({
     map: {
-      marginBottom: hasRoute ? 280 : 0,
+      marginBottom: marginBottom,
     },
   });
 };

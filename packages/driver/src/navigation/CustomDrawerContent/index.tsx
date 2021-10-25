@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 43,
     left: 80,
-    zIndex: 999,
+    zIndex: 15,
   },
   menu: {
     flex: 1,

@@ -10,7 +10,6 @@ import React from 'react';
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
 import { layout } from '@dagdag/common/theme';
-import { useLocation } from '@context/location';
 import { GOOGLE_MAPS_API_KEY } from '@env';
 
 Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'fr' });
@@ -22,21 +21,20 @@ interface IMap extends MapViewProps {
 
 const Map: React.FC<IMap> = React.memo(
   ({ children, mapRef = null, customStyle, region, ...props }) => {
-    const { location } = useLocation();
     return (
       <MapView
         ref={mapRef}
         style={[styles.map, customStyle]}
-        region={
-          region || {
-            latitude: location?.latitude || INITIAL_LATITUDE,
-            longitude: location?.longitude || INITIAL_LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }
-        }
+        initialRegion={{
+          latitude: INITIAL_LATITUDE,
+          longitude: INITIAL_LONGITUDE,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
         provider={PROVIDER_GOOGLE}
-        mapPadding={{ top: 20, right: 20, bottom: 165, left: 20 }}
+        mapPadding={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        showsUserLocation
+        showsMyLocationButton={false}
         {...props}>
         {children}
       </MapView>

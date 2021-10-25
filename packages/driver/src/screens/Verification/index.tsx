@@ -29,6 +29,7 @@ const Verification: React.FC<
 > = ({ route }) => {
   const headerHeight = useHeaderHeight();
   const { confirmation, setConfirmation } = useFirebaseAuthentication();
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: 6 });
@@ -45,9 +46,11 @@ const Verification: React.FC<
   };
 
   const confirmCode = async () => {
+    setIsLoading(true);
     try {
       await confirmation!.confirm(value);
     } catch {
+      setIsLoading(false);
       setError(true);
     }
   };
@@ -103,7 +106,7 @@ const Verification: React.FC<
             </Text>
           )}
         </View>
-        <Button text="Suivant" onPress={confirmCode} />
+        <Button text="Suivant" isLoading={isLoading} onPress={confirmCode} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

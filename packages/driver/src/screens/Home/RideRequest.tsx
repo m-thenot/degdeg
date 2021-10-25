@@ -1,5 +1,5 @@
 import { Button, RoundBottom } from '@dagdag/common/components';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import Start from '@dagdag/common/assets/icons/star.svg';
@@ -18,6 +18,7 @@ import { OrderStatus } from '@dagdag/common/types';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
+  const [isLoading, setIsLoading] = useState(false);
   const orderRequest = orders[0];
 
   const handlePressDecline = () => {
@@ -94,9 +95,11 @@ const RideRequest: React.FC = () => {
         </View>
         <Button
           text="Accepter"
-          onPress={() =>
-            updateOrderStatus(OrderStatus.ACCEPTED, orderRequest.uid)
-          }
+          isLoading={isLoading}
+          onPress={() => {
+            setIsLoading(true);
+            updateOrderStatus(OrderStatus.ACCEPTED, orderRequest.uid);
+          }}
         />
       </RoundBottom>
     </>

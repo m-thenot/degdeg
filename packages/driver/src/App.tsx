@@ -5,6 +5,7 @@ import AuthNavigation from './navigation/AuthNavigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LogBox } from 'react-native';
 import { RecoilRoot } from 'recoil';
+import { PortalProvider } from '@gorhom/portal';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -13,7 +14,9 @@ const App = () => {
     <RecoilRoot>
       <AuthProvider>
         <SafeAreaProvider>
-          <AuthNavigation />
+          <PortalProvider>
+            <AuthNavigation />
+          </PortalProvider>
         </SafeAreaProvider>
       </AuthProvider>
     </RecoilRoot>
