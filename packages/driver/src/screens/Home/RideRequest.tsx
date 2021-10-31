@@ -1,8 +1,6 @@
 import { Button, RoundBottom } from '@dagdag/common/components';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import PhotoUser from '@assets/icons/photo-user.svg';
-import Start from '@dagdag/common/assets/icons/star.svg';
 import Cross from '@dagdag/common/assets/icons/white_cross.svg';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import { Circle, Svg, Line, Polygon } from 'react-native-svg';
@@ -15,6 +13,7 @@ import { useRecoilState } from 'recoil';
 import { ordersState } from '@stores/orders.atom';
 import { updateOrderStatus } from '@services/order';
 import { OrderStatus } from '@dagdag/common/types';
+import PassengerProfile from './shared/PassengerProfile';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
@@ -39,16 +38,7 @@ const RideRequest: React.FC = () => {
       </View>
       <RoundBottom>
         <View style={styles.top}>
-          <View style={styles.customer}>
-            <PhotoUser height={50} width={50} />
-            <View style={styles.customerText}>
-              <Text style={styles.name}>{orderRequest.user.firstName}</Text>
-              <View style={styles.scoreContainer}>
-                <Start height={13} width={13} />
-                <Text style={styles.score}>4.8</Text>
-              </View>
-            </View>
-          </View>
+          <PassengerProfile firstName={orderRequest.user.firstName} />
           <View>
             <Text style={styles.price}>{orderRequest.car.price}€</Text>
             <Text style={styles.distance}>

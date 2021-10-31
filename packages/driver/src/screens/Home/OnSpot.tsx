@@ -1,66 +1,53 @@
 import { Button, Modal, RoundBottom } from '@dagdag/common/components';
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import RouteIcon from '@assets/icons/route.svg';
+import { StyleSheet, View, Text } from 'react-native';
 import CallIcon from '@dagdag/common/assets/icons/call.svg';
 import CloseIcon from '@dagdag/common/assets/icons/cross.svg';
 
-import { colors, font, layout } from '@dagdag/common/theme';
 import { RoundIconButton } from '@dagdag/common/components/RoundIconButton';
 import { updateOrderStatus } from '@services/order';
 import { OrderStatus } from '@dagdag/common/types';
 import { useRecoilValue } from 'recoil';
 import { currentOrderState } from '@stores/orders.atom';
-import openMap from 'react-native-open-maps';
-import { useLocation } from '@context/location';
-import { callNumber } from '@dagdag/common/utils';
 
-const PickUp: React.FC = () => {
+import { callNumber } from '@dagdag/common/utils';
+import PassengerProfile from './shared/PassengerProfile';
+import { colors, font, layout } from '@dagdag/common/theme';
+
+const OnSpot: React.FC = () => {
   const currentOrder = useRecoilValue(currentOrderState);
-  const { location } = useLocation();
   const [isCancelModalOpened, setIsCancelModalOpened] = useState(false);
 
   return (
     <>
       <RoundBottom>
-        <Text style={styles.pickup}>
-          Récupérer {currentOrder?.user.firstName} à{' '}
-        </Text>
-        <Text style={styles.address}>
-          {currentOrder?.departureAddress.formattedAddress}
-        </Text>
-
-        <View style={styles.actions}>
+        <View style={styles.top}>
+          <PassengerProfile firstName={currentOrder?.user.firstName!} />
           <Button
             icon={<CallIcon width={18} height={18} />}
+            style={styles.call}
             text="Appeler"
             type="secondary"
             onPress={() => callNumber(currentOrder?.user.phoneNumber!)}
           />
-          <Button
-            text="Itinéraire"
-            type="secondary"
-            icon={<RouteIcon width={24} height={24} />}
-            onPress={() =>
-              openMap({
-                travelType: 'drive',
-                navigate: true,
-                start: `${location?.latitude}, ${location?.longitude}`,
-                end: `${
-                  currentOrder?.departureAddress.coordinates!.latitude
-                }, ${currentOrder?.departureAddress.coordinates!.longitude}`,
-              })
-            }
-          />
+        </View>
+
+        <View style={styles.bottom}>
+          <View style={styles.addressContainer}>
+            <Text style={styles.pickup}>Point de rendez-vous: </Text>
+            <Text style={styles.address}>
+              {currentOrder?.departureAddress.formattedAddress}
+            </Text>
+          </View>
           <RoundIconButton onPress={() => setIsCancelModalOpened(true)}>
             <CloseIcon width={13} height={13} fill="red" stroke="red" />
           </RoundIconButton>
         </View>
 
         <Button
-          text="Je suis arrivé"
+          text="Le passager est à bord"
           onPress={() =>
-            updateOrderStatus(OrderStatus.ON_SPOT, currentOrder!.uid)
+            updateOrderStatus(OrderStatus.IN_PROGRESS, currentOrder!.uid)
           }
         />
       </RoundBottom>
@@ -81,21 +68,31 @@ const PickUp: React.FC = () => {
   );
 };
 
-export default PickUp;
+export default OnSpot;
 
 const styles = StyleSheet.create({
-  actions: {
+  top: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: layout.spacer4,
   },
-  address: {
-    color: colors.black,
-    fontSize: font.fontSize4,
+  call: {
+    flex: 1,
+    marginLeft: layout.spacer6,
   },
+  bottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: layout.spacer5,
+  },
+  addressContainer: {},
   pickup: {
     color: colors.grey2,
     fontSize: font.fontSize2,
+  },
+  address: {
+    color: colors.black,
+    fontSize: font.fontSize3,
   },
 });

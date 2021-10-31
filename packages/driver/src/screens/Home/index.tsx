@@ -16,6 +16,7 @@ import MapWithRoute from './MapWithRoute';
 import { OrderStatus } from '@dagdag/common/types';
 import PickUp from './PickUp';
 import { CurrentOrderProvider } from '@context/currentOrder';
+import OnSpot from './OnSpot';
 
 const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
@@ -61,16 +62,25 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
     return unsubscribe;
   }, []);
 
+  const stateMachine = (status: OrderStatus) => {
+    switch (status) {
+      case OrderStatus.NEW:
+        return <RideRequest />;
+      case OrderStatus.ACCEPTED:
+        return <PickUp />;
+      case OrderStatus.ON_SPOT:
+        return <OnSpot />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <CurrentOrderProvider>
       <SafeAreaView style={styles.container}>
         <MapWithRoute />
         {orders.length > 0 && isAvailable ? (
-          currentOrder?.status === OrderStatus.NEW ? (
-            <RideRequest />
-          ) : (
-            <PickUp />
-          )
+          stateMachine(currentOrder?.status!)
         ) : (
           <BottomStatus />
         )}

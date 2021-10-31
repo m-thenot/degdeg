@@ -3,6 +3,7 @@ import { ICar } from './car';
 export enum OrderStatus {
   NEW = 'NEW',
   ACCEPTED = 'ACCEPTED',
+  ON_SPOT = 'ON_SPOT',
   IN_PROGRESS = 'IN_PROGRESS',
   FINISHED = 'FINISHED',
   CANCELED_BY_CUSTOMER = 'CANCELED_BY_CUSTOMER',
