@@ -10,14 +10,14 @@ import {
 import globalStyles from '@theme/globalStyles';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { useRecoilState } from 'recoil';
-import { isAvailableState } from '@stores/driver.atom';
+import { isOnlineState } from '@stores/driver.atom';
 
 const BottomStatus: React.FC = () => {
-  const [isAvailable, setIsAvailable] = useRecoilState(isAvailableState);
+  const [isOnline, setisOnline] = useRecoilState(isOnlineState);
 
   return (
     <>
-      {isAvailable ? (
+      {isOnline ? (
         <RoundBottom>
           <Text style={styles.text}>
             Vous êtes <Text style={globalStyles.bold}>en ligne</Text>.
@@ -38,7 +38,7 @@ const BottomStatus: React.FC = () => {
             activeOpacity={0.4}
             style={styles.buttonGo}
             onPress={() => {
-              setIsAvailable(true);
+              setisOnline(true);
             }}>
             <Text style={styles.textGo}>GO</Text>
           </TouchableOpacity>

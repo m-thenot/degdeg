@@ -10,7 +10,7 @@ import RideRequest from './RideRequest';
 import Status from './Status';
 import BottomStatus from './BottomStatus';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isAvailableState } from '@stores/driver.atom';
+import { isOnlineState } from '@stores/driver.atom';
 import { ordersState, currentOrderState } from '@stores/orders.atom';
 import MapWithRoute from './MapWithRoute';
 import { OrderStatus } from '@dagdag/common/types';
@@ -23,7 +23,7 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
 }) => {
   const [orders, setOrders] = useRecoilState(ordersState);
-  const isAvailable = useRecoilValue(isAvailableState);
+  const isOnline = useRecoilValue(isOnlineState);
   const currentOrder = useRecoilValue(currentOrderState);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
     <CurrentOrderProvider>
       <SafeAreaView style={styles.container}>
         <MapWithRoute />
-        {orders.length > 0 && isAvailable ? (
+        {orders.length > 0 && isOnline ? (
           stateMachine(currentOrder?.status!)
         ) : (
           <BottomStatus />

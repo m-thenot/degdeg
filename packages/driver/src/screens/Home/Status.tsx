@@ -3,22 +3,22 @@ import { colors, font, layout } from '@dagdag/common/theme';
 import { OrderStatus } from '@dagdag/common/types';
 import { Portal } from '@gorhom/portal';
 import { updateOrderStatus } from '@services/order';
-import { isAvailableState } from '@stores/driver.atom';
+import { isOnlineState } from '@stores/driver.atom';
 import { currentOrderState, ordersState } from '@stores/orders.atom';
 import React, { useEffect, useState } from 'react';
 import { Switch, StyleSheet, View, Text } from 'react-native';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 const Status: React.FC = () => {
-  const [isAvailable, setIsAvailable] = useRecoilState(isAvailableState);
-  const [isEnabled, setIsEnabled] = useState(isAvailable);
+  const [isOnline, setisOnline] = useRecoilState(isOnlineState);
+  const [isEnabled, setIsEnabled] = useState(isOnline);
   const setOrders = useSetRecoilState(ordersState);
   const currentOrder = useRecoilValue(currentOrderState);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
-    setIsAvailable(previousState => !previousState);
+    setisOnline(previousState => !previousState);
   };
 
   const onSwitchChange = () => {
@@ -30,13 +30,13 @@ const Status: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isEnabled !== isAvailable) {
-      setIsEnabled(isAvailable);
+    if (isEnabled !== isOnline) {
+      setIsEnabled(isOnline);
     }
-    if (!isAvailable) {
+    if (!isOnline) {
       setOrders([]);
     }
-  }, [isAvailable]);
+  }, [isOnline]);
 
   return (
     <>
