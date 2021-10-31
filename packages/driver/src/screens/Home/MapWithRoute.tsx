@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Map from '@components/Map';
 import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_API_KEY } from '@env';
@@ -16,6 +16,8 @@ import { LATITUDE_DELTA, LONGITUDE_DELTA } from '@dagdag/common/constants';
 const marginBottomMap = {
   [OrderStatus.NEW]: 280,
   [OrderStatus.ACCEPTED]: 230,
+  [OrderStatus.ON_SPOT]: 230,
+  [OrderStatus.IN_PROGRESS]: 230,
 };
 
 const MapWithRoute: React.FC = React.memo(() => {

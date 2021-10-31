@@ -17,6 +17,7 @@ import { OrderStatus } from '@dagdag/common/types';
 import PickUp from './PickUp';
 import { CurrentOrderProvider } from '@context/currentOrder';
 import OnSpot from './OnSpot';
+import InProgress from './InProgress';
 
 const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
@@ -70,6 +71,8 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
         return <PickUp />;
       case OrderStatus.ON_SPOT:
         return <OnSpot />;
+      case OrderStatus.IN_PROGRESS:
+        return <InProgress />;
       default:
         return null;
     }
