@@ -1,4 +1,4 @@
-import { ICar } from '@dagdag/common/constants';
+import { ICar } from '@dagdag/common/types';
 import { atom } from 'recoil';
 
 export const carState = atom<ICar | null>({

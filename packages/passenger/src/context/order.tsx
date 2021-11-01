@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { IOrder } from '@dagdag/common/types';
+import { ORDERS_COLLECTION } from '@dagdag/common/constants';
 
 interface IContextProps {
   order: IOrder | null;
@@ -16,7 +17,7 @@ const OrderProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (orderUid) {
       const orderSubscriber = firestore()
-        .collection('orders')
+        .collection(ORDERS_COLLECTION)
         .doc(orderUid)
         .onSnapshot(documentSnapshot => {
           if (documentSnapshot?.data()) {

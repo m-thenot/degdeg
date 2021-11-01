@@ -19,7 +19,8 @@ export type BookingStackParamList = {
 };
 
 export type RideStackParamList = {
-  searchForDriver: undefined;
+  ride: undefined;
+  cancelOrder: undefined;
 };
 
 export type DrawerNavigatorParamList = {
@@ -27,5 +28,5 @@ export type DrawerNavigatorParamList = {
   myRides: undefined;
   payment: undefined;
   help: undefined;
-  ride: undefined;
+  order: undefined;
 };

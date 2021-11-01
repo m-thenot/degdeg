@@ -43,6 +43,7 @@ export interface IOrder {
   arrivalAddress: IAddress;
   departureAddress: IAddress;
   status: OrderStatus;
+  cancelReason?: string;
   user: IUser;
   metadataRoute: IMetadataRoute;
   car: ICar;

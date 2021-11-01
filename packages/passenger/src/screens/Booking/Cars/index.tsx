@@ -90,7 +90,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       setIsLoading(true);
       const result = await createOrder(order);
       setOrderUid?.(result.orderUid);
-      navigation.navigate('ride' as any);
+      navigation.navigate('order' as any, { screen: 'ride' });
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -99,7 +99,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
 
   return (
     <>
-      <MapWrapper />
+      <MapWrapper mapStyle={styles.map} />
 
       <CustomBottomSheet snapPoints={snapPoints}>
         <View style={styles.container}>
@@ -163,6 +163,9 @@ export default Cars;
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: layout.spacer5,
+  },
+  map: {
+    marginBottom: 360,
   },
   timeLabel: {
     color: colors.grey2,

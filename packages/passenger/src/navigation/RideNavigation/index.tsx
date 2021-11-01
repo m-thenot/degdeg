@@ -1,7 +1,9 @@
 import { RideStackParamList } from '@internalTypes/navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import SearchForDriver from '@screens/Ride/SearchForDriver';
+import Ride from '@screens/Ride';
+import CancelOrder from '@screens/Ride/CancelOrder';
+import { BackHeader } from '@dagdag/common/components';
 
 const RideStack = createNativeStackNavigator<RideStackParamList>();
 
@@ -14,7 +16,14 @@ const RideNavigation = () => {
         title: '',
         headerStyle: { backgroundColor: 'transparent' },
       })}>
-      <RideStack.Screen name="searchForDriver" component={SearchForDriver} />
+      <RideStack.Screen name="ride" component={Ride} />
+      <RideStack.Screen
+        name="cancelOrder"
+        component={CancelOrder}
+        options={({ navigation }) => ({
+          headerLeft: () => <BackHeader navigation={navigation} />,
+        })}
+      />
     </RideStack.Navigator>
   );
 };

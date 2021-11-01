@@ -41,7 +41,7 @@ const MainNavigation: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Drawer.Screen
-        name="ride"
+        name="order"
         component={RideNavigation}
         options={{ headerShown: false }}
       />

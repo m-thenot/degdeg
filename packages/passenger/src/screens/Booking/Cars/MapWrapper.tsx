@@ -11,7 +11,7 @@ import DepIcon from '@assets/icons/ic_dest.svg';
 import ArrIcon from '@assets/icons/ic_dropoff.svg';
 import { metadataRouteState } from '@stores/route.atom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { StyleSheet } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import { colors } from '@dagdag/common/theme';
 
 interface IMetadataRoute {
@@ -22,9 +22,13 @@ interface IMetadataRoute {
   waypointOrder: [[]];
 }
 
+interface IMapWrapperProps {
+  mapStyle?: StyleProp<ViewStyle>;
+}
+
 /* This wrapper is needed to prevent MAP to re-render (and lost the route) each time user select an other vehicle.*/
 
-const MapWrapper: React.FC = React.memo(() => {
+const MapWrapper: React.FC<IMapWrapperProps> = React.memo(({ mapStyle }) => {
   const setMetadaRouteState = useSetRecoilState(metadataRouteState);
   const mapRef = useRef<any | undefined>();
   const [metadataRoute, setMetadaRoute] = useState<IMetadataRoute>();
@@ -40,10 +44,10 @@ const MapWrapper: React.FC = React.memo(() => {
       ];
       mapRef?.current.fitToCoordinates(startStopCoords, {
         edgePadding: {
-          top: 30,
+          top: 70,
           left: 50,
           right: 50,
-          bottom: 30,
+          bottom: 70,
         },
         animated: true,
       });
@@ -55,7 +59,7 @@ const MapWrapper: React.FC = React.memo(() => {
     }
   }, [metadataRoute?.coordinates]);
   return (
-    <Map mapRef={mapRef} customStyle={styles.map}>
+    <Map mapRef={mapRef} customStyle={mapStyle}>
       <MapViewDirections
         destination={arrivalAddress.coordinates || arrivalAddress.text}
         origin={departureAddress.coordinates || departureAddress.text}
@@ -86,9 +90,3 @@ const MapWrapper: React.FC = React.memo(() => {
 });
 
 export default MapWrapper;
-
-const styles = StyleSheet.create({
-  map: {
-    marginBottom: 360,
-  },
-});
