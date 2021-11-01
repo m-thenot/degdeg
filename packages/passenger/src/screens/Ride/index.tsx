@@ -9,6 +9,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBackHandler } from '@dagdag/common/hooks';
 import { OrderStatus } from '@dagdag/common/types';
 import SearchForDriver from './SearchForDriver';
+import WaitingDriver from './WaitingDriver';
+
+const marginBottomMap = {
+  [OrderStatus.NEW]: 220,
+  [OrderStatus.ACCEPTED]: 90,
+  [OrderStatus.ON_SPOT]: 90,
+  [OrderStatus.IN_PROGRESS]: 230,
+};
 
 const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
   navigation,
@@ -18,6 +26,7 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
     navigation.navigate('cancelOrder');
     return true;
   });
+  const styles = createStyles(order ? marginBottomMap[order?.status] : 0);
 
   useEffect(() => {
     navigation.setOptions({
@@ -32,9 +41,9 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
       case OrderStatus.NEW:
         return <SearchForDriver />;
       case OrderStatus.ACCEPTED:
-        return null;
+        return <WaitingDriver />;
       case OrderStatus.ON_SPOT:
-        return null;
+        return <WaitingDriver />;
       case OrderStatus.IN_PROGRESS:
         return null;
       default:
@@ -52,11 +61,12 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
 
 export default Ride;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    marginBottom: 220,
-  },
-});
+const createStyles = (marginBottomMap: number) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    map: {
+      marginBottom: marginBottomMap,
+    },
+  });

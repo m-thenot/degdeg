@@ -1,4 +1,9 @@
-import { Button, Modal, RoundBottom } from '@dagdag/common/components';
+import {
+  Button,
+  ContactProfile,
+  Modal,
+  RoundBottom,
+} from '@dagdag/common/components';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import CallIcon from '@dagdag/common/assets/icons/call.svg';
@@ -11,7 +16,6 @@ import { useRecoilValue } from 'recoil';
 import { currentOrderState } from '@stores/orders.atom';
 
 import { callNumber } from '@dagdag/common/utils';
-import PassengerProfile from './shared/PassengerProfile';
 import { colors, font, layout } from '@dagdag/common/theme';
 
 const OnSpot: React.FC = () => {
@@ -22,7 +26,7 @@ const OnSpot: React.FC = () => {
     <>
       <RoundBottom>
         <View style={styles.top}>
-          <PassengerProfile firstName={currentOrder?.user.firstName!} />
+          <ContactProfile firstName={currentOrder?.user.firstName!} />
           <Button
             icon={<CallIcon width={18} height={18} />}
             style={styles.call}

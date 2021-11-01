@@ -1,4 +1,9 @@
-import { Button, RoundBottom, RouteSummary } from '@dagdag/common/components';
+import {
+  Button,
+  ContactProfile,
+  RoundBottom,
+  RouteSummary,
+} from '@dagdag/common/components';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Cross from '@dagdag/common/assets/icons/white_cross.svg';
@@ -9,7 +14,6 @@ import { useRecoilState } from 'recoil';
 import { ordersState } from '@stores/orders.atom';
 import { updateOrderStatus } from '@services/order';
 import { OrderStatus } from '@dagdag/common/types';
-import PassengerProfile from './shared/PassengerProfile';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
@@ -34,7 +38,7 @@ const RideRequest: React.FC = () => {
       </View>
       <RoundBottom>
         <View style={styles.top}>
-          <PassengerProfile firstName={orderRequest.user.firstName} />
+          <ContactProfile firstName={orderRequest.user.firstName} />
           <View>
             <Text style={styles.price}>{orderRequest.car.price}€</Text>
             <Text style={styles.distance}>
