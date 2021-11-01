@@ -15,6 +15,7 @@ import { layout, colors, font } from '@dagdag/common/theme';
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
   const { user } = useFirebaseAuthentication();
+
   return (
     <DrawerContentScrollView
       {...props}

@@ -1,5 +1,5 @@
 import { useOrder } from '@context/order';
-import { CrossHeader } from '@dagdag/common/components';
+import { CrossHeader, MenuHeader } from '@dagdag/common/components';
 import { RideStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import MapWrapper from '@screens/Booking/Cars/MapWrapper';
@@ -10,12 +10,14 @@ import { useBackHandler } from '@dagdag/common/hooks';
 import { OrderStatus } from '@dagdag/common/types';
 import SearchForDriver from './SearchForDriver';
 import WaitingDriver from './WaitingDriver';
+import OnTrip from './OnTrip';
+import TripEnded from './TripEnded';
 
 const marginBottomMap = {
   [OrderStatus.NEW]: 220,
   [OrderStatus.ACCEPTED]: 90,
   [OrderStatus.ON_SPOT]: 90,
-  [OrderStatus.IN_PROGRESS]: 230,
+  [OrderStatus.IN_PROGRESS]: 120,
 };
 
 const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
@@ -27,12 +29,18 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
     return true;
   });
   const styles = createStyles(order ? marginBottomMap[order?.status] : 0);
+  const isFinished = order?.status !== OrderStatus.FINISHED;
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <CrossHeader onPress={() => navigation.navigate('cancelOrder')} />
-      ),
+      title: order?.status === OrderStatus.IN_PROGRESS ? 'EN CHEMIN' : '',
+      headerTitleAlign: 'center',
+      headerLeft: () =>
+        isFinished ? (
+          <MenuHeader navigation={navigation} />
+        ) : (
+          <CrossHeader onPress={() => navigation.navigate('cancelOrder')} />
+        ),
     });
   }, []);
 
@@ -45,7 +53,9 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
       case OrderStatus.ON_SPOT:
         return <WaitingDriver />;
       case OrderStatus.IN_PROGRESS:
-        return null;
+        return <OnTrip />;
+      case OrderStatus.FINISHED:
+        return <TripEnded />;
       default:
         return null;
     }
@@ -53,7 +63,7 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <MapWrapper mapStyle={styles.map} />
+      {isFinished && <MapWrapper mapStyle={styles.map} />}
       {order && stateMachine(order?.status!)}
     </SafeAreaView>
   );

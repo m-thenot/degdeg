@@ -59,7 +59,7 @@ const MapWrapper: React.FC<IMapWrapperProps> = React.memo(({ mapStyle }) => {
     }
   }, [metadataRoute?.coordinates]);
   return (
-    <Map mapRef={mapRef} customStyle={mapStyle}>
+    <Map mapRef={mapRef} customStyle={mapStyle} showsUserLocation>
       <MapViewDirections
         destination={arrivalAddress.coordinates || arrivalAddress.text}
         origin={departureAddress.coordinates || departureAddress.text}
