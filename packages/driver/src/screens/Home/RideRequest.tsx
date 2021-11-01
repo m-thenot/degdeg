@@ -1,14 +1,10 @@
-import { Button, RoundBottom } from '@dagdag/common/components';
+import { Button, RoundBottom, RouteSummary } from '@dagdag/common/components';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Cross from '@dagdag/common/assets/icons/white_cross.svg';
 import { border, colors, font, layout } from '@dagdag/common/theme';
-import { Circle, Svg, Line, Polygon } from 'react-native-svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {
-  getFormattedTime,
-  getFormattedTimeArrival,
-} from '@dagdag/common/utils';
+
 import { useRecoilState } from 'recoil';
 import { ordersState } from '@stores/orders.atom';
 import { updateOrderStatus } from '@services/order';
@@ -46,43 +42,12 @@ const RideRequest: React.FC = () => {
             </Text>
           </View>
         </View>
-        <View style={styles.middle}>
-          <View>
-            <Text style={[styles.timeDeparture, styles.time]}>
-              {getFormattedTime(new Date(orders[0].departureAt))}
-            </Text>
-            <Text style={styles.time}>
-              {getFormattedTimeArrival(
-                new Date(orders[0].departureAt),
-                orderRequest.metadataRoute.duration,
-              )}
-            </Text>
-          </View>
-          <View style={styles.elements}>
-            <Svg height="10" width="10">
-              <Circle cx="4" cy="4" r="4" fill={colors.primary} />
-            </Svg>
-            <Svg style={styles.line} height="49" width="3">
-              <Line
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="49"
-                stroke={colors.grey3}
-                strokeWidth="3"
-              />
-            </Svg>
-            <Svg height="8" width="10">
-              <Polygon points="0,0 10,0 4,8" fill={colors.grey3} />
-            </Svg>
-          </View>
-          <View style={styles.addresses}>
-            <Text style={styles.departureAddress}>
-              {orderRequest.departureAddress.formattedAddress}
-            </Text>
-            <Text> {orderRequest.arrivalAddress.formattedAddress}</Text>
-          </View>
-        </View>
+        <RouteSummary
+          departureAddress={orderRequest.departureAddress.formattedAddress}
+          arrivalAddress={orderRequest.arrivalAddress.formattedAddress}
+          departureAt={orderRequest.departureAt}
+          style={styles.summary}
+        />
         <Button
           text="Accepter"
           isLoading={isLoading}
@@ -135,34 +100,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: font.fontSize2,
   },
-  elements: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: layout.spacer3,
-  },
-  line: {
-    marginVertical: layout.spacer2,
-  },
-  middle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  summary: {
     marginVertical: layout.spacer5,
-    marginLeft: layout.spacer2,
-  },
-  addresses: {
-    justifyContent: 'space-between',
-    flexShrink: 1,
-    width: '100%',
-  },
-  departureAddress: {
-    marginBottom: 45,
-  },
-  timeDeparture: {
-    marginBottom: 50,
-  },
-  time: {
-    color: colors.grey3,
   },
   ignore: {
     position: 'absolute',

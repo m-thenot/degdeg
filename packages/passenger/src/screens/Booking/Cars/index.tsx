@@ -1,6 +1,6 @@
 import CustomBottomSheet from '@components/CustomBottomSheet';
 import { Button } from '@dagdag/common/components';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import Car from './Car';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -20,6 +20,7 @@ import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { OrderStatus, RideType, CarType } from '@dagdag/common/types';
 import { createOrder } from '@services/order';
 import { getFormateDate } from '@dagdag/common/utils';
+import { useOrder } from '@context/order';
 
 const snapPoints = [400, '80%'];
 
@@ -40,6 +41,8 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
   const [departureAt, setDepartureAt] = useRecoilState(departureAtState);
   const { user } = useFirebaseAuthentication();
   const isOrderNow = !departureAt;
+  const { setOrderUid } = useOrder();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -58,7 +61,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
     return () => setDepartureAt(undefined);
   }, [navigation]);
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     const order = {
       uid: '',
       createdDate: Date.now(),
@@ -79,11 +82,19 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       metadataRoute: metadataRoute!,
       car: selectedCar!,
       rideType: isOrderNow ? RideType.NOW : RideType.LATER,
-      departureAt: departureAt || new Date(),
+      departureAt: departureAt?.getTime() || Date.now(),
       price: null, // TODO: add pricig
     };
 
-    createOrder(order);
+    try {
+      setIsLoading(true);
+      const result = await createOrder(order);
+      setOrderUid?.(result.orderUid);
+      navigation.navigate('ride' as any);
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
+    }
   };
 
   return (
@@ -130,6 +141,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
               style={[styles.button, styles.nowButton]}
               textStyle={styles.textButton}
               disabled={!selectedCar}
+              isLoading={isLoading}
             />
             <Button
               text={isOrderNow ? 'Plus tard' : 'Modifier'}

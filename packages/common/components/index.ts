@@ -4,3 +4,4 @@ export * from './HeaderLeft';
 export * from './LinkButton';
 export * from './RoundBottom';
 export * from './Modal';
+export * from './RouteSummary';

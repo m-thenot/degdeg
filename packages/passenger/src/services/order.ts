@@ -7,5 +7,5 @@ export const createOrder = async (order: IOrder) => {
     .app()
     .functions(FIREBASE_REGION)
     .httpsCallable('createOrder')({ order });
-  console.log(result);
+  return result.data;
 };

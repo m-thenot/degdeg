@@ -9,7 +9,7 @@ export const getRound5Date = () => {
   return new Date(new Date(d).setMinutes(Math.ceil(d.getMinutes() / 5) * 5));
 };
 
-export const getFormateDate = (date: Date) => {
+export const getFormateDate = (date: number | Date) => {
   if (isToday(date)) {
     return "aujourd'hui à " + format(date, 'HH:mm', { locale: fr });
   } else if (isTomorrow(date)) {
@@ -19,7 +19,7 @@ export const getFormateDate = (date: Date) => {
   }
 };
 
-export const getFormattedTime = (date: Date) =>
+export const getFormattedTime = (date: number | Date) =>
   format(date, 'HH:mm', { locale: fr });
 
 export const getFormattedTimeArrival = (date: Date, duration: number) =>

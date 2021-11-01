@@ -8,6 +8,7 @@ import MyRides from '@screens/MyRides';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import BookingNavigation from '@navigation/BookingNavigation';
 import { colors, layout } from '@dagdag/common/theme';
+import RideNavigation from '@navigation/RideNavigation';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
@@ -37,6 +38,11 @@ const MainNavigation: React.FC = () => {
       <Drawer.Screen
         name="booking"
         component={BookingNavigation}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="ride"
+        component={RideNavigation}
         options={{ headerShown: false }}
       />
       <Drawer.Screen name="myRides" component={MyRides} />

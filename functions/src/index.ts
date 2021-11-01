@@ -60,6 +60,7 @@ export const createOrder = functions.region(REGION).https.onCall(async data => {
   return {
     nbCars: result.size,
     cars: result.docs.map(doc => doc.data()),
+    orderUid,
   };
 });
 

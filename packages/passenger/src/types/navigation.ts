@@ -18,9 +18,14 @@ export type BookingStackParamList = {
   selectDate: undefined;
 };
 
+export type RideStackParamList = {
+  searchForDriver: undefined;
+};
+
 export type DrawerNavigatorParamList = {
   booking: undefined;
   myRides: undefined;
   payment: undefined;
   help: undefined;
+  ride: undefined;
 };
