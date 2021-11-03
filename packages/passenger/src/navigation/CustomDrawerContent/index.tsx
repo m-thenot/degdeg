@@ -21,7 +21,12 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
       {...props}
       contentContainerStyle={styles.container}>
       <View style={styles.userContainer}>
-        <EditIcon height={50} width={50} style={styles.edit} />
+        <EditIcon
+          height={50}
+          width={50}
+          style={styles.edit}
+          onPress={() => props.navigation.navigate('user')}
+        />
         <PhotoUser height={80} width={80} />
         <Text style={styles.name}>{user?.firstName}</Text>
         <Text style={styles.phoneNumber}>

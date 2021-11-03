@@ -88,7 +88,7 @@ const createStyles = () => {
       fontSize: font.fontSize3,
     },
     disabled: {
-      opacity: 0.4,
+      opacity: 0.6,
     },
     primary: {
       backgroundColor: colors.primary,

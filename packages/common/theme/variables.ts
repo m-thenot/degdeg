@@ -21,6 +21,7 @@ export const layout = {
   spacer6: 32,
   spacer7: 48,
   spacer8: 64,
+  spacer9: 80,
 };
 
 export const border = {

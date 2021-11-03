@@ -29,4 +29,5 @@ export type DrawerNavigatorParamList = {
   payment: undefined;
   help: undefined;
   order: undefined;
+  user: undefined;
 };

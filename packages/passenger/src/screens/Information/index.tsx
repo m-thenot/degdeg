@@ -21,7 +21,7 @@ import { layout, font } from '@dagdag/common/theme';
 
 interface IData {
   firstName: string;
-  name: string;
+  lastName: string;
   email: string;
 }
 
@@ -73,7 +73,7 @@ const Information: React.FC<
               }}
             />
             <Input
-              name="name"
+              name="lastName"
               label="Nom"
               control={control}
               error={errors?.name}

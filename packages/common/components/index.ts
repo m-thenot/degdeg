@@ -6,3 +6,4 @@ export * from './RoundBottom';
 export * from './Modal';
 export * from './RouteSummary';
 export * from './ContactProfile';
+export * from './InlineInput';

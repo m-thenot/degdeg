@@ -28,7 +28,7 @@ export const BackHeader: React.FC<IBackHeaderProps> = ({
   const styles = createStyles();
   return (
     <RoundIconButton
-      style={hasMargin && styles.margin}
+      style={[styles.margin, hasMargin && styles.marginLeft]}
       onPress={() => (onPress ? onPress() : navigation.goBack())}>
       <BackButton style={styles.icon} width={18} height={18} />
     </RoundIconButton>
@@ -61,8 +61,11 @@ const createStyles = () => {
       marginLeft: -3,
     },
     margin: {
-      marginTop: layout.spacer1,
+      marginTop: layout.spacer3,
       marginRight: layout.spacer2,
+    },
+    marginLeft: {
+      marginLeft: layout.spacer3,
     },
   });
 };

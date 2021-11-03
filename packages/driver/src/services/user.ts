@@ -5,7 +5,7 @@ import { CARS_COLLECTION, DRIVERS_COLLECTION } from '@dagdag/common/constants';
 
 interface newDriver {
   firstName: string;
-  name: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   uid: string;
