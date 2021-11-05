@@ -4,13 +4,13 @@ import {
   DrawerItem,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Image } from 'react-native';
 import { LinkButton } from '@dagdag/common/components';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import EditIcon from '@assets/icons/ic_edit.svg';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import parsePhoneNumber from 'libphonenumber-js';
-import { logout } from '@services/user';
+import { logout } from '@services/driver';
 import { layout, colors, font } from '@dagdag/common/theme';
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
@@ -20,8 +20,24 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
       {...props}
       contentContainerStyle={styles.container}>
       <View style={styles.userContainer}>
-        <EditIcon height={50} width={50} style={styles.edit} />
-        <PhotoUser height={80} width={80} />
+        <EditIcon
+          height={50}
+          width={50}
+          style={styles.edit}
+          onPress={() => props.navigation.navigate('user')}
+        />
+        {user?.image ? (
+          <Image
+            width={80}
+            height={80}
+            style={styles.image}
+            source={{
+              uri: user.image,
+            }}
+          />
+        ) : (
+          <PhotoUser height={80} width={80} />
+        )}
         <Text style={styles.name}>{user?.firstName}</Text>
         <Text style={styles.phoneNumber}>
           {user?.phoneNumber &&
@@ -111,5 +127,10 @@ const styles = StyleSheet.create({
   logout: {
     paddingHorizontal: layout.spacer5,
     marginBottom: layout.spacer7,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 80,
   },
 });

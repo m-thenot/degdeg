@@ -1,6 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { USERS_COLLECTION } from '@dagdag/common/constants';
+import { IUser } from '@internalTypes/user';
 
 interface newUser {
   firstName: string;
@@ -21,7 +22,7 @@ export const createUser = async (newUser: newUser) => {
     .set({ ...newUser, displayName: newUser.firstName });
 };
 
-export const updateUser = async (newUser: Partial<newUser>) => {
+export const updateUser = async (newUser: Partial<IUser>) => {
   const user = auth().currentUser;
   return await firestore()
     .collection(USERS_COLLECTION)

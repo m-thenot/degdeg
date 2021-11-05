@@ -4,15 +4,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import { USERS_COLLECTION } from '@dagdag/common/constants';
-
-interface IUser {
-  phoneNumber: string | null;
-  uid: string;
-  displayName: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-}
+import { IUser } from '@internalTypes/user';
 
 interface IContextProps {
   user: IUser | null | FirebaseFirestoreTypes.DocumentData;

@@ -9,6 +9,7 @@ import CustomDrawerContent from '@navigation/CustomDrawerContent';
 import History from '@screens/History';
 import Help from '@screens/Help';
 import Wallet from '@screens/Wallet';
+import User from '@screens/User';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
@@ -33,7 +34,7 @@ const MainNavigation: React.FC = () => {
             contentStyle: {
               backgroundColor: colors.white,
             },
-            headerLeft: () => <MenuHeader navigation={navigation} />,
+            headerLeft: () => <MenuHeader navigation={navigation} hasMargin />,
           };
         }}>
         <Drawer.Screen name="home" component={Home} />
@@ -51,6 +52,11 @@ const MainNavigation: React.FC = () => {
           name="wallet"
           component={Wallet}
           options={{ headerShown: false }}
+        />
+        <Drawer.Screen
+          name="user"
+          options={{ headerTitle: 'Profil', headerTitleAlign: 'center' }}
+          component={User}
         />
       </Drawer.Navigator>
     </LocationProvider>

@@ -54,3 +54,11 @@ export const saveTokenToDatabase = async token => {
       tokens: firestore.FieldValue.arrayUnion(token),
     });
 };
+
+export const updateDriver = async (newUser: Partial<IDriver>) => {
+  const user = auth().currentUser;
+  return await firestore()
+    .collection(DRIVERS_COLLECTION)
+    .doc(user?.uid)
+    .update(newUser);
+};

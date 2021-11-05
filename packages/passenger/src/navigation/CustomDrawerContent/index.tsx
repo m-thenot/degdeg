@@ -12,6 +12,7 @@ import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import parsePhoneNumber from 'libphonenumber-js';
 import { logout } from '@services/user';
 import { layout, colors, font } from '@dagdag/common/theme';
+import { Image } from 'react-native';
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
   const { user } = useFirebaseAuthentication();
@@ -27,7 +28,18 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           style={styles.edit}
           onPress={() => props.navigation.navigate('user')}
         />
-        <PhotoUser height={80} width={80} />
+        {user?.image ? (
+          <Image
+            width={80}
+            height={80}
+            style={styles.image}
+            source={{
+              uri: user.image,
+            }}
+          />
+        ) : (
+          <PhotoUser height={80} width={80} />
+        )}
         <Text style={styles.name}>{user?.firstName}</Text>
         <Text style={styles.phoneNumber}>
           {user?.phoneNumber &&
@@ -117,5 +129,10 @@ const styles = StyleSheet.create({
   logout: {
     paddingHorizontal: layout.spacer5,
     marginBottom: layout.spacer7,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 80,
   },
 });

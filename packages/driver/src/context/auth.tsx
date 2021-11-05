@@ -5,18 +5,8 @@ import firestore, {
 } from '@react-native-firebase/firestore';
 import { DRIVERS_COLLECTION } from '@dagdag/common/constants';
 
-interface IUser {
-  phoneNumber: string | null;
-  uid: string;
-  displayName: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  tokens?: string[];
-}
-
 interface IContextProps {
-  user: IUser | null | FirebaseFirestoreTypes.DocumentData;
+  user: IDriver | null | FirebaseFirestoreTypes.DocumentData;
   isLoading: boolean;
   confirmation: FirebaseAuthTypes.ConfirmationResult | null;
   setConfirmation: React.Dispatch<
@@ -31,7 +21,7 @@ const AuthContext = createContext<Partial<IContextProps>>({});
 const AuthProvider: React.FC = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<
-    IUser | null | FirebaseFirestoreTypes.DocumentData
+    IDriver | null | FirebaseFirestoreTypes.DocumentData
   >();
   const [confirmation, setConfirmation] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>();

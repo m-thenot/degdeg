@@ -11,7 +11,7 @@ import globalStyles from '@theme/globalStyles';
 import { Button, InlineInput } from '@dagdag/common/components';
 import PenIcon from '@dagdag/common/assets/icons/pen.svg';
 import PhotoUser from '@assets/icons/photo-user.svg';
-import { updateUser } from '@services/user';
+import { updateDriver } from '@services/driver';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   launchImageLibrary,
@@ -56,7 +56,7 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
   const onSubmit = (data: IData) => {
     const getImage = async () => {
       const url = await storage().ref(`drivers/${user?.uid}`).getDownloadURL();
-      updateUser({ image: url });
+      updateDriver({ image: url });
     };
 
     if (isNewImage) {
@@ -71,7 +71,7 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
     }
 
     if (!hasError) {
-      updateUser(data);
+      updateDriver(data);
       navigation.goBack();
     }
   };

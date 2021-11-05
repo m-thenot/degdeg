@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Alert } from 'react-native';
-import { requestUserPermission, saveTokenToDatabase } from '@services/user';
+import { requestUserPermission, saveTokenToDatabase } from '@services/driver';
 import messaging from '@react-native-firebase/messaging';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerScreenProps } from '@react-navigation/drawer';

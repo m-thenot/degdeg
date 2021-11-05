@@ -20,6 +20,10 @@ interface IBackHeaderProps extends IHeaderLeftProps {
   onPress?: () => void;
 }
 
+interface IMenuHeaderProps extends IHeaderLeftProps {
+  hasMargin?: boolean;
+}
+
 export const BackHeader: React.FC<IBackHeaderProps> = ({
   navigation,
   hasMargin = false,
@@ -35,11 +39,14 @@ export const BackHeader: React.FC<IBackHeaderProps> = ({
   );
 };
 
-export const MenuHeader: React.FC<IHeaderLeftProps> = ({ navigation }) => {
+export const MenuHeader: React.FC<IMenuHeaderProps> = ({
+  navigation,
+  hasMargin,
+}) => {
   const styles = createStyles();
   return (
     <RoundIconButton
-      style={styles.margin}
+      style={[styles.margin, hasMargin && styles.marginLeft]}
       onPress={() => navigation.openDrawer()}>
       <MenuButton style={styles.icon} width={30} height={30} />
     </RoundIconButton>

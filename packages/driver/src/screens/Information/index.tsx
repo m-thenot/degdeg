@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Input } from '@dagdag/common/components';
 import { EMAIL_REGEX } from '@dagdag/common/constants';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
-import { createDriver } from '@services/user';
+import { createDriver } from '@services/driver';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';

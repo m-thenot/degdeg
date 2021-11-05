@@ -11,4 +11,5 @@ export type DrawerNavigatorParamList = {
   history: undefined;
   wallet: undefined;
   help: undefined;
+  user: undefined;
 };
