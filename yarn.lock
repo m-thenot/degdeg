@@ -2819,18 +2819,18 @@
     "@types/react" "^16"
 
 "@types/react@*":
-  version "17.0.32"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.32.tgz#89a161286bbe2325d4d516420a27364a324909f4"
-  integrity sha512-hAm1pmwA3oZWbkB985RFwNvBRMG0F3KWSiC4/hNmanigKZMiKQoH5Q6etNw8HIDztTGfvXyOjPvdNnvBUCuaPg==
+  version "17.0.37"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.37.tgz#6884d0aa402605935c397ae689deed115caad959"
+  integrity sha512-2FS1oTqBGcH/s0E+CjrCCR9+JMpsu9b69RTFO+40ua43ZqP5MmQ4iUde/dMjWR909KxZwmOQIFq6AV6NjEG5xg==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
 "@types/react@^16":
-  version "16.14.20"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.20.tgz#ff6e932ad71d92c27590e4a8667c7a53a7d0baad"
-  integrity sha512-SV7TaVc8e9E/5Xuv6TIyJ5VhQpZoVFJqX6IZgj5HZoFCtIDCArE3qXkcHlc6O/Ud4UwcMoX+tlvDA95YrKdLgA==
+  version "16.14.21"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.21.tgz#35199b21a278355ec7a3c40003bd6a334bd4ae4a"
+  integrity sha512-rY4DzPKK/4aohyWiDRHS2fotN5rhBSK6/rz1X37KzNna9HJyqtaGAbq9fVttrEPWF5ywpfIP1ITL8Xi2QZn6Eg==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -9391,6 +9391,11 @@ react-native-svg@^12.1.1:
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
+
+react-native-toast-message@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.0.2.tgz#68f2396735e2f4ca9e290ca6a63d03d601a4a140"
+  integrity sha512-jjHRgK4o388WTfikoJ2D/EWtnrXKOW8YvpSBMENRG/QwK9C6SUWZ2zas/lpP634IMUbS1VuKwtQqpNXoJIAHwg==
 
 react-native@0.64.2:
   version "0.64.2"

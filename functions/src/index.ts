@@ -9,13 +9,19 @@ import db from './utils/db';
 import { generateRandomLocation } from './utils/generateRandomLocation';
 import { isApiError } from './utils/error';
 import { IOrder } from './types/order';
+import { IEmail } from './types/email';
 import { sendMessages } from './services/sendMessages';
+import nodemailer = require('nodemailer');
 
 const REGION = 'asia-south1';
 const CARS_COLLECTION = 'cars';
 
 const GeoFirestore = geofirestore.initializeApp(admin.firestore() as any);
 
+/**
+ * Create an order
+ * Trigger by passenger
+ */
 export const createOrder = functions.region(REGION).https.onCall(async data => {
   const order: IOrder = data.order;
 
@@ -64,6 +70,10 @@ export const createOrder = functions.region(REGION).https.onCall(async data => {
   };
 });
 
+/**
+ * Generate cars with random location, in order to simulate order on staging
+ * Trigger by admin
+ */
 export const generateCars = functions.region(REGION).https.onCall(data => {
   const { size } = data;
 
@@ -96,4 +106,34 @@ export const generateCars = functions.region(REGION).https.onCall(data => {
   return {
     success: true,
   };
+});
+
+/**
+ * SendEmail to DagDag Support
+ */
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'dagdag.contact@gmail.com',
+    pass: 'otempa691$',
+  },
+});
+
+exports.sendEmail = functions.region(REGION).https.onCall(data => {
+  const email: IEmail = data.email;
+
+  const mailOptions = {
+    from: 'Support <dagdag.contact@gmail.com>',
+    to: 'dagdag.contact@gmail.com',
+    subject: `[SUPPORT] Message de ${email.firstName} (uid: ${email.uid}) `,
+    text: email.from + '\n' + email.userType + ' \n\n' + email.message,
+  };
+
+  transporter.sendMail(mailOptions, error => {
+    if (error) {
+      throw new functions.https.HttpsError('unknown', error.message);
+    }
+  });
+
+  return { success: true };
 });

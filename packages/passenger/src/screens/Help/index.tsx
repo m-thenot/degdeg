@@ -1,14 +1,95 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
-import { layout } from '@dagdag/common/theme';
+import { colors, font, layout } from '@dagdag/common/theme';
+import { Button, Input } from '@dagdag/common/components';
+import { useForm } from 'react-hook-form';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import useFirebaseAuthentification from '@hooks/useFirebaseAuthentification';
+import { sendEmail } from '@dagdag/common/services';
+import DGToast, { ToastTypes } from '@utils/toast';
+import { PASSENGER } from '@dagdag/common/constants';
 
 const Help: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'help'>> =
   () => {
+    const { user } = useFirebaseAuthentification();
+    const {
+      control,
+      handleSubmit,
+      reset,
+      formState: { errors, isDirty },
+    } = useForm();
+
+    const onSubmit = async ({ message }) => {
+      const email = {
+        from: user?.email,
+        firstName: user?.firstName,
+        uid: user?.uid,
+        message: message,
+        userType: PASSENGER as typeof PASSENGER,
+      };
+      const result = await sendEmail(email);
+      reset();
+      if (result.success) {
+        DGToast.show(ToastTypes.DG_SUCCESS, {
+          message: 'Votre email a été envoyé avec succès !',
+        });
+      } else {
+        DGToast.show(ToastTypes.DG_ERROR, {
+          message: "Une erreur innattendue s'est produite. Veuillez réessayer.",
+        });
+      }
+    };
+
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Un problème ?</Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardContainer}>
+          <KeyboardAwareScrollView
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="always"
+            extraScrollHeight={25}
+            enableOnAndroid>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.headline}>
+                Vous avez eu un problème durant votre voyage ? Vous n'arrivez
+                pas à utiliser l'application ? Ou vous avez besoin d'un
+                renseignement ? Envoyez nous un message et on vous répondra
+                aussi vite que possible !
+              </Text>
+              <Input
+                label="Votre message"
+                name="message"
+                multiline
+                control={control}
+                error={errors?.message}
+                rules={{
+                  required: {
+                    value: true,
+                    message: 'Ce champ est requis.',
+                  },
+                }}
+              />
+
+              <View style={styles.separator} />
+
+              <Button
+                text="Envoyer"
+                disabled={!isDirty}
+                onPress={handleSubmit(onSubmit)}
+              />
+            </View>
+          </KeyboardAwareScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     );
   };
@@ -18,7 +99,24 @@ export default Help;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: layout.marginHorizontal,
-    marginTop: layout.marginTop,
+    backgroundColor: colors.white,
+  },
+  keyboardContainer: {
+    flex: 1,
+  },
+  content: {
+    flexGrow: 1,
+    paddingHorizontal: layout.marginHorizontal,
+    paddingTop: layout.spacer9,
+    paddingBottom: layout.spacer4,
+  },
+  headline: {
+    fontSize: font.fontSize2,
+    color: colors.black,
+    marginBottom: layout.spacer2,
+  },
+  separator: {
+    flex: 1,
+    minHeight: layout.spacer3,
   },
 });

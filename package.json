@@ -22,7 +22,8 @@
       "**/react-native/**",
       "**/react-native-codegen",
       "**/react-native-dev-menu",
-      "**/react-native-svg"
+      "**/react-native-svg",
+      "@react-native-firebase/functions"
     ]
   }
 }

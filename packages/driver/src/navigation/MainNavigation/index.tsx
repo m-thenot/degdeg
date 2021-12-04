@@ -1,6 +1,6 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { MenuHeader } from '@dagdag/common/components';
+import { BackHeader, MenuHeader } from '@dagdag/common/components';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import { colors, layout } from '@dagdag/common/theme';
 import Home from '@screens/Home';
@@ -38,26 +38,37 @@ const MainNavigation: React.FC = () => {
           };
         }}>
         <Drawer.Screen name="home" component={Home} />
-        <Drawer.Screen
-          name="history"
-          component={History}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="help"
-          component={Help}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="wallet"
-          component={Wallet}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="user"
-          options={{ headerTitle: 'Profil', headerTitleAlign: 'center' }}
-          component={User}
-        />
+
+        <Drawer.Group
+          screenOptions={({ navigation }) => {
+            return {
+              headerTitleAlign: 'center',
+              headerLeft: () => (
+                <BackHeader navigation={navigation} hasMargin={true} />
+              ),
+            };
+          }}>
+          <Drawer.Screen
+            name="history"
+            component={History}
+            options={{ headerShown: false }}
+          />
+          <Drawer.Screen
+            name="help"
+            component={Help}
+            options={{ headerTitle: "Besoin d'aide ?" }}
+          />
+          <Drawer.Screen
+            name="wallet"
+            component={Wallet}
+            options={{ headerShown: false }}
+          />
+          <Drawer.Screen
+            name="user"
+            options={{ headerTitle: 'Profil', headerTitleAlign: 'center' }}
+            component={User}
+          />
+        </Drawer.Group>
       </Drawer.Navigator>
     </LocationProvider>
   );

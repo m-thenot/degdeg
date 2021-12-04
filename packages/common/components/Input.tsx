@@ -31,7 +31,11 @@ export const Input: React.FC<IInput> = ({
         <>
           <Text style={styles.label}>{label}</Text>
           <TextInput
-            style={[styles.input, error && styles.inputError]}
+            style={[
+              styles.input,
+              error && styles.inputError,
+              props.multiline && styles.textArea,
+            ]}
             value={value}
             onChangeText={text => onChange(text)}
             {...props}
@@ -60,6 +64,7 @@ const createStyles = () => {
       fontSize: font.fontSize2,
       borderWidth: 1,
       borderColor: colors.grey1,
+      color: colors.black,
     },
     inputError: {
       borderColor: colors.error,
@@ -67,6 +72,10 @@ const createStyles = () => {
     error: {
       marginTop: layout.spacer1,
       color: colors.error,
+    },
+    textArea: {
+      minHeight: 150,
+      textAlignVertical: 'top',
     },
   });
 };

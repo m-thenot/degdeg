@@ -62,7 +62,11 @@ const MainNavigation: React.FC = () => {
         />
         <Drawer.Screen name="myRides" component={MyRides} />
         <Drawer.Screen name="payment" component={Payment} />
-        <Drawer.Screen name="help" component={Help} />
+        <Drawer.Screen
+          name="help"
+          options={{ headerTitle: "Besoin d'aide ?" }}
+          component={Help}
+        />
       </Drawer.Group>
     </Drawer.Navigator>
   );
