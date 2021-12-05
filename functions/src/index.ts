@@ -2,6 +2,8 @@ import * as functions from 'firebase-functions';
 import * as geofirestore from 'geofirestore';
 import * as admin from 'firebase-admin';
 import { v4 as uuidv4 } from 'uuid';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 admin.initializeApp();
 
@@ -115,7 +117,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'dagdag.contact@gmail.com',
-    pass: 'otempa691$',
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
