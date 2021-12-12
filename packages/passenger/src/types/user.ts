@@ -6,4 +6,6 @@ export interface IUser {
   lastName?: string;
   email?: string;
   image?: string;
+  customerId: string;
+  defaultPaymentMethod?: string;
 }

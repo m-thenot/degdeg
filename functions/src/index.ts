@@ -9,11 +9,14 @@ admin.initializeApp();
 
 import db from './utils/db';
 import { generateRandomLocation } from './utils/generateRandomLocation';
-import { isApiError } from './utils/error';
+import { isApiError, isStripeError } from './utils/error';
 import { IOrder } from './types/order';
 import { IEmail } from './types/email';
 import { sendMessages } from './services/sendMessages';
 import nodemailer = require('nodemailer');
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 
 const REGION = 'asia-south1';
 const CARS_COLLECTION = 'cars';
@@ -136,6 +139,94 @@ exports.sendEmail = functions.region(REGION).https.onCall(data => {
       throw new functions.https.HttpsError('unknown', error.message);
     }
   });
+
+  return { success: true };
+});
+
+/**
+ * Stripe: Setup intent
+ */
+
+exports.createSetupIntent = functions
+  .region(REGION)
+  .https.onCall(async data => {
+    const { customerId = null, email = '', name = '', phoneNumber = '' } = data;
+    const customer = customerId
+      ? { id: customerId }
+      : await stripe.customers.create({
+          email: email,
+          name: name,
+          phone: phoneNumber,
+        });
+    const ephemeralKey = await stripe.ephemeralKeys.create(
+      { customer: customer.id },
+      { apiVersion: '2020-08-27' },
+    );
+    const setupIntent = await stripe.setupIntents.create({
+      customer: customer.id,
+    });
+    const clientSecret = setupIntent.client_secret;
+
+    return { clientSecret, customerId: customer.id, ephemeralKey };
+  });
+
+/**
+ * Stripe: get payment methods
+ * */
+exports.getPaymentMethods = functions
+  .region(REGION)
+  .https.onCall(async data => {
+    const { customerId } = data;
+
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: customerId,
+      type: 'card',
+    });
+
+    return { paymentMethods };
+  });
+
+/**
+ * Stripe: proceed to payment
+ * */
+
+exports.proceedToPayment = functions.region(REGION).https.onCall(async data => {
+  const { customerId, paymentMethodId, amount } = data;
+
+  try {
+    await stripe.paymentIntents.create({
+      amount: amount,
+      currency: 'eur',
+      customer: customerId,
+      payment_method: paymentMethodId,
+      off_session: true,
+      confirm: true,
+    });
+  } catch (err) {
+    if (isStripeError(err)) {
+      functions.logger.error('Error code is: ' + err.code);
+      if (err.raw.payment_intent?.id) {
+        const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(
+          err.raw.payment_intent.id,
+        );
+        functions.logger.error('PI retrieved: ' + paymentIntentRetrieved?.id);
+      }
+
+      throw new functions.https.HttpsError(
+        'unknown',
+        'PROCEED TO PAYMENT ERROR',
+        {
+          message: err.message,
+          code: err.code,
+        },
+      );
+    } else {
+      throw new functions.https.HttpsError(
+        'unknown',
+        'UNKNOWN PROCEED TO PAYMENT ERROR',
+      );
+    }
+  }
 
   return { success: true };
 });
