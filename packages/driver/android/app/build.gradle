@@ -80,6 +80,8 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
+    devDisabledInStaging: true,
+    bundleInStaging: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -132,7 +134,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.dagdag.driver.staging"
+        applicationId "com.dagdag.driver"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -157,6 +159,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            applicationIdSuffix ".staging"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -166,8 +169,10 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         staging {
-            initWith release
-            // applicationIdSuffix ".staging"
+            signingConfig signingConfigs.debug
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            applicationIdSuffix ".staging"
             matchingFallbacks = ['release']
         }
     }
@@ -215,6 +220,7 @@ dependencies {
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
+        stagingImplementation files(hermesPath + "hermes-release.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor

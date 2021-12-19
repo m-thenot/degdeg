@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>246871164241-lrfnbcbt733s74kiu0gg65tq8jjj7nio.apps.googleusercontent.com</string>
+	<string>246871164241-kuh5rrft27tkhl2m1j44ekgkkqs5fq9h.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.246871164241-lrfnbcbt733s74kiu0gg65tq8jjj7nio</string>
+	<string>com.googleusercontent.apps.246871164241-kuh5rrft27tkhl2m1j44ekgkkqs5fq9h</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>246871164241-1g0e35joptiks1jj1s3tkq7j6u77v1b7.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCb5yGG4rY6tSyqbFawXOvZ3M3eCUnMQ6U</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.MyApp</string>
+	<string>com.dagdag.passenger.staging</string>
 	<key>PROJECT_ID</key>
 	<string>staging-zegzeg</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:246871164241:ios:b281b32043a00f04c0bf70</string>
+	<string>1:246871164241:ios:8d0eb8a2f0679997c0bf70</string>
 </dict>
 </plist>
