@@ -56,7 +56,7 @@ const Verification: React.FC<
   };
 
   return (
-    <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         keyboardVerticalOffset={
@@ -106,7 +106,12 @@ const Verification: React.FC<
             </Text>
           )}
         </View>
-        <Button text="Suivant" isLoading={isLoading} onPress={confirmCode} />
+        <Button
+          text="Suivant"
+          style={styles.button}
+          isLoading={isLoading}
+          onPress={confirmCode}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop,
+    marginTop: layout.marginTop + 50,
   },
   title: {
     fontSize: font.fontSize4,
@@ -155,5 +160,8 @@ const styles = StyleSheet.create({
   },
   error: {
     marginTop: layout.spacer3,
+  },
+  button: {
+    marginBottom: layout.spacer3,
   },
 });

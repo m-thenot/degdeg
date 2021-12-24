@@ -10,8 +10,11 @@ import {
 } from '@services/checkout';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { updateUser } from '@services/user';
-import { Button } from '@dagdag/common/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackHeader, Button } from '@dagdag/common/components';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 // CREDIT CARDS ICONS
 import AmexIcon from '@assets/images/amex.svg';
@@ -35,7 +38,7 @@ const CREDIT_CARDS = {
 
 const Payment: React.FC<
   DrawerScreenProps<DrawerNavigatorParamList, 'payment'>
-> = () => {
+> = ({ navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { user } = useFirebaseAuthentication();
   const customer = {
@@ -45,6 +48,7 @@ const Payment: React.FC<
     phoneNumber: user?.phoneNumber,
   };
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const insets = useSafeAreaInsets();
 
   const getPaymentMethods = async () => {
     const newPaymentMethods: { data: PaymentMethod[] } =
@@ -87,6 +91,16 @@ const Payment: React.FC<
   };
 
   useEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <BackHeader
+          navigation={navigation}
+          title="Moyens de paiement"
+          marginTop={insets.top}
+        />
+      ),
+    });
+
     if (user?.customerId) {
       getPaymentMethods();
     }
@@ -131,7 +145,11 @@ const Payment: React.FC<
         </View>
       ))}
       <View style={{ flex: 1 }} />
-      <Button text="Ajouter un moyen de paiement" onPress={openPaymentSheet} />
+      <Button
+        text="Ajouter un moyen de paiement"
+        style={styles.button}
+        onPress={openPaymentSheet}
+      />
     </SafeAreaView>
   );
 };
@@ -141,8 +159,9 @@ export default Payment;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: layout.marginHorizontal,
-    marginTop: layout.spacer9,
+    paddingHorizontal: layout.marginHorizontal,
+    paddingTop: layout.spacer9,
+    backgroundColor: colors.white,
   },
   creditCard: {
     flexDirection: 'row',
@@ -164,5 +183,8 @@ const styles = StyleSheet.create({
     marginTop: layout.spacer1,
     fontSize: font.fontSize1_5,
     color: colors.grey3,
+  },
+  button: {
+    marginBottom: layout.spacer3,
   },
 });

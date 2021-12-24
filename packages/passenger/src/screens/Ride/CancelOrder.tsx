@@ -1,11 +1,14 @@
 import { CancelReason } from '@constants/ride';
-import { Button } from '@dagdag/common/components';
+import { BackHeader, Button } from '@dagdag/common/components';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { RideStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import OkIcon from '@dagdag/common/assets/icons/ok.svg';
 import { updateOrder } from '@services/order';
 import { OrderStatus } from '@dagdag/common/types';
@@ -25,6 +28,15 @@ const CancelOrder: React.FC<
 > = ({ navigation }) => {
   const [reason, setReason] = useState<CancelReason>();
   const { order } = useOrder();
+  const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <BackHeader navigation={navigation} marginTop={insets.top} />
+      ),
+    });
+  }, []);
 
   const onSubmit = () => {
     updateOrder(

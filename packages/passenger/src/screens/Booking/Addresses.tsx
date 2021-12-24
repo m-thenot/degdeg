@@ -25,7 +25,11 @@ import PlaceIcon from '@assets/icons/ic_place.svg';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, layout } from '@dagdag/common/theme';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import { BackHeader } from '@dagdag/common/components';
 
 const GOOGLE_PACES_API_BASE_URL = 'https://maps.googleapis.com/maps/api/place';
 
@@ -66,13 +70,20 @@ const Addresses: React.FC<
     departureAddressState,
   );
   const currentPosition = useRecoilValue(currentPositionState);
+  const insets = useSafeAreaInsets();
 
   const [arrivalAddress, setArrivalAddress] =
     useRecoilState(arrivalAddressState);
 
   useEffect(() => {
     navigation.setOptions({
-      title: "Saisir l'adresse",
+      header: () => (
+        <BackHeader
+          navigation={navigation}
+          marginTop={insets.top}
+          title="Saisir l'adresse"
+        />
+      ),
     });
   }, []);
 
@@ -240,6 +251,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: layout.spacer4,
+    color: colors.black,
   },
   line: {
     marginVertical: layout.spacer2,

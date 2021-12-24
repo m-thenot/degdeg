@@ -39,7 +39,7 @@ const SignInWithPhoneNumber: React.FC<
   };
 
   return (
-    <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         keyboardVerticalOffset={
@@ -81,6 +81,7 @@ const SignInWithPhoneNumber: React.FC<
         <Button
           text="Suivant"
           isLoading={isLoading}
+          style={styles.button}
           onPress={() => {
             setIsLoading(true);
             const checkValid = phoneInput.current?.isValidNumber(value);
@@ -102,7 +103,7 @@ export default SignInWithPhoneNumber;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   keyboardContainer: { flex: 1, marginHorizontal: layout.marginHorizontal },
-  main: { flex: 1, marginTop: layout.marginTop },
+  main: { flex: 1, marginTop: layout.marginTop + 50 },
   title: {
     fontSize: font.fontSize4,
     fontWeight: '700',
@@ -114,5 +115,8 @@ const styles = StyleSheet.create({
   phoneNumber: {
     marginVertical: layout.spacer6,
     width: 'auto',
+  },
+  button: {
+    marginBottom: layout.spacer3,
   },
 });

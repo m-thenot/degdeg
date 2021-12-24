@@ -21,6 +21,10 @@ import { OrderStatus, RideType, CarType } from '@dagdag/common/types';
 import { createOrder } from '@services/order';
 import { getFormateDate } from '@dagdag/common/utils';
 import { useOrder } from '@context/order';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 const snapPoints = [400, '80%'];
 
@@ -43,14 +47,15 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
   const isOrderNow = !departureAt;
   const { setOrderUid } = useOrder();
   const [isLoading, setIsLoading] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     navigation.setOptions({
-      title: '',
-      headerLeft: () => (
+      header: () => (
         <BackHeader
           navigation={navigation}
-          hasMargin={true}
+          backgroundColor="transparent"
+          marginTop={insets.top}
           onPress={() => {
             setArrivalAddress(defaultAddress);
             navigation.goBack();
@@ -98,7 +103,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
   };
 
   return (
-    <>
+    <SafeAreaView style={styles.safeContainer}>
       <MapWrapper mapStyle={styles.map} />
 
       <CustomBottomSheet snapPoints={snapPoints}>
@@ -154,13 +159,16 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
           </View>
         </View>
       </CustomBottomSheet>
-    </>
+    </SafeAreaView>
   );
 };
 
 export default Cars;
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+  },
   container: {
     marginHorizontal: layout.spacer5,
   },

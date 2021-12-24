@@ -50,7 +50,7 @@ const Information: React.FC<
   };
 
   return (
-    <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         keyboardVerticalOffset={
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop,
+    marginTop: layout.marginTop + 50,
     marginBottom: layout.spacer3,
   },
   title: {

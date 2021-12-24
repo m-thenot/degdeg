@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import SignInWithPhoneNumber from '@screens/SignInWithPhoneNumber';
 import Start from '@screens/Start';
 import { AuthStackParamList } from '@internalTypes/navigation';
@@ -10,12 +10,14 @@ import MainNavigation from '@navigation/MainNavigation';
 import Information from '@screens/Information';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import SplashScreen from '@screens/SplashScreen';
-import { colors } from '@dagdag/common/theme';
+import { colors, layout } from '@dagdag/common/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const Stack = createNativeStackNavigator<AuthStackParamList>();
+const Stack = createStackNavigator<AuthStackParamList>();
 
 const AuthNavigation: React.FC = () => {
   const { user, isLoading } = useFirebaseAuthentication();
+  const insets = useSafeAreaInsets();
 
   if (isLoading) {
     return <SplashScreen />;
@@ -25,16 +27,12 @@ const AuthNavigation: React.FC = () => {
       <Stack.Navigator
         screenOptions={({ navigation }) => {
           return {
-            headerBackTitleVisible: false,
-            title: '',
-            headerShadowVisible: false,
-            headerStyle: {
+            cardStyle: {
               backgroundColor: colors.white,
             },
-            contentStyle: {
-              backgroundColor: colors.white,
-            },
-            headerLeft: () => <BackHeader navigation={navigation} />,
+            header: () => (
+              <BackHeader navigation={navigation} marginTop={insets.top} />
+            ),
           };
         }}>
         {user ? (

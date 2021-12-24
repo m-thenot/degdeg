@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, Platform, Dimensions } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import {
   arrivalAddressState,
@@ -7,7 +7,7 @@ import {
   departureAddressState,
 } from '@stores/address.atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Button } from '@dagdag/common/components';
+import { BackHeader, Button } from '@dagdag/common/components';
 import { DEPARTURE } from '@constants/address';
 import Map from '@components/Map';
 import { LatLng, Marker } from 'react-native-maps';
@@ -20,7 +20,10 @@ import {
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, layout, font } from '@dagdag/common/theme';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 interface IDraggablePosition {
   coordinates: LatLng;
@@ -39,8 +42,18 @@ const PickPoint: React.FC<
     departureAddressState,
   );
   const currentPosition = useRecoilValue(currentPositionState);
+  const insets = useSafeAreaInsets();
+
   const placeholder =
     route.params.type === DEPARTURE ? "D'où partez-vous ? " : 'Où allez-vous ?';
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <BackHeader navigation={navigation} marginTop={insets.top} />
+      ),
+    });
+  }, []);
 
   const onDragEnd = (coordinates: LatLng) => {
     Geocoder.from({
@@ -105,8 +118,8 @@ const PickPoint: React.FC<
 
       <Button
         text="Terminer"
-        style={styles.positionButton}
         onPress={onPressFinish}
+        style={styles.positionButton}
       />
     </SafeAreaView>
   );
@@ -119,13 +132,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   positionButton: {
+    position: 'absolute',
+    bottom: layout.spacer3,
     marginHorizontal: layout.marginHorizontal,
-    marginBottom: layout.spacer3,
+    left: 0,
+    right: 0,
+    width: Dimensions.get('window').width - 2 * layout.marginHorizontal,
+    zIndex: 30,
   },
   top: {
     position: 'absolute',
     backgroundColor: colors.white,
-    top: Platform.OS === 'ios' ? 91 : 50,
+    top: 70,
     width: '100%',
     paddingHorizontal: layout.spacer5,
     shadowColor: colors.black,

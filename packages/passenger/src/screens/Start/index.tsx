@@ -13,6 +13,7 @@ const Start: React.FC<NativeStackScreenProps<AuthStackParamList, 'start'>> = ({
       <View style={styles.top} />
       <Button
         text="Commencer"
+        style={styles.button}
         onPress={() => navigation.navigate('signInWithPhoneNumber')}
       />
     </SafeAreaView>
@@ -29,5 +30,8 @@ const styles = StyleSheet.create({
   },
   top: {
     flex: 1,
+  },
+  button: {
+    marginBottom: layout.spacer3,
   },
 });

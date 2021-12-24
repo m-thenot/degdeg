@@ -2,13 +2,16 @@ import { EMAIL_REGEX } from '@dagdag/common/constants';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { colors, font, layout } from '@dagdag/common/theme';
 import globalStyles from '@theme/globalStyles';
-import { Button, InlineInput } from '@dagdag/common/components';
+import { BackHeader, Button, InlineInput } from '@dagdag/common/components';
 import PenIcon from '@dagdag/common/assets/icons/pen.svg';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import { updateUser } from '@services/user';
@@ -46,6 +49,19 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
   const reference = useRef(storage().ref(`drivers/${user?.uid}`)).current;
   const [image, setImage] = useState<string | undefined>(user?.image);
   const [isNewImage, setIsNewImage] = useState(false);
+  const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <BackHeader
+          navigation={navigation}
+          title="Profil"
+          marginTop={insets.top}
+        />
+      ),
+    });
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -219,6 +235,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     width: '100%',
     marginHorizontal: layout.marginHorizontal,
+    marginBottom: layout.spacer3,
   },
   error: {
     marginTop: layout.spacer4,

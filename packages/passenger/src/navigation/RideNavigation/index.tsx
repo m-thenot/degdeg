@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import Ride from '@screens/Ride';
 import CancelOrder from '@screens/Ride/CancelOrder';
-import { BackHeader } from '@dagdag/common/components';
 
 const RideStack = createNativeStackNavigator<RideStackParamList>();
 
@@ -17,13 +16,7 @@ const RideNavigation = () => {
         headerStyle: { backgroundColor: 'transparent' },
       })}>
       <RideStack.Screen name="ride" component={Ride} />
-      <RideStack.Screen
-        name="cancelOrder"
-        component={CancelOrder}
-        options={({ navigation }) => ({
-          headerLeft: () => <BackHeader navigation={navigation} />,
-        })}
-      />
+      <RideStack.Screen name="cancelOrder" component={CancelOrder} />
     </RideStack.Navigator>
   );
 };

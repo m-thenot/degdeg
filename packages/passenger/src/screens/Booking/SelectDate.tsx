@@ -1,11 +1,14 @@
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { StyleSheet, View, Text } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { colors, font, layout } from '@dagdag/common/theme';
-import { Button } from '@dagdag/common/components';
+import { BackHeader, Button } from '@dagdag/common/components';
 import { getRound5Date, formatMinutes } from '@dagdag/common/utils';
 
 import { useRecoilState } from 'recoil';
@@ -18,10 +21,17 @@ const SelectDate: React.FC<
   const [departureAt, setDepartureAt] = useRecoilState(departureAtState);
 
   const [date, setDate] = useState(departureAt || getRound5Date());
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     navigation.setOptions({
-      title: 'Heure de départ',
+      header: () => (
+        <BackHeader
+          navigation={navigation}
+          marginTop={insets.top}
+          title="Heure de départ"
+        />
+      ),
     });
   }, []);
 
@@ -52,7 +62,12 @@ const SelectDate: React.FC<
           textStyle={styles.textButton}
         />
       </View>
-      <DatePicker date={date} onDateChange={setDate} minuteInterval={5} />
+      <DatePicker
+        date={date}
+        onDateChange={setDate}
+        minuteInterval={5}
+        locale="fr"
+      />
       <Text style={styles.info}>
         Votre chauffeur arrivera entre {date.getHours()}:
         {formatMinutes(date.getMinutes())} et {datePlusTen.getHours()}:
@@ -60,6 +75,7 @@ const SelectDate: React.FC<
       </Text>
       <Button
         text="Enregistrer"
+        style={styles.save}
         onPress={() => {
           setDepartureAt(date);
           navigation.goBack();
@@ -76,7 +92,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: layout.marginHorizontal,
-    paddingTop: layout.spacer3,
+    paddingTop: layout.spacer8,
   },
   shortcuts: {
     flexDirection: 'row',
@@ -101,5 +117,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: font.fontSize2,
     flex: 1,
+  },
+  save: {
+    marginBottom: layout.spacer3,
   },
 });

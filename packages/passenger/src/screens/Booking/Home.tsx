@@ -22,6 +22,7 @@ import {
 } from '@stores/address.atom';
 import { colors, layout, font, border } from '@dagdag/common/theme';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
   navigation,
@@ -29,11 +30,17 @@ const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
   const { user } = useFirebaseAuthentication();
   const setCurrentPosition = useSetRecoilState(currentPositionState);
   const setArrivalAddress = useSetRecoilState(arrivalAddressState);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     navigation.setOptions({
-      title: '',
-      headerLeft: () => <MenuHeader navigation={navigation} />,
+      header: () => (
+        <MenuHeader
+          navigation={navigation}
+          marginTop={insets.top}
+          backgroundColor="transparent"
+        />
+      ),
     });
 
     // Reset arrival address

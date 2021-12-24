@@ -50,6 +50,7 @@ const createStyles = () => {
       alignItems: 'center',
       borderBottomWidth: 1,
       borderColor: colors.grey1,
+      minHeight: 50,
     },
     label: {
       fontSize: font.fontSize2,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from '../CustomDrawerContent';
-import { BackHeader, MenuHeader } from '@dagdag/common/components';
+import { MenuHeader } from '@dagdag/common/components';
 import Payment from '@screens/Payment';
 import Help from '@screens/Help';
 import MyRides from '@screens/MyRides';
@@ -33,7 +33,9 @@ const MainNavigation: React.FC = () => {
           contentStyle: {
             backgroundColor: colors.white,
           },
-          headerLeft: () => <MenuHeader navigation={navigation} />,
+          headerLeft: () => (
+            <MenuHeader navigation={navigation} backgroundColor="transparent" />
+          ),
         };
       }}>
       <Drawer.Screen
@@ -46,32 +48,10 @@ const MainNavigation: React.FC = () => {
         component={RideNavigation}
         options={{ headerShown: false }}
       />
-      <Drawer.Group
-        screenOptions={({ navigation }) => {
-          return {
-            headerTitleAlign: 'center',
-            headerLeft: () => (
-              <BackHeader navigation={navigation} hasMargin={true} />
-            ),
-          };
-        }}>
-        <Drawer.Screen
-          name="user"
-          options={{ headerTitle: 'Profil' }}
-          component={User}
-        />
-        <Drawer.Screen name="myRides" component={MyRides} />
-        <Drawer.Screen
-          name="payment"
-          component={Payment}
-          options={{ headerTitle: 'Moyens de paiement' }}
-        />
-        <Drawer.Screen
-          name="help"
-          options={{ headerTitle: "Besoin d'aide ?" }}
-          component={Help}
-        />
-      </Drawer.Group>
+      <Drawer.Screen name="user" component={User} />
+      <Drawer.Screen name="myRides" component={MyRides} />
+      <Drawer.Screen name="payment" component={Payment} />
+      <Drawer.Screen name="help" component={Help} />
     </Drawer.Navigator>
   );
 };
