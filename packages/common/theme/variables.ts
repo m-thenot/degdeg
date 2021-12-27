@@ -40,3 +40,5 @@ export const font = {
   fontSize4: 22,
   fontSize5: 28,
 };
+
+export const headerHeight = 58;

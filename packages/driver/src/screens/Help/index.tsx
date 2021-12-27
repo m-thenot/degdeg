@@ -39,6 +39,7 @@ const Help: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'help'>> = ({
           navigation={navigation}
           title="Besoin d'aide ?"
           marginTop={insets.top}
+          hasPaddingHorizontal
         />
       ),
     });

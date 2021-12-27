@@ -31,7 +31,11 @@ const AuthNavigation: React.FC = () => {
               backgroundColor: colors.white,
             },
             header: () => (
-              <BackHeader navigation={navigation} marginTop={insets.top} />
+              <BackHeader
+                hasPaddingHorizontal
+                navigation={navigation}
+                marginTop={insets.top}
+              />
             ),
           };
         }}>

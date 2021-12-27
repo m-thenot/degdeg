@@ -38,6 +38,7 @@ const MainNavigation: React.FC = () => {
               <MenuHeader
                 navigation={navigation}
                 backgroundColor="transparent"
+                hasPaddingHorizontal
               />
             ),
           };

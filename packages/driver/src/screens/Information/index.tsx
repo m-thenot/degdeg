@@ -17,7 +17,7 @@ import { createDriver } from '@services/driver';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { layout, font } from '@dagdag/common/theme';
+import { layout, font, headerHeight } from '@dagdag/common/theme';
 
 interface IData {
   firstName: string;
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop + 50,
+    marginTop: layout.marginTop + headerHeight,
     marginBottom: layout.spacer3,
   },
   title: {

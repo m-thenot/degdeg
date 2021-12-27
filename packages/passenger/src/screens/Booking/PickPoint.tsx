@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Platform, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+  Dimensions,
+  ViewStyle,
+  StyleProp,
+} from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import {
   arrivalAddressState,
@@ -19,7 +27,7 @@ import {
 } from '@dagdag/common/constants';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors, layout, font } from '@dagdag/common/theme';
+import { colors, layout, font, headerHeight } from '@dagdag/common/theme';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -46,14 +54,6 @@ const PickPoint: React.FC<
 
   const placeholder =
     route.params.type === DEPARTURE ? "D'où partez-vous ? " : 'Où allez-vous ?';
-
-  useEffect(() => {
-    navigation.setOptions({
-      header: () => (
-        <BackHeader navigation={navigation} marginTop={insets.top} />
-      ),
-    });
-  }, []);
 
   const onDragEnd = (coordinates: LatLng) => {
     Geocoder.from({
@@ -86,6 +86,10 @@ const PickPoint: React.FC<
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackHeader
+        navigation={navigation}
+        style={[styles.header, { top: insets.top }]}
+      />
       <Map
         showsMyLocationButton
         region={
@@ -109,8 +113,7 @@ const PickPoint: React.FC<
           description={draggablePosition?.text}
         />
       </Map>
-
-      <View style={styles.top}>
+      <View style={topStyles(insets.top)}>
         <Text style={styles.address}>
           {draggablePosition?.text || placeholder}
         </Text>
@@ -127,9 +130,30 @@ const PickPoint: React.FC<
 
 export default PickPoint;
 
+const topStyles = (insetTop: number): StyleProp<ViewStyle> => ({
+  position: 'absolute',
+  backgroundColor: colors.white,
+  top: Platform.OS === 'ios' ? headerHeight + insetTop : headerHeight,
+  width: '100%',
+  paddingHorizontal: layout.spacer5,
+  shadowColor: colors.black,
+  shadowOffset: {
+    width: 0,
+    height: 8,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    position: 'absolute',
+    paddingLeft: layout.marginHorizontal,
+    width: '100%',
   },
   positionButton: {
     position: 'absolute',
@@ -140,22 +164,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 2 * layout.marginHorizontal,
     zIndex: 30,
   },
-  top: {
-    position: 'absolute',
-    backgroundColor: colors.white,
-    top: 70,
-    width: '100%',
-    paddingHorizontal: layout.spacer5,
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-
   address: {
     color: colors.black,
     fontSize: font.fontSize4,

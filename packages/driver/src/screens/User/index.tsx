@@ -58,6 +58,7 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
           navigation={navigation}
           title="Profil"
           marginTop={insets.top}
+          hasPaddingHorizontal
         />
       ),
     });

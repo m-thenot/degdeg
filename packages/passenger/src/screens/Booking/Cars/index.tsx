@@ -50,19 +50,6 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    navigation.setOptions({
-      header: () => (
-        <BackHeader
-          navigation={navigation}
-          backgroundColor="transparent"
-          marginTop={insets.top}
-          onPress={() => {
-            setArrivalAddress(defaultAddress);
-            navigation.goBack();
-          }}
-        />
-      ),
-    });
     return () => setDepartureAt(undefined);
   }, [navigation]);
 
@@ -104,6 +91,15 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
 
   return (
     <SafeAreaView style={styles.safeContainer}>
+      <BackHeader
+        navigation={navigation}
+        backgroundColor="transparent"
+        style={[styles.header, { top: insets.top }]}
+        onPress={() => {
+          setArrivalAddress(defaultAddress);
+          navigation.goBack();
+        }}
+      />
       <MapWrapper mapStyle={styles.map} />
 
       <CustomBottomSheet snapPoints={snapPoints}>
@@ -171,6 +167,10 @@ const styles = StyleSheet.create({
   },
   container: {
     marginHorizontal: layout.spacer5,
+  },
+  header: {
+    position: 'absolute',
+    left: layout.marginHorizontal,
   },
   map: {
     marginBottom: 360,

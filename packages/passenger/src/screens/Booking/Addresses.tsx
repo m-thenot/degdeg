@@ -25,10 +25,7 @@ import PlaceIcon from '@assets/icons/ic_place.svg';
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, layout } from '@dagdag/common/theme';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { BackHeader } from '@dagdag/common/components';
 
 const GOOGLE_PACES_API_BASE_URL = 'https://maps.googleapis.com/maps/api/place';
@@ -70,22 +67,9 @@ const Addresses: React.FC<
     departureAddressState,
   );
   const currentPosition = useRecoilValue(currentPositionState);
-  const insets = useSafeAreaInsets();
 
   const [arrivalAddress, setArrivalAddress] =
     useRecoilState(arrivalAddressState);
-
-  useEffect(() => {
-    navigation.setOptions({
-      header: () => (
-        <BackHeader
-          navigation={navigation}
-          marginTop={insets.top}
-          title="Saisir l'adresse"
-        />
-      ),
-    });
-  }, []);
 
   useEffect(() => {
     if (departureAddress.text === '' && currentPosition?.formattedAddress) {
@@ -141,6 +125,11 @@ const Addresses: React.FC<
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackHeader
+        navigation={navigation}
+        title="Saisir l'adresse"
+        style={styles.header}
+      />
       <View style={styles.shadow}>
         <View style={styles.addresses}>
           <View style={styles.elements}>
@@ -212,12 +201,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingTop: layout.spacer8,
+  },
+  header: {
+    paddingHorizontal: layout.marginHorizontal,
   },
   shadow: {
     borderRadius: 20,
     marginHorizontal: layout.spacer5,
-    marginTop: layout.spacer1,
+    marginTop: layout.spacer4,
     marginBottom: layout.spacer4,
     shadowColor: 'rgba(0,0,0, 0.5)',
     shadowOffset: {

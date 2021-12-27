@@ -39,6 +39,7 @@ const SelectDate: React.FC<
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackHeader navigation={navigation} title="Heure de départ" />
       <View style={styles.shortcuts}>
         <Button
           type="secondary"
@@ -92,13 +93,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: layout.marginHorizontal,
-    paddingTop: layout.spacer8,
   },
   shortcuts: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     marginBottom: layout.spacer5,
+    marginTop: layout.marginTop,
   },
   button: {
     padding: layout.spacer2,

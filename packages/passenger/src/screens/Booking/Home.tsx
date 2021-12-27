@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
@@ -10,7 +9,6 @@ import {
 import { BookingStackParamList } from '@internalTypes/navigation';
 import { MenuHeader, RoundBottom } from '@dagdag/common/components';
 import Map from '@components/Map';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
@@ -22,9 +20,13 @@ import {
 } from '@stores/address.atom';
 import { colors, layout, font, border } from '@dagdag/common/theme';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import { StackScreenProps } from '@react-navigation/stack';
 
-const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
+const Home: React.FC<StackScreenProps<BookingStackParamList, 'home'>> = ({
   navigation,
 }) => {
   const { user } = useFirebaseAuthentication();
@@ -33,16 +35,6 @@ const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    navigation.setOptions({
-      header: () => (
-        <MenuHeader
-          navigation={navigation}
-          marginTop={insets.top}
-          backgroundColor="transparent"
-        />
-      ),
-    });
-
     // Reset arrival address
     setArrivalAddress(defaultAddress);
 
@@ -80,6 +72,11 @@ const Home: React.FC<NativeStackScreenProps<BookingStackParamList, 'home'>> = ({
 
   return (
     <SafeAreaView style={styles.container}>
+      <MenuHeader
+        navigation={navigation}
+        backgroundColor="transparent"
+        style={[styles.header, { top: insets.top }]}
+      />
       <Map showsMyLocationButton showsUserLocation />
       <RoundBottom>
         <Text style={styles.firstName}>Bonjour {user?.firstName} !</Text>
@@ -103,6 +100,10 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    position: 'absolute',
+    left: layout.marginHorizontal,
   },
   firstName: {
     marginBottom: layout.spacer1,

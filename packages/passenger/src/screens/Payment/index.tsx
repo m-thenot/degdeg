@@ -97,6 +97,7 @@ const Payment: React.FC<
           navigation={navigation}
           title="Moyens de paiement"
           marginTop={insets.top}
+          hasPaddingHorizontal
         />
       ),
     });

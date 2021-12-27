@@ -22,7 +22,7 @@ import globalStyles from '@theme/globalStyles';
 import parsePhoneNumber from 'libphonenumber-js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { colors, layout, font } from '@dagdag/common/theme';
+import { colors, layout, font, headerHeight } from '@dagdag/common/theme';
 
 const Verification: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'verification'>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop + 50,
+    marginTop: layout.marginTop + headerHeight,
   },
   title: {
     fontSize: font.fontSize4,

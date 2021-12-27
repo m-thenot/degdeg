@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native';
 import BackButton from './../assets/icons/left-arrow.svg';
 import MenuButton from './../assets/icons/ic_menu.svg';
 import CrossButton from './../assets/icons/cross.svg';
@@ -11,6 +11,8 @@ interface IHeaderProps {
   navigation: any;
   marginTop?: number;
   backgroundColor?: string;
+  style?: StyleProp<ViewStyle>;
+  hasPaddingHorizontal?: boolean;
 }
 
 interface ICrossHeader {
@@ -28,7 +30,9 @@ export const BackHeader: React.FC<IBackHeaderProps> = ({
   navigation,
   title = '',
   marginTop = 0,
+  hasPaddingHorizontal,
   backgroundColor = colors.white,
+  style,
   onPress,
 }) => {
   const styles = createStyles();
@@ -38,6 +42,8 @@ export const BackHeader: React.FC<IBackHeaderProps> = ({
       style={[
         styles.header,
         { marginTop: marginTop, backgroundColor: backgroundColor },
+        hasPaddingHorizontal && styles.paddingHorizontal,
+        style,
       ]}>
       <RoundIconButton
         style={[styles.iconButton]}
@@ -53,6 +59,8 @@ export const MenuHeader: React.FC<IMenuHeaderProps> = ({
   navigation,
   marginTop = 0,
   backgroundColor = colors.white,
+  hasPaddingHorizontal,
+  style,
 }) => {
   const styles = createStyles();
   return (
@@ -60,6 +68,8 @@ export const MenuHeader: React.FC<IMenuHeaderProps> = ({
       style={[
         styles.header,
         { marginTop: marginTop, backgroundColor: backgroundColor },
+        style,
+        hasPaddingHorizontal && styles.paddingHorizontal,
       ]}>
       <RoundIconButton
         style={[styles.iconButton, styles.iconMenuButton]}
@@ -82,11 +92,16 @@ export const CrossHeader: React.FC<ICrossHeader> = ({ onPress }) => {
 const createStyles = () => {
   return StyleSheet.create({
     header: {
-      paddingHorizontal: layout.marginHorizontal,
-      minHeight: 50,
+      paddingTop: layout.spacer2,
+      minHeight: 50 + layout.spacer2,
+      maxHeight: 50 + layout.spacer2,
       flexDirection: 'row',
       alignItems: 'center',
       flex: 1,
+      zIndex: 1000,
+    },
+    paddingHorizontal: {
+      paddingHorizontal: layout.marginHorizontal,
     },
     icon: {
       marginLeft: -3,

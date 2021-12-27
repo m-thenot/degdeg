@@ -1,7 +1,6 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from '../CustomDrawerContent';
-import { MenuHeader } from '@dagdag/common/components';
 import Payment from '@screens/Payment';
 import Help from '@screens/Help';
 import MyRides from '@screens/MyRides';
@@ -18,7 +17,7 @@ const MainNavigation: React.FC = () => {
     <Drawer.Navigator
       initialRouteName="booking"
       drawerContent={props => <CustomDrawerContent {...props} />}
-      screenOptions={({ navigation }) => {
+      screenOptions={() => {
         return {
           headerBackTitleVisible: false,
           headerTitle: '',
@@ -33,9 +32,6 @@ const MainNavigation: React.FC = () => {
           contentStyle: {
             backgroundColor: colors.white,
           },
-          headerLeft: () => (
-            <MenuHeader navigation={navigation} backgroundColor="transparent" />
-          ),
         };
       }}>
       <Drawer.Screen
@@ -43,11 +39,7 @@ const MainNavigation: React.FC = () => {
         component={BookingNavigation}
         options={{ headerShown: false }}
       />
-      <Drawer.Screen
-        name="order"
-        component={RideNavigation}
-        options={{ headerShown: false }}
-      />
+      <Drawer.Screen name="order" component={RideNavigation} />
       <Drawer.Screen name="user" component={User} />
       <Drawer.Screen name="myRides" component={MyRides} />
       <Drawer.Screen name="payment" component={Payment} />

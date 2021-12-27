@@ -1,4 +1,7 @@
-import { BookingStackParamList } from '@internalTypes/navigation';
+import {
+  BookingStackParamList,
+  DrawerNavigatorParamList,
+} from '@internalTypes/navigation';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import Home from '@screens/Booking/Home';
@@ -6,15 +9,17 @@ import Cars from '@screens/Booking/Cars';
 import Addresses from '@screens/Booking/Addresses';
 import PickPoint from '@screens/Booking/PickPoint';
 import SelectDate from '@screens/Booking/SelectDate';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 
 const BookingStack = createStackNavigator<BookingStackParamList>();
 
-const BookingNavigation = () => {
+const BookingNavigation: React.FC<
+  DrawerScreenProps<DrawerNavigatorParamList, 'booking'>
+> = () => {
   return (
     <BookingStack.Navigator
       screenOptions={{
-        headerShadowVisible: false,
-        headerTransparent: true,
+        headerShown: false,
       }}>
       <BookingStack.Screen name="home" component={Home} />
       <BookingStack.Screen name="addresses" component={Addresses} />
