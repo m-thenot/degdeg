@@ -43,7 +43,7 @@ const LocationProvider: React.FC = ({ children }) => {
               setLocation({ latitude, longitude });
             },
             error => {
-              console.log(error);
+              console.error(error);
             },
             {
               enableHighAccuracy: true,
@@ -61,7 +61,7 @@ const LocationProvider: React.FC = ({ children }) => {
         }
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }, []);
 

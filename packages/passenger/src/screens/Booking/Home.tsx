@@ -58,7 +58,7 @@ const Home: React.FC<StackScreenProps<BookingStackParamList, 'home'>> = ({
             });
           },
           error => {
-            console.log(error.code, error.message);
+            console.error(error.code, error.message);
           },
           {
             enableHighAccuracy: true,

@@ -33,5 +33,5 @@ export const generateCars = async () => {
     .functions(FIREBASE_REGION)
     .httpsCallable('generateCars')({ size: 50 })
     .then(r => console.log(r))
-    .catch(e => console.log('e', e.message));
+    .catch(e => console.error('e', e.message));
 };

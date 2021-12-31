@@ -119,7 +119,7 @@ const Addresses: React.FC<
         setCurrentPredictionsType(type);
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 

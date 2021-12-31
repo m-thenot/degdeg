@@ -87,7 +87,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       navigation.navigate('order' as any, { screen: 'ride' });
     } catch (e) {
       setIsLoading(false);
-      console.log(e);
+      console.error(e);
     }
   };
 

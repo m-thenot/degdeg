@@ -44,7 +44,7 @@ const Information: React.FC<
           navigation.navigate('main');
         })
         .catch(e => {
-          console.log(e);
+          console.error(e);
           setSubmitHasFailed(true);
         });
     }

@@ -25,7 +25,7 @@ const Finished: React.FC = () => {
         isPassengerRating: true,
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     // Remove current order from orders request

@@ -83,7 +83,7 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
           getImage();
         })
         .catch(e => {
-          console.log(e);
+          console.error(e);
         });
     }
 

@@ -17,7 +17,6 @@ interface IRating {
 }
 
 export const updateRating = async (data: IRating) => {
-  console.log(data);
   const result = await firebase
     .app()
     .functions(FIREBASE_REGION)
