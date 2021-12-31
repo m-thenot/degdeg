@@ -4,7 +4,7 @@ import {
   DrawerItem,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Image } from 'react-native';
 import { LinkButton } from '@dagdag/common/components';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import EditIcon from '@assets/icons/ic_edit.svg';
@@ -12,20 +12,26 @@ import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import parsePhoneNumber from 'libphonenumber-js';
 import { logout } from '@services/user';
 import { layout, colors, font } from '@dagdag/common/theme';
-import { Image } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import StarIcon from '@dagdag/common/assets/icons/rating.svg';
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
   const { user } = useFirebaseAuthentication();
+  const insets = useSafeAreaInsets();
 
   return (
     <DrawerContentScrollView
       {...props}
       contentContainerStyle={styles.container}>
-      <View style={styles.userContainer}>
+      <View
+        style={[
+          styles.userContainer,
+          { paddingTop: insets.top + layout.spacer7 },
+        ]}>
         <EditIcon
           height={50}
           width={50}
-          style={styles.edit}
+          style={[styles.edit, { top: insets.top + 45 }]}
           onPress={() => props.navigation.navigate('user')}
         />
         {user?.image ? (
@@ -41,6 +47,14 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           <PhotoUser height={80} width={80} />
         )}
         <Text style={styles.name}>{user?.firstName}</Text>
+        {user?.rating && (
+          <View style={styles.rating}>
+            <StarIcon width={12} height={12} fill="#FFB800" />
+            <Text style={styles.ratingNumber}>
+              {user?.rating.overall.toFixed(2)}
+            </Text>
+          </View>
+        )}
         <Text style={styles.phoneNumber}>
           {user?.phoneNumber &&
             parsePhoneNumber(user.phoneNumber)?.formatInternational()}
@@ -91,25 +105,34 @@ const styles = StyleSheet.create({
   userContainer: {
     backgroundColor: colors.primary,
     color: colors.white,
-    height: 200,
     paddingHorizontal: layout.spacer5,
-    paddingTop: layout.spacer7,
-    position: 'relative',
+    paddingBottom: layout.spacer6,
   },
   name: {
     color: colors.white,
     fontSize: font.fontSize3,
     fontWeight: '700',
     marginTop: layout.spacer3,
-    marginBottom: layout.spacer1,
+  },
+  rating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 1,
+  },
+  ratingNumber: {
+    color: colors.white,
+    fontSize: font.fontSize1_5,
+    fontWeight: '700',
+    marginLeft: layout.spacer1,
+    paddingTop: 2,
   },
   phoneNumber: {
     color: colors.white,
     fontSize: font.fontSize2,
+    marginTop: layout.spacer2,
   },
   edit: {
     position: 'absolute',
-    top: 43,
     left: 80,
     zIndex: 15,
   },

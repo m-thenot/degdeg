@@ -6,4 +6,8 @@ export interface IDriver {
   lastName?: string;
   email?: string;
   tokens: string[];
+  rating?: {
+    overall: number;
+    count: number;
+  };
 }

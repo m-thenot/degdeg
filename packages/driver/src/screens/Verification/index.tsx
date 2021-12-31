@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop + headerHeight,
+    marginTop: layout.marginTop,
   },
   title: {
     fontSize: font.fontSize4,

@@ -10,6 +10,7 @@ import { currentOrderState } from '@stores/orders.atom';
 import openMap from 'react-native-open-maps';
 import { useLocation } from '@context/location';
 import { getDistanceFromLatLonInKm } from '@utils/distance';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const InProgress: React.FC = () => {
   const currentOrder = useRecoilValue(currentOrderState);
@@ -17,6 +18,7 @@ const InProgress: React.FC = () => {
   const { arrivalAddress, departureAddress } = currentOrder!;
   const [isConfirmationModalOpened, setIsConfirmationModalOpened] =
     useState(false);
+  const insets = useSafeAreaInsets();
 
   const updateStatus = () =>
     updateOrderStatus(OrderStatus.FINISHED, currentOrder!.uid);
@@ -33,7 +35,7 @@ const InProgress: React.FC = () => {
 
   return (
     <>
-      <RoundBottom>
+      <RoundBottom customStyle={{ bottom: insets.bottom }}>
         <Text style={styles.destination}>Aller à destination :</Text>
         <Text style={styles.address}>{arrivalAddress.formattedAddress}</Text>
 

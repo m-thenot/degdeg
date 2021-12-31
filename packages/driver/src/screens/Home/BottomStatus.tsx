@@ -11,14 +11,16 @@ import globalStyles from '@theme/globalStyles';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { useRecoilState } from 'recoil';
 import { isOnlineState } from '@stores/driver.atom';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const BottomStatus: React.FC = () => {
   const [isOnline, setisOnline] = useRecoilState(isOnlineState);
+  const insets = useSafeAreaInsets();
 
   return (
     <>
       {isOnline ? (
-        <RoundBottom>
+        <RoundBottom customStyle={{ bottom: insets.bottom }}>
           <Text style={styles.text}>
             Vous êtes <Text style={globalStyles.bold}>en ligne</Text>.
           </Text>
@@ -36,13 +38,13 @@ const BottomStatus: React.FC = () => {
         <>
           <TouchableOpacity
             activeOpacity={0.4}
-            style={styles.buttonGo}
+            style={[styles.buttonGo, { bottom: insets.bottom + 130 }]}
             onPress={() => {
               setisOnline(true);
             }}>
             <Text style={styles.textGo}>GO</Text>
           </TouchableOpacity>
-          <RoundBottom>
+          <RoundBottom customStyle={{ bottom: insets.bottom }}>
             <Text style={styles.text}>
               Vous êtes <Text style={globalStyles.bold}>hors-ligne</Text>.
             </Text>
@@ -66,7 +68,6 @@ const styles = StyleSheet.create({
   },
   buttonGo: {
     position: 'absolute',
-    bottom: 130,
     backgroundColor: colors.primary,
     width: 90,
     height: 90,

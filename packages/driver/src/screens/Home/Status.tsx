@@ -79,6 +79,7 @@ export default Status;
 const styles = StyleSheet.create({
   status: {
     marginRight: layout.spacer3,
+    marginTop: layout.spacer3,
     flexDirection: 'row',
     alignItems: 'center',
   },

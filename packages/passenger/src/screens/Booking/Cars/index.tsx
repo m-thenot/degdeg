@@ -70,6 +70,8 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
         id: user!.uid,
         firstName: user?.firstName,
         phoneNumber: user?.phoneNumber,
+        image: user?.image,
+        rating: user?.rating,
       },
       metadataRoute: metadataRoute!,
       car: selectedCar!,

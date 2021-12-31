@@ -14,11 +14,13 @@ import { useRecoilState } from 'recoil';
 import { ordersState } from '@stores/orders.atom';
 import { updateOrderStatus } from '@services/order';
 import { OrderStatus } from '@dagdag/common/types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
   const [isLoading, setIsLoading] = useState(false);
   const orderRequest = orders[0];
+  const insets = useSafeAreaInsets();
 
   const handlePressDecline = () => {
     const newOrders = [...orders];
@@ -36,7 +38,7 @@ const RideRequest: React.FC = () => {
           <Text style={styles.ignoreText}>Décliner</Text>
         </TouchableOpacity>
       </View>
-      <RoundBottom>
+      <RoundBottom customStyle={{ bottom: insets.bottom }}>
         <View style={styles.top}>
           <ContactProfile firstName={orderRequest.user.firstName} />
           <View>

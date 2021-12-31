@@ -14,15 +14,17 @@ import { currentOrderState } from '@stores/orders.atom';
 import openMap from 'react-native-open-maps';
 import { useLocation } from '@context/location';
 import { callNumber } from '@dagdag/common/utils';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PickUp: React.FC = () => {
   const currentOrder = useRecoilValue(currentOrderState);
   const { location } = useLocation();
   const [isCancelModalOpened, setIsCancelModalOpened] = useState(false);
+  const insets = useSafeAreaInsets();
 
   return (
     <>
-      <RoundBottom>
+      <RoundBottom customStyle={{ bottom: insets.bottom }}>
         <Text style={styles.pickup}>
           Récupérer {currentOrder?.user.firstName} à{' '}
         </Text>

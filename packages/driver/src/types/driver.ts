@@ -1,4 +1,4 @@
-interface IDriver {
+export interface IDriver {
   phoneNumber: string | null;
   uid: string;
   displayName: string;
@@ -7,4 +7,8 @@ interface IDriver {
   email?: string;
   tokens?: string[];
   image?: string;
+  rating?: {
+    overall: number;
+    count: number;
+  };
 }

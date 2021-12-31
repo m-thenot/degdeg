@@ -20,6 +20,8 @@ const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 
 const REGION = 'asia-south1';
 const CARS_COLLECTION = 'cars';
+const PASSENGERS_COLLECTION = 'users';
+const DRIVERS_COLLECTION = 'drivers';
 
 const GeoFirestore = geofirestore.initializeApp(admin.firestore() as any);
 
@@ -139,6 +141,31 @@ exports.sendEmail = functions.region(REGION).https.onCall(data => {
       throw new functions.https.HttpsError('unknown', error.message);
     }
   });
+
+  return { success: true };
+});
+
+/**
+ * Update rating
+ */
+
+exports.updateRating = functions.region(REGION).https.onCall(data => {
+  const { rating, overallRating, ratingsCount, uid, isPassengerRating } = data;
+
+  const newOverallRating = overallRating
+    ? (overallRating * ratingsCount + rating) / (ratingsCount + 1)
+    : rating;
+
+  admin
+    .firestore()
+    .collection(isPassengerRating ? PASSENGERS_COLLECTION : DRIVERS_COLLECTION)
+    .doc(uid)
+    .update({
+      rating: {
+        overall: newOverallRating,
+        count: ratingsCount ? ratingsCount + 1 : 1,
+      },
+    });
 
   return { success: true };
 });

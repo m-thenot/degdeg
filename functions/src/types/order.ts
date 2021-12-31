@@ -44,6 +44,11 @@ interface IUser {
   id: string;
   firstName: string;
   phoneNumber: string;
+  image?: string;
+  rating?: {
+    overall: number;
+    count: number;
+  };
 }
 
 export interface IOrder {

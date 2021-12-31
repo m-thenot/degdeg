@@ -9,7 +9,7 @@ import Verification from '@screens/Verification/index';
 import Information from '@screens/Information';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import SplashScreen from '@screens/SplashScreen';
-import { colors, layout } from '@dagdag/common/theme';
+import { colors } from '@dagdag/common/theme';
 import MainNavigation from '@navigation/MainNavigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

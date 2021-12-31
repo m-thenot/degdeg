@@ -8,4 +8,8 @@ export interface IUser {
   image?: string;
   customerId: string;
   defaultPaymentMethod?: string;
+  rating?: {
+    overall: number;
+    count: number;
+  };
 }

@@ -103,7 +103,7 @@ export default SignInWithPhoneNumber;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   keyboardContainer: { flex: 1, marginHorizontal: layout.marginHorizontal },
-  main: { flex: 1, marginTop: layout.marginTop + headerHeight },
+  main: { flex: 1, marginTop: layout.marginTop },
   title: {
     fontSize: font.fontSize4,
     fontWeight: '700',

@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop + headerHeight,
+    marginTop: layout.marginTop,
     marginBottom: layout.spacer3,
   },
   title: {

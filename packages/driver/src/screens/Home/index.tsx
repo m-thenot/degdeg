@@ -18,6 +18,7 @@ import PickUp from './PickUp';
 import { CurrentOrderProvider } from '@context/currentOrder';
 import OnSpot from './OnSpot';
 import InProgress from './InProgress';
+import Finished from './Finished';
 
 const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
@@ -73,6 +74,8 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
         return <OnSpot />;
       case OrderStatus.IN_PROGRESS:
         return <InProgress />;
+      case OrderStatus.FINISHED:
+        return <Finished />;
       default:
         return null;
     }

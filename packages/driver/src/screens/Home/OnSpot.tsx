@@ -17,14 +17,16 @@ import { currentOrderState } from '@stores/orders.atom';
 
 import { callNumber } from '@dagdag/common/utils';
 import { colors, font, layout } from '@dagdag/common/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const OnSpot: React.FC = () => {
+  const insets = useSafeAreaInsets();
   const currentOrder = useRecoilValue(currentOrderState);
   const [isCancelModalOpened, setIsCancelModalOpened] = useState(false);
 
   return (
     <>
-      <RoundBottom>
+      <RoundBottom customStyle={{ bottom: insets.bottom }}>
         <View style={styles.top}>
           <ContactProfile firstName={currentOrder?.user.firstName!} />
           <Button

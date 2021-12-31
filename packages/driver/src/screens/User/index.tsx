@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, font, layout } from '@dagdag/common/theme';
 import globalStyles from '@theme/globalStyles';
 import { BackHeader, Button, InlineInput } from '@dagdag/common/components';
@@ -180,6 +180,8 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
         </Text>
       )}
 
+      <View style={{ flex: 1 }} />
+
       <Button
         disabled={!isDirty && !isNewImage}
         text="Sauvegarder"
@@ -232,10 +234,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   button: {
-    position: 'absolute',
-    bottom: 10,
-    width: '100%',
-    marginHorizontal: layout.marginHorizontal,
+    marginBottom: layout.spacer3,
   },
   error: {
     marginTop: layout.spacer4,

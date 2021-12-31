@@ -2,6 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import { CARS_COLLECTION, DRIVERS_COLLECTION } from '@dagdag/common/constants';
+import { IDriver } from '@internalTypes/driver';
 
 interface newDriver {
   firstName: string;

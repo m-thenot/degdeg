@@ -52,17 +52,20 @@ const Help: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'help'>> = ({
       message: message,
       userType: PASSENGER as typeof PASSENGER,
     };
-    const result = await sendEmail(email);
-    reset();
-    if (result.success) {
-      DGToast.show(ToastTypes.DG_SUCCESS, {
-        message: 'Votre email a été envoyé avec succès !',
-      });
-    } else {
+    try {
+      const result = await sendEmail(email);
+      if (result.success) {
+        DGToast.show(ToastTypes.DG_SUCCESS, {
+          message: 'Votre email a été envoyé avec succès !',
+        });
+      }
+    } catch (e) {
+      console.error(e);
       DGToast.show(ToastTypes.DG_ERROR, {
         message: "Une erreur innattendue s'est produite. Veuillez réessayer.",
       });
     }
+    reset();
   };
 
   return (
