@@ -38,6 +38,7 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
     messaging()
       .getToken()
       .then(token => {
+        console.log(token);
         return saveTokenToDatabase(token);
       });
 

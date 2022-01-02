@@ -28,7 +28,11 @@ const OnSpot: React.FC = () => {
     <>
       <RoundBottom customStyle={{ bottom: insets.bottom }}>
         <View style={styles.top}>
-          <ContactProfile firstName={currentOrder?.user.firstName!} />
+          <ContactProfile
+            firstName={currentOrder?.user.firstName!}
+            image={currentOrder?.user.image}
+            rating={currentOrder?.user.rating?.overall}
+          />
           <Button
             icon={<CallIcon width={18} height={18} />}
             style={styles.call}

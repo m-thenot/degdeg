@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import { colors, font, layout } from '@dagdag/common/theme';
@@ -48,6 +48,7 @@ const Payment: React.FC<
     phoneNumber: user?.phoneNumber,
   };
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const insets = useSafeAreaInsets();
 
   const getPaymentMethods = async () => {
@@ -64,6 +65,7 @@ const Payment: React.FC<
       updateUser({ defaultPaymentMethod: newPaymentMethods.data[0].id });
     }
     setPaymentMethods(newPaymentMethods?.data || []);
+    setIsLoading(false);
   };
 
   const initializePaymentSheet = async () => {
@@ -128,28 +130,47 @@ const Payment: React.FC<
 
   return (
     <SafeAreaView style={styles.container}>
-      {paymentMethods.map(paymentMethod => (
-        <View key={paymentMethod.card.fingerprint} style={styles.creditCard}>
-          {CREDIT_CARDS[paymentMethod.card.brand]}
-          <View style={styles.cardInfo}>
-            <Text style={styles.last4}>
-              **** **** **** {paymentMethod?.card?.last4}
+      {isLoading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.primary}
+          style={styles.loader}
+        />
+      ) : (
+        <>
+          {paymentMethods.map(paymentMethod => (
+            <View
+              key={paymentMethod.card.fingerprint}
+              style={styles.creditCard}>
+              {CREDIT_CARDS[paymentMethod.card.brand]}
+              <View style={styles.cardInfo}>
+                <Text style={styles.last4}>
+                  **** **** **** {paymentMethod?.card?.last4}
+                </Text>
+                <Text style={styles.exp}>
+                  Expiration:{' '}
+                  {paymentMethod?.card?.exp_month > 9
+                    ? paymentMethod?.card?.exp_month
+                    : '0' + paymentMethod?.card?.exp_month}{' '}
+                  / {paymentMethod?.card?.exp_year}
+                </Text>
+              </View>
+            </View>
+          ))}
+          {paymentMethods.length === 0 && (
+            <Text style={styles.noCards}>
+              Aucun moyen de paiement n'a été ajouté pour le moment.
             </Text>
-            <Text style={styles.exp}>
-              Expiration:{' '}
-              {paymentMethod?.card?.exp_month > 9
-                ? paymentMethod?.card?.exp_month
-                : '0' + paymentMethod?.card?.exp_month}{' '}
-              / {paymentMethod?.card?.exp_year}
-            </Text>
-          </View>
-        </View>
-      ))}
+          )}
+        </>
+      )}
+
       <View style={{ flex: 1 }} />
       <Button
         text="Ajouter un moyen de paiement"
         style={styles.button}
         onPress={openPaymentSheet}
+        disabled={isLoading}
       />
     </SafeAreaView>
   );
@@ -163,6 +184,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.marginHorizontal,
     paddingTop: layout.spacer9,
     backgroundColor: colors.white,
+  },
+  loader: {
+    flex: 1,
+    alignSelf: 'center',
+  },
+  noCards: {
+    color: colors.black,
+    fontSize: font.fontSize2,
+    textAlign: 'center',
+    flex: 1,
+    paddingTop: '50%',
   },
   creditCard: {
     flexDirection: 'row',
