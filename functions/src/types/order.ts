@@ -51,6 +51,17 @@ interface IUser {
   };
 }
 
+export interface IPublicDriver {
+  uid: string;
+  firstName: string;
+  phoneNumber: string;
+  image?: string;
+  rating?: {
+    overall: number;
+    count: number;
+  };
+}
+
 export interface IOrder {
   uid: string;
   createdDate: number;
@@ -64,4 +75,5 @@ export interface IOrder {
   rideType: RideType;
   departureAt: number;
   price: any;
+  driver?: IPublicDriver;
 }

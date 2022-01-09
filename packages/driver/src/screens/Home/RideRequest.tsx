@@ -12,13 +12,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useRecoilState } from 'recoil';
 import { ordersState } from '@stores/orders.atom';
-import { updateOrderStatus } from '@services/order';
-import { OrderStatus } from '@dagdag/common/types';
+import { acceptOrder } from '@services/order';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useFirebaseAuthentication();
   const orderRequest = orders[0];
   const insets = useSafeAreaInsets();
 
@@ -63,7 +64,12 @@ const RideRequest: React.FC = () => {
           isLoading={isLoading}
           onPress={() => {
             setIsLoading(true);
-            updateOrderStatus(OrderStatus.ACCEPTED, orderRequest.uid);
+            const driver = user;
+            delete driver?.displayName;
+            delete driver?.email;
+            delete driver?.tokens;
+            delete driver?.lastName;
+            acceptOrder(driver, orderRequest.uid);
           }}
         />
       </RoundBottom>

@@ -19,6 +19,10 @@ export const getFormateDate = (date: number | Date) => {
   }
 };
 
+export const getCompleteDateFormatted = (date: number | Date) => {
+  return format(date, 'dd MMMM yyyy', { locale: fr });
+};
+
 export const getFormattedTime = (date: number | Date) =>
   format(date, 'HH:mm', { locale: fr });
 

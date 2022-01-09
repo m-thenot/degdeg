@@ -8,3 +8,4 @@ export * from './RouteSummary';
 export * from './ContactProfile';
 export * from './InlineInput';
 export * from './SimpleToast';
+export * from './OrdersHistory';

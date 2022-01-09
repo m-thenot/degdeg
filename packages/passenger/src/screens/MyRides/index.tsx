@@ -1,15 +1,50 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
-import { layout } from '@dagdag/common/theme';
+import { colors, layout } from '@dagdag/common/theme';
+import { BackHeader } from '@dagdag/common/components';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import { getUserOrders } from '@services/order';
+import { IOrder } from '@dagdag/common/types';
+import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
+import OrdersHistory from '@dagdag/common/components/OrdersHistory';
 
 const MyRides: React.FC<
   DrawerScreenProps<DrawerNavigatorParamList, 'myRides'>
-> = () => {
+> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
+  const [orders, setOrders] = useState<IOrder[]>([]);
+  const { user } = useFirebaseAuthentication();
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <BackHeader
+          navigation={navigation}
+          title="Mes courses"
+          marginTop={insets.top}
+          hasPaddingHorizontal
+        />
+      ),
+    });
+  }, []);
+
+  useEffect(() => {
+    const getOrders = async () => {
+      const orders = await getUserOrders(user?.uid);
+      setOrders(orders.map(order => order.data()) as IOrder[]);
+    };
+
+    getOrders();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Mes courses</Text>
+      <OrdersHistory orders={orders} isPassengerHistory />
     </SafeAreaView>
   );
 };
@@ -19,11 +54,8 @@ export default MyRides;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: layout.marginHorizontal,
-    marginTop: layout.marginTop,
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: 'center',
+    backgroundColor: colors.white,
+    paddingHorizontal: layout.marginHorizontal,
+    paddingTop: layout.spacer9,
   },
 });
