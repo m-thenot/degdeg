@@ -72,7 +72,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           }}
         />
         <DrawerItem
-          label="Mon portefeuille"
+          label="Mes gains"
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {

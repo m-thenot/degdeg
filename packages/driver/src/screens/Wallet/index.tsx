@@ -1,17 +1,247 @@
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text } from 'react-native';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import React, { useEffect, useState } from 'react';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import { Text, StyleSheet, View } from 'react-native';
+import { BackHeader } from '@dagdag/common/components';
+import { border, colors, font, layout } from '@dagdag/common/theme';
+import ArrowIcon from '@dagdag/common/assets/icons/left-arrow.svg';
+import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
+import { IOrder } from '@dagdag/common/types';
+import { getOrdersByDate } from '@services/order';
+import { addDays, format, startOfWeek, subDays } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+const weekdays = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 
 const Wallet: React.FC<
-  DrawerNavigationProp<DrawerNavigatorParamList, 'wallet'>
-> = () => {
+  DrawerScreenProps<DrawerNavigatorParamList, 'wallet'>
+> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
+  const { user } = useFirebaseAuthentication();
+  const [currentDate, setCurrentDate] = useState(Date.now());
+  const [orders, setOrders] = useState<IOrder[]>([]);
+  const startOfWeekDate = startOfWeek(currentDate);
+  const isLastWeek =
+    startOfWeekDate.getTime() === startOfWeek(Date.now()).getTime();
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <BackHeader
+          navigation={navigation}
+          title="Mes gains"
+          marginTop={insets.top}
+          hasPaddingHorizontal
+        />
+      ),
+    });
+  }, []);
+
+  useEffect(() => {
+    const getOrders = async () => {
+      const orders = await getOrdersByDate(
+        user?.uid,
+        startOfWeek(currentDate).getTime(),
+        currentDate,
+      );
+      setOrders(orders.map(order => order.data()) as IOrder[]);
+    };
+
+    getOrders();
+  }, [currentDate]);
+
+  const renderBars = () => {
+    const ret: any[] = [];
+    const ordersByWeekdays = orders.map(order => ({
+      ...order,
+      departureAt: new Date(order.departureAt).getDate(),
+    }));
+
+    weekdays.map((day, index) => {
+      const ordersOfTheDay = ordersByWeekdays.filter(
+        order => order.departureAt === startOfWeekDate.getDate() + index,
+      );
+      const height =
+        ordersOfTheDay.length > 0
+          ? ordersOfTheDay.reduce((a, b) => a + b?.price, 10)
+          : 10;
+
+      ret.push(
+        <View key={index} style={styles.barContainer}>
+          <View style={[styles.bar, { height: height }]} />
+          <Text style={styles.day}>{day}</Text>
+        </View>,
+      );
+    });
+    return ret;
+  };
+
   return (
-    <SafeAreaView>
-      <Text>Wallet</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.date}>
+            {format(startOfWeekDate, 'MMM', { locale: fr })}{' '}
+            {startOfWeekDate.getDate()}-{addDays(startOfWeekDate, 7).getDate()}
+          </Text>
+          <View style={styles.navigation}>
+            <TouchableOpacity
+              style={styles.arrowButton}
+              onPress={() => setCurrentDate(subDays(currentDate, 7).getTime())}>
+              <ArrowIcon width={15} height={15} />
+            </TouchableOpacity>
+            <Text style={styles.total}>
+              {orders.length > 0 ? orders.reduce((a, b) => a + b?.price, 0) : 0}{' '}
+              €
+            </Text>
+            <TouchableOpacity
+              style={styles.arrowButton}
+              disabled={isLastWeek}
+              onPress={() => setCurrentDate(addDays(currentDate, 7).getTime())}>
+              <ArrowIcon
+                width={15}
+                height={15}
+                opacity={isLastWeek ? 0.3 : 1}
+                style={[styles.arrowRight]}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.graph}>{renderBars()}</View>
+        <View style={styles.separator} />
+        <View style={styles.footer}>
+          <View>
+            <Text style={styles.metaLabel}>Courses</Text>
+            <Text style={styles.metaValue}>{orders.length}</Text>
+          </View>
+          <View>
+            <Text style={styles.metaLabel}>Temps en course</Text>
+            <Text style={styles.metaValue}>
+              {orders.length > 0
+                ? Math.round(
+                    orders.reduce((a, b) => a + b?.metadataRoute.duration, 0),
+                  )
+                : 0}{' '}
+              min
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.metaLabel}>Distance</Text>
+            <Text style={styles.metaValue}>
+              {orders.length > 0
+                ? Math.round(
+                    orders.reduce((a, b) => a + b?.metadataRoute.distance, 0),
+                  )
+                : 0}{' '}
+              km
+            </Text>
+          </View>
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
 
 export default Wallet;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: layout.marginHorizontal,
+    paddingTop: layout.spacer9,
+  },
+  content: {
+    backgroundColor: colors.white,
+    borderRadius: border.radius4,
+    paddingHorizontal: layout.spacer3,
+    paddingVertical: layout.spacer4,
+    shadowColor: colors.grey3,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+    zIndex: 999,
+  },
+  arrowRight: {
+    transform: [{ rotateY: '180deg' }],
+  },
+  header: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navigation: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: layout.spacer1,
+  },
+  total: {
+    marginHorizontal: layout.spacer5,
+    fontSize: font.fontSize4,
+    color: colors.black,
+    fontWeight: 'bold',
+  },
+  date: {
+    fontSize: font.fontSize1,
+    color: colors.grey2,
+  },
+  barContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  bar: {
+    width: '60%',
+    marginHorizontal: layout.spacer4,
+    backgroundColor: colors.primary,
+    opacity: 0.7,
+    borderRadius: border.radius1,
+  },
+  graph: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    width: '100%',
+    marginTop: layout.spacer6,
+    minHeight: 150,
+  },
+  day: {
+    fontWeight: 'bold',
+    color: colors.black,
+    marginTop: 2,
+  },
+  separator: {
+    height: 1,
+    width: '90%',
+    alignSelf: 'center',
+    backgroundColor: colors.grey1,
+    marginTop: layout.spacer6,
+    marginBottom: layout.spacer5,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
+    alignSelf: 'center',
+  },
+  metaLabel: {
+    color: colors.grey2,
+    fontSize: font.fontSize1_5,
+  },
+  metaValue: {
+    color: colors.black,
+    fontSize: font.fontSize2,
+    marginTop: layout.spacer1,
+  },
+  arrowButton: {
+    width: 25,
+    height: 25,
+    justifyContent: 'center',
+  },
+});
