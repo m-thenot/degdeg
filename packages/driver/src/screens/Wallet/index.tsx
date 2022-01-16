@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Pressable } from 'react-native';
 import { BackHeader } from '@dagdag/common/components';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import ArrowIcon from '@dagdag/common/assets/icons/left-arrow.svg';
@@ -25,6 +25,7 @@ const Wallet: React.FC<
   const { user } = useFirebaseAuthentication();
   const [currentDate, setCurrentDate] = useState(Date.now());
   const [orders, setOrders] = useState<IOrder[]>([]);
+  const [activeDay, setActiveDay] = useState(-1);
   const startOfWeekDate = startOfWeek(currentDate);
   const isLastWeek =
     startOfWeekDate.getTime() === startOfWeek(Date.now()).getTime();
@@ -47,13 +48,19 @@ const Wallet: React.FC<
       const orders = await getOrdersByDate(
         user?.uid,
         startOfWeek(currentDate).getTime(),
-        currentDate,
+        addDays(currentDate, 7).getTime(),
       );
       setOrders(orders.map(order => order.data()) as IOrder[]);
     };
 
     getOrders();
   }, [currentDate]);
+
+  console.log(orders);
+  console.log(
+    addDays(currentDate, 7).getDate(),
+    startOfWeek(currentDate).getDate(),
+  );
 
   const renderBars = () => {
     const ret: any[] = [];
@@ -69,13 +76,29 @@ const Wallet: React.FC<
       const height =
         ordersOfTheDay.length > 0
           ? ordersOfTheDay.reduce((a, b) => a + b?.price, 10)
-          : 10;
+          : 5;
 
       ret.push(
-        <View key={index} style={styles.barContainer}>
-          <View style={[styles.bar, { height: height }]} />
+        <Pressable
+          onPress={() => setActiveDay(index)}
+          key={index}
+          style={styles.barContainer}>
+          <View
+            style={[
+              styles.bar,
+              { height: height, opacity: index === activeDay ? 1 : 0.7 },
+            ]}
+          />
           <Text style={styles.day}>{day}</Text>
-        </View>,
+          {index === activeDay && (
+            <View style={styles.dayPriceContainer}>
+              <View style={styles.dayPrice}>
+                <Text>{ordersOfTheDay.length > 0 ? height : 0} €</Text>
+              </View>
+              <View style={styles.line} />
+            </View>
+          )}
+        </Pressable>,
       );
     });
     return ret;
@@ -201,7 +224,6 @@ const styles = StyleSheet.create({
     width: '60%',
     marginHorizontal: layout.spacer4,
     backgroundColor: colors.primary,
-    opacity: 0.7,
     borderRadius: border.radius1,
   },
   graph: {
@@ -243,5 +265,22 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     justifyContent: 'center',
+  },
+  dayPrice: {
+    backgroundColor: colors.grey1,
+    borderRadius: border.radius2,
+    padding: layout.spacer1,
+  },
+  dayPriceContainer: {
+    alignItems: 'center',
+    position: 'absolute',
+    zIndex: 20,
+    top: -35,
+    left: 5,
+  },
+  line: {
+    width: 2,
+    height: 10,
+    backgroundColor: colors.grey1,
   },
 });
