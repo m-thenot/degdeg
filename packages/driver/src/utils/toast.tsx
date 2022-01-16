@@ -25,7 +25,7 @@ export default class DGToast {
     Toast.show({
       type: type,
       props: options,
-      visibilityTime: 3000,
+      visibilityTime: 4000,
       autoHide: true,
     });
   }

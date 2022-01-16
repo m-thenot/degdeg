@@ -80,6 +80,14 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           }}
         />
         <DrawerItem
+          label="Mes informations"
+          style={styles.item}
+          labelStyle={styles.label}
+          onPress={() => {
+            props.navigation.navigate('my_information');
+          }}
+        />
+        <DrawerItem
           label="Besoin d'aide ?"
           style={styles.item}
           labelStyle={styles.label}

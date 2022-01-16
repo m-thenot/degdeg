@@ -10,6 +10,7 @@ import History from '@screens/History';
 import Help from '@screens/Help';
 import Wallet from '@screens/Wallet';
 import User from '@screens/User';
+import MyInformation from '@screens/MyInformation';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
@@ -46,6 +47,7 @@ const MainNavigation: React.FC = () => {
         <Drawer.Screen name="home" component={Home} />
         <Drawer.Screen name="history" component={History} />
         <Drawer.Screen name="help" component={Help} />
+        <Drawer.Screen name="my_information" component={MyInformation} />
         <Drawer.Screen name="wallet" component={Wallet} />
         <Drawer.Screen name="user" component={User} />
       </Drawer.Navigator>

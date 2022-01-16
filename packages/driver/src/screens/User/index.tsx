@@ -22,6 +22,7 @@ import {
 } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import { Image } from 'react-native';
+import DGToast, { ToastTypes } from '@utils/toast';
 
 const options: ImageLibraryOptions = {
   mediaType: 'photo',
@@ -89,7 +90,9 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
 
     if (!hasError) {
       updateDriver(data);
-      navigation.goBack();
+      DGToast.show(ToastTypes.DG_SUCCESS, {
+        message: 'Votre profil été mise à jour avec succès !',
+      });
     }
   };
 

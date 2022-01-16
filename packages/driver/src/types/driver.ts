@@ -1,3 +1,5 @@
+import { CarType } from '@dagdag/common/types';
+
 export interface IDriver {
   phoneNumber: string | null;
   uid: string;
@@ -10,5 +12,12 @@ export interface IDriver {
   rating?: {
     overall: number;
     count: number;
+  };
+  car: {
+    model: string;
+    brand: string;
+    color: string;
+    plate?: string;
+    type: CarType | null;
   };
 }

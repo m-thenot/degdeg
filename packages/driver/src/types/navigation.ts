@@ -10,6 +10,7 @@ export type DrawerNavigatorParamList = {
   home: undefined;
   history: undefined;
   wallet: undefined;
+  my_information: undefined;
   help: undefined;
   user: undefined;
 };
