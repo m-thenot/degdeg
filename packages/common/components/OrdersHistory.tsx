@@ -1,47 +1,57 @@
 import React from 'react';
-import { Text, StyleSheet, View, ScrollView } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { border, colors, font, layout } from '../theme';
 import { IOrder, OrderStatus } from '../types';
-import { getCompleteDateFormatted } from '../utils';
+import { getFormateDate, sortByDepartureAtDesc } from '../utils';
 import { RouteSummary } from './RouteSummary';
 
 interface IOrdersHistoryProps {
   orders: IOrder[];
   isPassengerHistory?: boolean;
+  hasPriceDisplayed?: boolean;
+  hasDateDisplayed?: boolean;
+  onPress?: (uid: string) => void;
 }
 
 const OrdersHistory: React.FC<IOrdersHistoryProps> = ({
   orders,
   isPassengerHistory = false,
+  hasPriceDisplayed = false,
+  hasDateDisplayed = false,
+  onPress,
 }) => {
   const styles = createStyles();
-  const sortOrders = orders.sort((a, b) => {
-    if (a.departureAt < b.departureAt) {
-      return 1;
-    } else if (a.departureAt > b.departureAt) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
+  const sortOrders = orders.sort(sortByDepartureAtDesc);
 
   return (
     <ScrollView style={styles.jobs}>
       {sortOrders.map(order => (
-        <View style={styles.job} key={order.uid}>
+        <TouchableOpacity
+          style={styles.job}
+          key={order.uid}
+          onPress={() => onPress && onPress(order?.uid)}
+          activeOpacity={onPress ? 0.6 : 1}>
           <View style={styles.info}>
-            {isPassengerHistory ? (
+            {(isPassengerHistory || hasDateDisplayed) && (
               <Text style={styles.createdDate}>
-                {getCompleteDateFormatted(order.departureAt)}
+                {getFormateDate(order.departureAt, true)}
               </Text>
-            ) : (
+            )}
+
+            {!isPassengerHistory && (
               <Text style={styles.distance}>
                 {Math.floor(order.metadataRoute.distance)} km
               </Text>
             )}
 
             <Text style={styles.price}>
-              {order.status === OrderStatus.FINISHED ? (
+              {order.status === OrderStatus.FINISHED || hasPriceDisplayed ? (
                 `${order.price} €`
               ) : order.status.startsWith('CANCEL') ? (
                 <Text style={styles.canceled}>ANNULÉ</Text>
@@ -57,7 +67,7 @@ const OrdersHistory: React.FC<IOrdersHistoryProps> = ({
             departureAt={order.departureAt}
             style={styles.summary}
           />
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );

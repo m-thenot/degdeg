@@ -11,6 +11,7 @@ import Help from '@screens/Help';
 import Wallet from '@screens/Wallet';
 import User from '@screens/User';
 import MyInformation from '@screens/MyInformation';
+import PrebooksNavigation from '@navigation/PrebooksNavigation';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
@@ -37,6 +38,8 @@ const MainNavigation: React.FC = () => {
             },
             headerLeft: () => (
               <MenuHeader
+                hasCalendarButton
+                prebooksScreen="prebooks"
                 navigation={navigation}
                 backgroundColor="transparent"
                 hasPaddingHorizontal
@@ -50,6 +53,11 @@ const MainNavigation: React.FC = () => {
         <Drawer.Screen name="my_information" component={MyInformation} />
         <Drawer.Screen name="wallet" component={Wallet} />
         <Drawer.Screen name="user" component={User} />
+        <Drawer.Screen
+          name="prebooks"
+          component={PrebooksNavigation}
+          options={{ headerShown: false }}
+        />
       </Drawer.Navigator>
     </LocationProvider>
   );

@@ -56,12 +56,6 @@ const Wallet: React.FC<
     getOrders();
   }, [currentDate]);
 
-  console.log(orders);
-  console.log(
-    addDays(currentDate, 7).getDate(),
-    startOfWeek(currentDate).getDate(),
-  );
-
   const renderBars = () => {
     const ret: any[] = [];
     const ordersByWeekdays = orders.map(order => ({

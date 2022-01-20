@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native';
 import BackButton from './../assets/icons/left-arrow.svg';
 import MenuButton from './../assets/icons/ic_menu.svg';
 import CrossButton from './../assets/icons/cross.svg';
+import CalendarButton from './../assets/icons/calendar.svg';
 
 import { layout, font, colors } from '@dagdag/common/theme';
 import { RoundIconButton } from './RoundIconButton';
@@ -19,12 +20,19 @@ interface ICrossHeader {
   onPress: () => void;
 }
 
+interface ICrossHeaderWithLabelProps extends IHeaderProps {
+  title?: string;
+}
+
 interface IBackHeaderProps extends IHeaderProps {
   onPress?: () => void;
   title?: string;
 }
 
-interface IMenuHeaderProps extends IHeaderProps {}
+interface IMenuHeaderProps extends IHeaderProps {
+  hasCalendarButton?: boolean;
+  prebooksScreen?: string;
+}
 
 export const BackHeader: React.FC<IBackHeaderProps> = ({
   navigation,
@@ -60,6 +68,8 @@ export const MenuHeader: React.FC<IMenuHeaderProps> = ({
   marginTop = 0,
   backgroundColor = colors.white,
   hasPaddingHorizontal,
+  hasCalendarButton = false,
+  prebooksScreen,
   style,
 }) => {
   const styles = createStyles();
@@ -76,6 +86,13 @@ export const MenuHeader: React.FC<IMenuHeaderProps> = ({
         onPress={() => navigation.openDrawer()}>
         <MenuButton style={styles.icon} width={30} height={30} />
       </RoundIconButton>
+      {hasCalendarButton && (
+        <RoundIconButton
+          style={[styles.iconButton, styles.iconMenuButton]}
+          onPress={() => navigation.navigate(prebooksScreen)}>
+          <CalendarButton width={18} height={18} />
+        </RoundIconButton>
+      )}
     </View>
   );
 };
@@ -86,6 +103,33 @@ export const CrossHeader: React.FC<ICrossHeader> = ({ onPress }) => {
     <RoundIconButton style={styles.iconButton} onPress={onPress}>
       <CrossButton width={16} height={16} />
     </RoundIconButton>
+  );
+};
+
+export const CrossHeaderWithLabel: React.FC<ICrossHeaderWithLabelProps> = ({
+  navigation,
+  title = '',
+  marginTop = 0,
+  hasPaddingHorizontal,
+  backgroundColor = colors.white,
+  style,
+}) => {
+  const styles = createStyles();
+  return (
+    <View
+      style={[
+        styles.header,
+        { marginTop: marginTop, backgroundColor: backgroundColor },
+        hasPaddingHorizontal && styles.paddingHorizontal,
+        style,
+      ]}>
+      <Text style={[styles.title, styles.titleTranslate]}>{title}</Text>
+      <RoundIconButton
+        style={styles.iconButton}
+        onPress={() => navigation.goBack()}>
+        <CrossButton width={16} height={16} />
+      </RoundIconButton>
+    </View>
   );
 };
 
@@ -119,6 +163,9 @@ const createStyles = () => {
       fontWeight: '600',
       textAlign: 'center',
       flex: 1,
+    },
+    titleTranslate: {
+      transform: [{ translateX: 17 }],
     },
   });
 };

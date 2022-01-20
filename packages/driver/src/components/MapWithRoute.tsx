@@ -5,12 +5,10 @@ import { GOOGLE_MAPS_API_KEY } from '@env';
 import { Marker } from 'react-native-maps';
 import DepIcon from '@assets/icons/ic_dest.svg';
 import ArrIcon from '@assets/icons/ic_dropoff.svg';
-import { useRecoilValue } from 'recoil';
 import { StyleSheet } from 'react-native';
 import { colors } from '@dagdag/common/theme';
-import { currentOrderState } from '@stores/orders.atom';
 import { useLocation } from '@context/location';
-import { IMetadataRoute, OrderStatus } from '@dagdag/common/types';
+import { IMetadataRoute, IOrder, OrderStatus } from '@dagdag/common/types';
 import { LATITUDE_DELTA, LONGITUDE_DELTA } from '@dagdag/common/constants';
 
 const marginBottomMap = {
@@ -20,9 +18,12 @@ const marginBottomMap = {
   [OrderStatus.IN_PROGRESS]: 230,
 };
 
-const MapWithRoute: React.FC = React.memo(() => {
+interface IMapWithRouteProps {
+  order: IOrder | null;
+}
+
+const MapWithRoute: React.FC<IMapWithRouteProps> = React.memo(({ order }) => {
   const mapRef = useRef<any | undefined>();
-  const order = useRecoilValue(currentOrderState);
   const styles = createStyles(
     order?.metadataRoute ? marginBottomMap[order.status] : 0,
   );

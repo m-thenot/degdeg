@@ -9,18 +9,19 @@ export const getRound5Date = () => {
   return new Date(new Date(d).setMinutes(Math.ceil(d.getMinutes() / 5) * 5));
 };
 
-export const getFormateDate = (date: number | Date) => {
+export const getFormateDate = (
+  date: number | Date,
+  isCompleteDate?: boolean,
+) => {
   if (isToday(date)) {
     return "aujourd'hui à " + format(date, 'HH:mm', { locale: fr });
   } else if (isTomorrow(date)) {
-    return 'demain à' + format(date, 'HH:mm', { locale: fr });
+    return 'demain à ' + format(date, 'HH:mm', { locale: fr });
+  } else if (isCompleteDate) {
+    return format(date, 'dd MMMM yyyy', { locale: fr });
   } else {
     return format(date, 'eeee à HH:mm', { locale: fr });
   }
-};
-
-export const getCompleteDateFormatted = (date: number | Date) => {
-  return format(date, 'dd MMMM yyyy', { locale: fr });
 };
 
 export const getFormattedTime = (date: number | Date) =>

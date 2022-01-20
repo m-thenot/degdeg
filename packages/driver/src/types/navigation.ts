@@ -6,6 +6,15 @@ export type AuthStackParamList = {
   main: undefined;
 };
 
+export type PrebooksStackParamList = {
+  list: {
+    activeTab?: string;
+  };
+  detail: {
+    orderId: string;
+  };
+};
+
 export type DrawerNavigatorParamList = {
   home: undefined;
   history: undefined;
@@ -13,4 +22,8 @@ export type DrawerNavigatorParamList = {
   my_information: undefined;
   help: undefined;
   user: undefined;
+  prebooks: {
+    orderId?: string;
+    activeTab?: string;
+  };
 };

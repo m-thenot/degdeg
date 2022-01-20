@@ -12,7 +12,7 @@ import BottomStatus from './BottomStatus';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isOnlineState } from '@stores/driver.atom';
 import { ordersState, currentOrderState } from '@stores/orders.atom';
-import MapWithRoute from './MapWithRoute';
+import MapWithRoute from '@components/MapWithRoute';
 import { OrderStatus } from '@dagdag/common/types';
 import PickUp from './PickUp';
 import { CurrentOrderProvider } from '@context/currentOrder';
@@ -84,7 +84,7 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   return (
     <CurrentOrderProvider>
       <SafeAreaView style={styles.container}>
-        <MapWithRoute />
+        <MapWithRoute order={currentOrder} />
         {orders.length > 0 && isOnline ? (
           stateMachine(currentOrder?.status!)
         ) : (
