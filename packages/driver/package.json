@@ -13,6 +13,7 @@
     "@dagdag/common": "1.0.0",
     "@gorhom/portal": "^1.0.11",
     "@react-native-community/picker": "^1.8.1",
+    "@react-native-firebase/analytics": "^14.3.0",
     "@react-native-firebase/app": "^12.8.0",
     "@react-native-firebase/auth": "^12.4.0",
     "@react-native-firebase/crashlytics": "^14.3.0",

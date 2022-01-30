@@ -15,6 +15,7 @@ import openMap from 'react-native-open-maps';
 import { useLocation } from '@context/location';
 import { callNumber } from '@dagdag/common/utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import analytics from '@react-native-firebase/analytics';
 
 const PickUp: React.FC = () => {
   const currentOrder = useRecoilValue(currentOrderState);
@@ -61,9 +62,10 @@ const PickUp: React.FC = () => {
 
         <Button
           text="Je suis arrivé"
-          onPress={() =>
-            updateOrderStatus(OrderStatus.ON_SPOT, currentOrder!.uid)
-          }
+          onPress={async () => {
+            updateOrderStatus(OrderStatus.ON_SPOT, currentOrder!.uid);
+            await analytics().logEvent('on_spot');
+          }}
         />
       </RoundBottom>
 

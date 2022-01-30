@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
-import { Button, SafeAreaView, StyleSheet } from 'react-native';
+import { Button, StyleSheet } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
-import { colors } from '@dagdag/common/theme';
+import { colors, layout } from '@dagdag/common/theme';
 import crashlytics from '@react-native-firebase/crashlytics';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { BackHeader } from '@dagdag/common/components';
 
 const Dev: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'dev'>> = ({
@@ -43,5 +46,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
+    paddingTop: layout.spacer9,
   },
 });

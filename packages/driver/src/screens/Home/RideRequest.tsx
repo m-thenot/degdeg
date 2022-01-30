@@ -18,6 +18,7 @@ import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import OrderAlreadyTakenModal from '@components/OrderAlreadyTakenModal';
 import { useEffect } from 'react';
 import { OrderStatus } from '@dagdag/common/types';
+import analytics from '@react-native-firebase/analytics';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
@@ -42,6 +43,8 @@ const RideRequest: React.FC = () => {
     delete driver?.tokens;
     delete driver?.lastName;
     const orderAlreadyTaken = await acceptOrder(driver, orderRequest.uid);
+
+    await analytics().logEvent('ride_acceptance');
 
     if (orderAlreadyTaken) {
       setOrderIsNotAvailable(true);

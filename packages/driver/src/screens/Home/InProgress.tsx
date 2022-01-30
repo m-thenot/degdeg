@@ -11,6 +11,7 @@ import openMap from 'react-native-open-maps';
 import { useLocation } from '@context/location';
 import { getDistanceFromLatLonInKm } from '@utils/distance';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import analytics from '@react-native-firebase/analytics';
 
 const InProgress: React.FC = () => {
   const currentOrder = useRecoilValue(currentOrderState);
@@ -20,8 +21,10 @@ const InProgress: React.FC = () => {
     useState(false);
   const insets = useSafeAreaInsets();
 
-  const updateStatus = () =>
+  const updateStatus = async () => {
     updateOrderStatus(OrderStatus.FINISHED, currentOrder!.uid);
+    await analytics().logEvent('ride_finished');
+  };
 
   const onPressFinish = () => {
     if (

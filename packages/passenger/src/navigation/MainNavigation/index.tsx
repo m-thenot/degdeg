@@ -45,13 +45,7 @@ const MainNavigation: React.FC = () => {
       <Drawer.Screen name="myRides" component={MyRides} />
       <Drawer.Screen name="payment" component={Payment} />
       <Drawer.Screen name="help" component={Help} />
-      {__DEV__ && (
-        <Drawer.Screen
-          name="dev"
-          component={Dev}
-          options={{ headerShown: false }}
-        />
-      )}
+      {__DEV__ && <Drawer.Screen name="dev" component={Dev} />}
     </Drawer.Navigator>
   );
 };

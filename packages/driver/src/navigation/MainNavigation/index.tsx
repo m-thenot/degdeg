@@ -60,13 +60,7 @@ const MainNavigation: React.FC = () => {
           options={{ headerShown: false }}
         />
 
-        {__DEV__ && (
-          <Drawer.Screen
-            name="dev"
-            component={Dev}
-            options={{ headerShown: false }}
-          />
-        )}
+        {__DEV__ && <Drawer.Screen name="dev" component={Dev} />}
       </Drawer.Navigator>
     </LocationProvider>
   );

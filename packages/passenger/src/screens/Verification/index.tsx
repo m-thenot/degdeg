@@ -22,7 +22,8 @@ import globalStyles from '@theme/globalStyles';
 import parsePhoneNumber from 'libphonenumber-js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { colors, layout, font, headerHeight } from '@dagdag/common/theme';
+import { colors, layout, font } from '@dagdag/common/theme';
+import analytics from '@react-native-firebase/analytics';
 
 const Verification: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'verification'>
@@ -49,6 +50,9 @@ const Verification: React.FC<
     setIsLoading(true);
     try {
       await confirmation!.confirm(value);
+      await analytics().logSignUp({
+        method: 'phone',
+      });
     } catch {
       setError(true);
       setIsLoading(false);

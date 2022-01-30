@@ -18,6 +18,7 @@ import { currentOrderState } from '@stores/orders.atom';
 import { callNumber } from '@dagdag/common/utils';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import analytics from '@react-native-firebase/analytics';
 
 const OnSpot: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -56,9 +57,10 @@ const OnSpot: React.FC = () => {
 
         <Button
           text="Le passager est à bord"
-          onPress={() =>
-            updateOrderStatus(OrderStatus.IN_PROGRESS, currentOrder!.uid)
-          }
+          onPress={async () => {
+            updateOrderStatus(OrderStatus.IN_PROGRESS, currentOrder!.uid);
+            await analytics().logEvent('in_progress');
+          }}
         />
       </RoundBottom>
 

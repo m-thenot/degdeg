@@ -26,6 +26,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
 
 const snapPoints = [400, '80%'];
 
@@ -85,6 +86,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       setIsLoading(true);
       const result = await createOrder(order);
       setOrderUid?.(result.orderUid);
+      await analytics().logEvent('new_order');
       navigation.navigate('order' as any, { screen: 'ride' });
     } catch (e: any) {
       setIsLoading(false);

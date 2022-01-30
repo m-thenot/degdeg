@@ -32,3 +32,9 @@ export type DrawerNavigatorParamList = {
   user: undefined;
   dev?: undefined;
 };
+
+export type RootParamList =
+  | DrawerNavigatorParamList
+  | BookingStackParamList
+  | AuthStackParamList
+  | RideStackParamList;
