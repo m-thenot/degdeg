@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import { requestUserPermission, saveTokenToDatabase } from '@services/driver';
 import messaging from '@react-native-firebase/messaging';
@@ -19,6 +19,8 @@ import { CurrentOrderProvider } from '@context/currentOrder';
 import OnSpot from './OnSpot';
 import InProgress from './InProgress';
 import Finished from './Finished';
+import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
+import OrderAlreadyTakenModal from '@components/OrderAlreadyTakenModal';
 
 const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
@@ -26,6 +28,8 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   const [orders, setOrders] = useRecoilState(ordersState);
   const isOnline = useRecoilValue(isOnlineState);
   const currentOrder = useRecoilValue(currentOrderState);
+  const { user } = useFirebaseAuthentication();
+  const [orderIsNotAvailable, setOrderIsNotAvailable] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -64,12 +68,32 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (
+      currentOrder?.status === OrderStatus.ACCEPTED &&
+      currentOrder?.driver?.uid !== user?.uid
+    ) {
+      setOrderIsNotAvailable(true);
+    }
+  }, [currentOrder]);
+
+  const handlePressDecline = () => {
+    const newOrders = [...orders];
+    newOrders.shift();
+    setOrders(newOrders);
+    setOrderIsNotAvailable(false);
+  };
+
   const stateMachine = (status: OrderStatus) => {
     switch (status) {
       case OrderStatus.NEW:
         return <RideRequest />;
       case OrderStatus.ACCEPTED:
-        return <PickUp />;
+        return currentOrder?.driver?.uid === user?.uid ? (
+          <PickUp />
+        ) : (
+          <RideRequest />
+        );
       case OrderStatus.ON_SPOT:
         return <OnSpot />;
       case OrderStatus.IN_PROGRESS:
@@ -89,6 +113,9 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
           stateMachine(currentOrder?.status!)
         ) : (
           <BottomStatus />
+        )}
+        {orderIsNotAvailable && (
+          <OrderAlreadyTakenModal onClose={handlePressDecline} />
         )}
       </SafeAreaView>
     </CurrentOrderProvider>

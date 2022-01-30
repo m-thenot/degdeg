@@ -8,11 +8,17 @@ export const updateOrderStatus = (orderStatus: OrderStatus, uid: string) => {
   });
 };
 
-export const acceptOrder = (driver: any, uid: string) => {
-  firestore().collection(ORDERS_COLLECTION).doc(uid).update({
-    status: OrderStatus.ACCEPTED,
-    driver,
-  });
+export const acceptOrder = async (driver: any, uid: string) => {
+  const order = await getOrder(uid);
+  if (!order.driver && OrderStatus.NEW) {
+    firestore().collection(ORDERS_COLLECTION).doc(uid).update({
+      status: OrderStatus.ACCEPTED,
+      driver,
+    });
+    return false;
+  } else {
+    return true;
+  }
 };
 
 export const getOrdersByDate = async (

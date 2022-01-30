@@ -15,10 +15,14 @@ import { ordersState } from '@stores/orders.atom';
 import { acceptOrder } from '@services/order';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
+import OrderAlreadyTakenModal from '@components/OrderAlreadyTakenModal';
+import { useEffect } from 'react';
+import { OrderStatus } from '@dagdag/common/types';
 
 const RideRequest: React.FC = () => {
   const [orders, setOrders] = useRecoilState(ordersState);
   const [isLoading, setIsLoading] = useState(false);
+  const [orderIsNotAvailable, setOrderIsNotAvailable] = useState(false);
   const { user } = useFirebaseAuthentication();
   const orderRequest = orders[0];
   const insets = useSafeAreaInsets();
@@ -27,7 +31,31 @@ const RideRequest: React.FC = () => {
     const newOrders = [...orders];
     newOrders.shift();
     setOrders(newOrders);
+    setOrderIsNotAvailable(false);
   };
+
+  const onPressAccept = async () => {
+    setIsLoading(true);
+    const driver = user;
+    delete driver?.displayName;
+    delete driver?.email;
+    delete driver?.tokens;
+    delete driver?.lastName;
+    const orderAlreadyTaken = await acceptOrder(driver, orderRequest.uid);
+
+    if (orderAlreadyTaken) {
+      setOrderIsNotAvailable(true);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      orderRequest.status === OrderStatus.ACCEPTED &&
+      orderRequest?.driver?.uid !== user?.uid
+    ) {
+      setOrderIsNotAvailable(true);
+    }
+  }, [orderRequest]);
 
   return (
     <>
@@ -59,20 +87,11 @@ const RideRequest: React.FC = () => {
           departureAt={orderRequest.departureAt}
           style={styles.summary}
         />
-        <Button
-          text="Accepter"
-          isLoading={isLoading}
-          onPress={() => {
-            setIsLoading(true);
-            const driver = user;
-            delete driver?.displayName;
-            delete driver?.email;
-            delete driver?.tokens;
-            delete driver?.lastName;
-            acceptOrder(driver, orderRequest.uid);
-          }}
-        />
+        <Button text="Accepter" isLoading={isLoading} onPress={onPressAccept} />
       </RoundBottom>
+      {orderIsNotAvailable && (
+        <OrderAlreadyTakenModal onClose={handlePressDecline} />
+      )}
     </>
   );
 };

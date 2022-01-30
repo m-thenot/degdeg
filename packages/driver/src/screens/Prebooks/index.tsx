@@ -50,19 +50,6 @@ const Prebooks: React.FC<PrebookslNavigationProps> = ({
     setActiveTab(route?.params?.activeTab || TABS.ALL);
   }, [route?.params?.activeTab]);
 
-  useEffect(() => {
-    navigation.setOptions({
-      header: () => (
-        <CrossHeaderWithLabel
-          navigation={navigation}
-          title="Réservations"
-          marginTop={insets.top}
-          hasPaddingHorizontal
-        />
-      ),
-    });
-  }, []);
-
   useFocusEffect(
     React.useCallback(() => {
       const getOrders = async () => {
@@ -80,7 +67,8 @@ const Prebooks: React.FC<PrebookslNavigationProps> = ({
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container]}>
+      <CrossHeaderWithLabel navigation={navigation} title="Réservations" />
       <View style={styles.tabs}>
         <Pressable
           onPress={() => setActiveTab(TABS.ALL)}
@@ -146,19 +134,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingTop: layout.spacer5,
     paddingHorizontal: layout.marginHorizontal,
+    paddingTop: layout.spacer2,
   },
   tabs: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: colors.primary,
     borderRadius: border.radius2,
+    marginTop: layout.spacer2,
   },
   tab: {
     width: '50%',
     paddingVertical: layout.spacer3,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
   tabLeft: {
     borderTopLeftRadius: border.radius2,

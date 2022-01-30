@@ -1,6 +1,6 @@
-import RideDetail from '@components/RideDetail';
-import { BackHeader } from '@dagdag/common/components';
-import { IOrder } from '@dagdag/common/types';
+import RideDetail from '@screens/Prebooks/RideDetail';
+import { BackHeader, Modal } from '@dagdag/common/components';
+import { IOrder, OrderStatus } from '@dagdag/common/types';
 import {
   PrebooksStackParamList,
   DrawerNavigatorParamList,
@@ -8,7 +8,7 @@ import {
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { getOrder } from '@services/order';
+import { getOrder, updateOrderStatus } from '@services/order';
 import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
@@ -20,6 +20,9 @@ import DGToast, { ToastTypes } from '@utils/toast';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentOrderState, ordersState } from '@stores/orders.atom';
 import { isOnlineState } from '@stores/driver.atom';
+import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
+import { colors, font } from '@dagdag/common/theme';
+import OrderAlreadyTakenModal from '@components/OrderAlreadyTakenModal';
 
 type PrebookDetailNavigationProps = CompositeScreenProps<
   DrawerScreenProps<DrawerNavigatorParamList, 'prebooks'>,
@@ -35,8 +38,9 @@ const PrebookDetail: React.FC<PrebookDetailNavigationProps> = ({
   const [order, setOrder] = useState<IOrder | null>(null);
   const currentOrder = useRecoilValue(currentOrderState);
   const setisOnline = useSetRecoilState(isOnlineState);
-
+  const [isCancelModalOpened, setIsCancelModalOpened] = useState(false);
   const [orders, setOrders] = useRecoilState(ordersState);
+  const { user } = useFirebaseAuthentication();
 
   useEffect(() => {
     navigation.setOptions({
@@ -66,21 +70,22 @@ const PrebookDetail: React.FC<PrebookDetailNavigationProps> = ({
     navigation.navigate('list', { activeTab: 'my_rides' });
   };
 
+  const takeOrder = () => {
+    const newOrders = [...orders];
+    newOrders.unshift(order!);
+    setOrders(newOrders);
+    navigation.popToTop();
+    navigation.navigate('home');
+  };
+
   const onPressStart = () => {
     setisOnline(true);
     if (!currentOrder || currentOrder.status === 'NEW') {
-      const newOrders = [...orders];
-      newOrders.unshift(order!);
-      setOrders(newOrders);
-      navigation.popToTop();
-      navigation.navigate('home');
+      takeOrder();
     } else {
-      //modal pour prevenir risque d'annuler course en cours
+      setIsCancelModalOpened(true);
     }
   };
-
-  //TODO: modal cette course n'est plus disponible
-  // Oups... trop tard, cette course a été prise en charge par un autre chauffeur.
 
   return (
     <SafeAreaView style={styles.container}>
@@ -93,6 +98,31 @@ const PrebookDetail: React.FC<PrebookDetailNavigationProps> = ({
           onPressStart={onPressStart}
         />
       )}
+
+      {isCancelModalOpened && (
+        <Modal
+          question="Vous êtes déjà engagé dans une course. Êtes-vous sûr de vouloir annuler cette course ?"
+          primaryText="Oui"
+          secondaryText="Non"
+          onPressPrimary={() => {
+            updateOrderStatus(
+              OrderStatus.CANCELED_BY_DRIVER,
+              currentOrder!.uid,
+            );
+            takeOrder();
+          }}
+          onPressSecondary={() => setIsCancelModalOpened(false)}
+          onPressOutside={() => setIsCancelModalOpened(false)}
+        />
+      )}
+
+      {order?.status === OrderStatus.ACCEPTED &&
+        order.driver?.uid !== user?.uid && (
+          <OrderAlreadyTakenModal
+            onClose={() => navigation.goBack()}
+            closeText="Retour"
+          />
+        )}
     </SafeAreaView>
   );
 };
@@ -102,5 +132,10 @@ export default PrebookDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  lateText: {
+    fontSize: font.fontSize2,
+    color: colors.black,
+    textAlign: 'center',
   },
 });

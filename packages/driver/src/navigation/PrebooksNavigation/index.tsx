@@ -18,6 +18,7 @@ const PrebooksNavigation: React.FC = () => {
           headerStyle: {
             backgroundColor: 'transparent',
           },
+          headerShown: false,
         };
       }}>
       <Stack.Screen name="list" component={Prebooks} />
