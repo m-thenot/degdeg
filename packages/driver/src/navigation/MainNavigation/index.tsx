@@ -12,6 +12,7 @@ import Wallet from '@screens/Wallet';
 import User from '@screens/User';
 import MyInformation from '@screens/MyInformation';
 import PrebooksNavigation from '@navigation/PrebooksNavigation';
+import Dev from '@screens/Dev';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
@@ -58,6 +59,14 @@ const MainNavigation: React.FC = () => {
           component={PrebooksNavigation}
           options={{ headerShown: false }}
         />
+
+        {__DEV__ && (
+          <Drawer.Screen
+            name="dev"
+            component={Dev}
+            options={{ headerShown: false }}
+          />
+        )}
       </Drawer.Navigator>
     </LocationProvider>
   );

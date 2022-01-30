@@ -23,6 +23,7 @@ import {
 import storage from '@react-native-firebase/storage';
 import { Image } from 'react-native';
 import DGToast, { ToastTypes } from '@utils/toast';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const options: ImageLibraryOptions = {
   mediaType: 'photo',
@@ -85,6 +86,7 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
         })
         .catch(e => {
           console.error(e);
+          crashlytics().recordError(e);
         });
     }
 

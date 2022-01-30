@@ -8,6 +8,7 @@ import { currentOrderState, ordersState } from '@stores/orders.atom';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import { updateRating } from '@dagdag/common/services';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const Finished: React.FC = () => {
   const [rating, setRating] = useState(5);
@@ -24,8 +25,9 @@ const Finished: React.FC = () => {
         uid: currentOrder?.user?.id!,
         isPassengerRating: true,
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      crashlytics().recordError(e);
     }
 
     // Remove current order from orders request

@@ -95,6 +95,17 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
             props.navigation.navigate('help');
           }}
         />
+
+        {__DEV__ && (
+          <DrawerItem
+            label="Dev"
+            style={styles.item}
+            labelStyle={styles.label}
+            onPress={() => {
+              props.navigation.navigate('dev');
+            }}
+          />
+        )}
       </View>
       <LinkButton
         text="Se déconnecter"

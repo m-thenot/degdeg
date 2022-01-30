@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { layout, font, headerHeight } from '@dagdag/common/theme';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 interface IData {
   firstName: string;
@@ -43,8 +44,9 @@ const Information: React.FC<
         .then(() => {
           navigation.navigate('main');
         })
-        .catch(e => {
+        .catch((e: any) => {
           console.error(e);
+          crashlytics().recordError(e);
           setSubmitHasFailed(true);
         });
     }
