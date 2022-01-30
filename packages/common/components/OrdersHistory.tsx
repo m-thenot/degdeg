@@ -30,7 +30,7 @@ const OrdersHistory: React.FC<IOrdersHistoryProps> = ({
   const sortOrders = orders.sort(sortByDepartureAtDesc);
 
   return (
-    <ScrollView style={styles.jobs}>
+    <ScrollView style={styles.jobs} contentContainerStyle={styles.jobsContent}>
       {sortOrders.map(order => (
         <TouchableOpacity
           style={styles.job}
@@ -91,6 +91,10 @@ const createStyles = () => {
       width: '100%',
       backgroundColor: colors.grey1,
     },
+    jobsContent: {
+      alignItems: 'center',
+      paddingBottom: layout.spacer5,
+    },
     job: {
       marginTop: layout.spacer4,
       padding: layout.spacer4,
@@ -105,6 +109,7 @@ const createStyles = () => {
       shadowRadius: 4.65,
       elevation: 7,
       zIndex: 999,
+      width: '97%',
     },
     distance: {
       color: colors.black,
