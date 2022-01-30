@@ -26,12 +26,3 @@ export const createCar = async (driverId: string, tokens: string[]) => {
     tokens: tokens,
   });
 };
-
-export const generateCars = async () => {
-  await firebase
-    .app()
-    .functions(FIREBASE_REGION)
-    .httpsCallable('generateCars')({ size: 50 })
-    .then(r => console.log(r))
-    .catch(e => console.error('e', e.message));
-};

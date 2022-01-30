@@ -26,4 +26,5 @@ export type DrawerNavigatorParamList = {
     orderId?: string;
     activeTab?: string;
   };
+  dev?: undefined;
 };

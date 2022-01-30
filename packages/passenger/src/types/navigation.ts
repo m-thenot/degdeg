@@ -30,4 +30,5 @@ export type DrawerNavigatorParamList = {
   help: undefined;
   order: undefined;
   user: undefined;
+  dev?: undefined;
 };

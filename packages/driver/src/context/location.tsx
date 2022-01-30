@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import Geolocation from 'react-native-geolocation-service';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import { ILocation } from '@internalTypes/geo';
 import { updatePosition } from '@services/cars';
@@ -44,6 +45,7 @@ const LocationProvider: React.FC = ({ children }) => {
             },
             error => {
               console.log(error);
+              crashlytics().recordError(error as any);
             },
             {
               enableHighAccuracy: true,
@@ -62,6 +64,7 @@ const LocationProvider: React.FC = ({ children }) => {
       })
       .catch(error => {
         console.error(error);
+        crashlytics().recordError(error);
       });
   }, []);
 

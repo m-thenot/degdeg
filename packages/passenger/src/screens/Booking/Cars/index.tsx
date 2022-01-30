@@ -25,6 +25,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const snapPoints = [400, '80%'];
 
@@ -85,9 +86,10 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       const result = await createOrder(order);
       setOrderUid?.(result.orderUid);
       navigation.navigate('order' as any, { screen: 'ride' });
-    } catch (e) {
+    } catch (e: any) {
       setIsLoading(false);
       console.error(e);
+      crashlytics().recordError(e);
     }
   };
 
