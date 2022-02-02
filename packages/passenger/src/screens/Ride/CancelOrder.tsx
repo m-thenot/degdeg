@@ -3,12 +3,9 @@ import { BackHeader, Button } from '@dagdag/common/components';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { RideStackParamList } from '@internalTypes/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import OkIcon from '@dagdag/common/assets/icons/ok.svg';
 import { updateOrder } from '@services/order';
 import { OrderStatus } from '@dagdag/common/types';
@@ -28,45 +25,39 @@ const CancelOrder: React.FC<
 > = ({ navigation }) => {
   const [reason, setReason] = useState<CancelReason>();
   const { order } = useOrder();
-  const insets = useSafeAreaInsets();
-
-  useEffect(() => {
-    navigation.setOptions({
-      header: () => (
-        <BackHeader navigation={navigation} marginTop={insets.top} />
-      ),
-    });
-  }, []);
 
   const onSubmit = () => {
     updateOrder(
       { status: OrderStatus.CANCELED_BY_CUSTOMER, cancelReason: reason },
       order!.uid,
     );
-    navigation.navigate('home' as any);
+    navigation.navigate('booking' as any);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>
-        Veuillez sélectionner la raison de l'annulation :
-      </Text>
+      <BackHeader navigation={navigation} />
+      <View style={styles.content}>
+        <Text style={styles.title}>
+          Veuillez sélectionner la raison de l'annulation :
+        </Text>
 
-      <View style={styles.items}>
-        {Object.keys(reasons).map((key, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.item}
-            onPress={() => setReason(key as CancelReason)}>
-            <View
-              style={[styles.circle, reason === key && styles.circleFilled]}>
-              <OkIcon />
-            </View>
-            <Text style={styles.reason}>{reasons[key]}</Text>
-          </TouchableOpacity>
-        ))}
+        <View style={styles.items}>
+          {Object.keys(reasons).map((key, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.item}
+              onPress={() => setReason(key as CancelReason)}>
+              <View
+                style={[styles.circle, reason === key && styles.circleFilled]}>
+                <OkIcon />
+              </View>
+              <Text style={styles.reason}>{reasons[key]}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <Button text="Soumettre" disabled={!reason} onPress={onSubmit} />
       </View>
-      <Button text="Soumettre" disabled={!reason} onPress={onSubmit} />
     </SafeAreaView>
   );
 };
@@ -77,8 +68,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingTop: layout.spacer8,
     paddingHorizontal: layout.marginHorizontal,
+  },
+  content: {
+    paddingTop: layout.spacer8,
+    flex: 1,
   },
   title: {
     color: colors.black,

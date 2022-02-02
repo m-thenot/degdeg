@@ -10,13 +10,16 @@ import BookingNavigation from '@navigation/BookingNavigation';
 import { colors, layout } from '@dagdag/common/theme';
 import RideNavigation from '@navigation/RideNavigation';
 import Dev from '@screens/Dev';
+import { useOrder } from '@context/order';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
 const MainNavigation: React.FC = () => {
+  const { orderUid } = useOrder();
+
   return (
     <Drawer.Navigator
-      initialRouteName="booking"
+      initialRouteName={orderUid ? 'order' : 'booking'}
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={() => {
         return {
@@ -40,7 +43,11 @@ const MainNavigation: React.FC = () => {
         component={BookingNavigation}
         options={{ headerShown: false }}
       />
-      <Drawer.Screen name="order" component={RideNavigation} />
+      <Drawer.Screen
+        name="order"
+        component={RideNavigation}
+        options={{ headerShown: false }}
+      />
       <Drawer.Screen name="user" component={User} />
       <Drawer.Screen name="myRides" component={MyRides} />
       <Drawer.Screen name="payment" component={Payment} />

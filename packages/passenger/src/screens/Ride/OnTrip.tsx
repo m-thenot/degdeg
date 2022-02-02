@@ -2,10 +2,13 @@ import { Button, ContactProfile, RoundBottom } from '@dagdag/common/components';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const OnTrip: React.FC = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <RoundBottom>
+    <RoundBottom customStyle={{ bottom: insets.bottom }}>
       <View style={styles.driver}>
         <ContactProfile firstName="Robert" />
         <View style={styles.car}>

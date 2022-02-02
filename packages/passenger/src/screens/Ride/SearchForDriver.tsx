@@ -3,12 +3,14 @@ import { RoundBottom, RouteSummary } from '@dagdag/common/components';
 import { colors, font, layout } from '@dagdag/common/theme';
 import React from 'react';
 import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SearchForDriver: React.FC = () => {
   const { order } = useOrder();
+  const insets = useSafeAreaInsets();
 
   return (
-    <RoundBottom>
+    <RoundBottom customStyle={{ bottom: insets.bottom }}>
       <View style={styles.indicator}>
         <ActivityIndicator size="small" color={colors.primary} />
         <Text style={styles.search}>

@@ -16,16 +16,18 @@ import SplashScreen from '@screens/SplashScreen';
 import { colors } from '@dagdag/common/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import analytics from '@react-native-firebase/analytics';
+import { useOrder } from '@context/order';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
 const AuthNavigation: React.FC = () => {
   const { user, isLoading } = useFirebaseAuthentication();
+  const { orderUid } = useOrder();
   const insets = useSafeAreaInsets();
   const routeNameRef = useRef<string>();
   const navigationRef = useNavigationContainerRef<RootParamList>();
 
-  if (isLoading) {
+  if (isLoading || orderUid === null) {
     return <SplashScreen />;
   }
   return (

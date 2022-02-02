@@ -1,27 +1,55 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import { IOrder } from '@dagdag/common/types';
+import { IOrder, OrderStatus } from '@dagdag/common/types';
 import { ORDERS_COLLECTION } from '@dagdag/common/constants';
+import {
+  getStringData,
+  removeData,
+  storeStringData,
+} from '@dagdag/common/utils';
 
 interface IContextProps {
   order: IOrder | null;
-  setOrderUid: React.Dispatch<React.SetStateAction<string | null>>;
+  setOrderUid: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  orderUid: string | null | undefined;
 }
 
 const OrderContext = createContext<Partial<IContextProps>>({});
 
 const OrderProvider: React.FC = ({ children }) => {
-  const [orderUid, setOrderUid] = useState<string | null>(null);
+  const [orderUid, setOrderUid] = useState<string | null | undefined>(null);
   const [order, setOrder] = useState<IOrder | null>(null);
 
   useEffect(() => {
+    const getSavedOrder = async () => {
+      const savedOrderUid = await getStringData('currentOrder');
+      setOrderUid(savedOrderUid);
+    };
+
+    getSavedOrder();
+  }, []);
+
+  useEffect(() => {
+    const saveOrderId = async (orderUid: string) => {
+      await storeStringData(orderUid, 'currentOrder');
+    };
+
     if (orderUid) {
+      saveOrderId(orderUid);
       const orderSubscriber = firestore()
         .collection(ORDERS_COLLECTION)
         .doc(orderUid)
-        .onSnapshot(documentSnapshot => {
+        .onSnapshot(async documentSnapshot => {
           if (documentSnapshot?.data()) {
-            setOrder(documentSnapshot.data() as IOrder);
+            const updatedOrder = documentSnapshot.data() as IOrder;
+            setOrder(updatedOrder);
+
+            if (
+              updatedOrder?.status === OrderStatus.FINISHED ||
+              updatedOrder?.status.startsWith('CANCEL')
+            ) {
+              await removeData('currentOrder');
+            }
           }
         });
 
@@ -30,7 +58,7 @@ const OrderProvider: React.FC = ({ children }) => {
   }, [orderUid]);
 
   return (
-    <OrderContext.Provider value={{ order, setOrderUid }}>
+    <OrderContext.Provider value={{ order, setOrderUid, orderUid }}>
       {children}
     </OrderContext.Provider>
   );
