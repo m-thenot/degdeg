@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
-target 'driver' do
+abstract_target 'DagDagDriver' do
   config = use_native_modules!
 
   permissions_path = '../node_modules/react-native-permissions/ios'
@@ -37,5 +37,8 @@ target 'driver' do
 
   post_install do |installer|
     react_native_post_install(installer)
+  end
+
+  target 'staging' do
   end
 end

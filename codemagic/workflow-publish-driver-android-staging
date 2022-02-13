@@ -1,0 +1,40 @@
+publish-driver-android-staging:
+  name: Publish Android Staging Driver
+  max_build_duration: 120
+  instance_type: mac_mini
+  environment:
+    groups:
+      - staging
+    vars:
+      ANDROID_APP_DIR: '$FCI_BUILD_DIR/packages/driver/android'
+    node: 14.17.6
+  cache:
+    cache_paths:
+      - $FCI_BUILD_DIR/packages/driver/node_modules
+      - $HOME/.gradle/caches
+  scripts:
+    - name: Install yarn dependencies
+      script: |
+        yarn
+    - name: Set Android SDK location
+      script: |
+        echo "sdk.dir=$ANDROID_SDK_ROOT" > "$ANDROID_APP_DIR/local.properties"
+    - name: Build Android App (APK - Staging)
+      script: |
+        cd $ANDROID_APP_DIR && ./gradlew assembleStaging
+  artifacts:
+    - $ANDROID_APP_DIR/app/build/outputs/apk/**/*.apk
+    - $ANDROID_APP_DIR/app/build/outputs/bundle/**/*.aab
+  publishing:
+    email:
+      recipients:
+        - martinthenot@gmail.com
+      notify:
+        success: false
+        failure: true
+    firebase:
+      firebase_token: $FIREBASE_TOKEN
+      android:
+        app_id: 1:246871164241:android:0e374d98292f051ac0bf70
+        groups:
+          - android

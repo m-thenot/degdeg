@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
                BuildableName = "driver.app"
-               BlueprintName = "driver"
+               BlueprintName = "staging"
                ReferencedContainer = "container:driver.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -56,7 +56,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "driver.app"
-            BlueprintName = "driver"
+            BlueprintName = "staging"
             ReferencedContainer = "container:driver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -79,7 +79,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "driver.app"
-            BlueprintName = "driver"
+            BlueprintName = "staging"
             ReferencedContainer = "container:driver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
