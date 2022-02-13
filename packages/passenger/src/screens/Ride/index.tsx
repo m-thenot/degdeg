@@ -29,7 +29,7 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
     return true;
   });
   const styles = createStyles(order ? marginBottomMap[order?.status] : 0);
-  const isFinished = order?.status !== OrderStatus.FINISHED;
+  const isFinished = order?.status === OrderStatus.FINISHED;
 
   useEffect(() => {
     navigation.setOptions({
@@ -37,7 +37,7 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
       headerTitleAlign: 'center',
       headerLeft: () =>
         isFinished ? (
-          <MenuHeader navigation={navigation} />
+          <MenuHeader navigation={navigation} backgroundColor="transparent" />
         ) : (
           <CrossHeader onPress={() => navigation.navigate('cancelOrder')} />
         ),
@@ -63,7 +63,7 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      {isFinished && <MapWrapper mapStyle={styles.map} />}
+      {!isFinished && <MapWrapper mapStyle={styles.map} />}
       {order && stateMachine(order?.status!)}
     </SafeAreaView>
   );

@@ -5,26 +5,28 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "react": "17.0.1",
-    "react-native": "^0.65.1",
-    "react-hook-form": "^7.13.0",
-    "react-native-svg": "^12.1.1",
-    "date-fns": "^2.25.0",
+    "@react-native-async-storage/async-storage": "^1.15.17",
+    "@react-native-firebase/app": "^12.8.0",
+    "@react-native-firebase/crashlytics": "^14.3.0",
     "@react-native-firebase/functions": "^12.9.0",
-    "@react-native-firebase/app": "^12.8.0"
+    "date-fns": "^2.25.0",
+    "react": "17.0.1",
+    "react-hook-form": "^7.13.0",
+    "react-native": "^0.65.1",
+    "react-native-svg": "^12.1.1"
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
-    "eslint-import-resolver-babel-module": "^5.3.1",
-    "typescript": "^3.8.3",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "@types/react-native": "^0.65.0",
-    "react-native-codegen": "^0.0.7",
-    "@react-native-community/cli": "5.0.1",
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
+    "@react-native-community/cli": "5.0.1",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@types/react-native": "^0.65.0",
+    "eslint": "^7.14.0",
+    "eslint-import-resolver-babel-module": "^5.3.1",
+    "metro-babel-register": "0.66.2",
     "metro-react-native-babel-preset": "^0.66.0",
-    "metro-babel-register": "0.66.2"
+    "react-native-codegen": "^0.0.7",
+    "typescript": "^3.8.3"
   },
   "resolutions": {
     "@types/react": "^17"

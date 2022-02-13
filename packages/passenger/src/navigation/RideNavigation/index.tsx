@@ -12,11 +12,16 @@ const RideNavigation = () => {
       screenOptions={() => ({
         headerShadowVisible: false,
         headerTransparent: true,
+        headerBackVisible: false,
         title: '',
         headerStyle: { backgroundColor: 'transparent' },
       })}>
       <RideStack.Screen name="ride" component={Ride} />
-      <RideStack.Screen name="cancelOrder" component={CancelOrder} />
+      <RideStack.Screen
+        name="cancelOrder"
+        component={CancelOrder}
+        options={{ headerShown: false }}
+      />
     </RideStack.Navigator>
   );
 };
