@@ -43,7 +43,7 @@ publish-driver-ios-staging:
         set -x
         cd $IOS_APP_DIR
         # agvtool new-version -all $(($BUILD_NUMBER + 1))
-        agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 2))
+        agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
     - name: Set up code signing settings on Xcode project
       script: |
         xcode-project use-profiles --project=**/driver.xcodeproj
