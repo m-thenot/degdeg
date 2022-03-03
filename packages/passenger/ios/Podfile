@@ -6,7 +6,7 @@ platform :ios, '11.0'
 pod 'Firebase/Auth'
 pod 'Firebase/Firestore'
 
-target 'DagDag' do
+abstract_target 'DagDagPassenger' do
   config = use_native_modules!
 
   permissions_path = '../node_modules/react-native-permissions/ios'
@@ -41,5 +41,8 @@ target 'DagDag' do
 
   post_install do |installer|
     react_native_post_install(installer)
+  end
+
+  target 'staging' do
   end
 end

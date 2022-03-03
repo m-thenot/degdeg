@@ -1,0 +1,7 @@
+# Check out https://docs.codemagic.io/yaml/building-a-react-native-app/ for more information
+# Please review and update values
+
+# /!\ WARNING
+# File generated from ./codemagic/concat.sh
+# Do not update this file directly
+workflows:
