@@ -24,6 +24,7 @@ import UnionPayIcon from '@assets/images/union_pay.svg';
 import CreditCardIcon from '@assets/images/credit_card.svg';
 import DGToast, { ToastTypes } from '@utils/toast';
 import { PaymentMethod } from '@internalTypes/payment';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const CREDIT_CARDS = {
   amex: <AmexIcon width={50} height={50} />,
@@ -52,20 +53,25 @@ const Payment: React.FC<
   const insets = useSafeAreaInsets();
 
   const getPaymentMethods = async () => {
-    const newPaymentMethods: { data: PaymentMethod[] } =
-      await fetchPaymentMethods(user?.customerId);
-    if (
-      newPaymentMethods.data.length > 0 &&
-      ((paymentMethods.length > 0 &&
-        newPaymentMethods.data.length > paymentMethods.length) || // Make new payment method as default payment method
-        !newPaymentMethods.data.find(
-          paymentMethod => paymentMethod.id === user?.defaultPaymentMethod, // Change default payment method if it is not exist anymore
-        ))
-    ) {
-      updateUser({ defaultPaymentMethod: newPaymentMethods.data[0].id });
+    try {
+      const newPaymentMethods: { data: PaymentMethod[] } =
+        await fetchPaymentMethods(user?.customerId);
+      if (
+        newPaymentMethods.data.length > 0 &&
+        ((paymentMethods.length > 0 &&
+          newPaymentMethods.data.length > paymentMethods.length) || // Make new payment method as default payment method
+          !newPaymentMethods.data.find(
+            paymentMethod => paymentMethod.id === user?.defaultPaymentMethod, // Change default payment method if it is not exist anymore
+          ))
+      ) {
+        updateUser({ defaultPaymentMethod: newPaymentMethods.data[0].id });
+      }
+      setPaymentMethods(newPaymentMethods?.data || []);
+      setIsLoading(false);
+    } catch (e) {
+      crashlytics().recordError(e as any);
+      console.error(e);
     }
-    setPaymentMethods(newPaymentMethods?.data || []);
-    setIsLoading(false);
   };
 
   const initializePaymentSheet = async () => {
@@ -108,7 +114,7 @@ const Payment: React.FC<
       getPaymentMethods();
     }
     initializePaymentSheet();
-  }, []);
+  }, [user?.customerId]);
 
   const openPaymentSheet = async () => {
     const { error } = await presentPaymentSheet();

@@ -4,7 +4,7 @@ import {
   DrawerItem,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
 import { LinkButton } from '@dagdag/common/components';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import EditIcon from '@assets/icons/ic_edit.svg';
@@ -27,24 +27,25 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           styles.userContainer,
           { paddingTop: insets.top + layout.spacer7 },
         ]}>
-        <EditIcon
-          height={50}
-          width={50}
-          style={[styles.edit, { top: insets.top + 45 }]}
-          onPress={() => props.navigation.navigate('user')}
-        />
-        {user?.image ? (
-          <Image
-            width={80}
-            height={80}
-            style={styles.image}
-            source={{
-              uri: user.image,
-            }}
+        <Pressable onPress={() => props.navigation.navigate('user')}>
+          <EditIcon
+            height={50}
+            width={50}
+            style={[styles.edit, { top: insets.top - 25 }]}
           />
-        ) : (
-          <PhotoUser height={80} width={80} />
-        )}
+          {user?.image ? (
+            <Image
+              width={80}
+              height={80}
+              style={styles.image}
+              source={{
+                uri: user.image,
+              }}
+            />
+          ) : (
+            <PhotoUser height={80} width={80} />
+          )}
+        </Pressable>
 
         <Text style={styles.name}>{user?.firstName}</Text>
 

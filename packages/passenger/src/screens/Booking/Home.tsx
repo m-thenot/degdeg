@@ -79,7 +79,7 @@ const Home: React.FC<StackScreenProps<BookingStackParamList, 'home'>> = ({
         backgroundColor="transparent"
         style={[styles.header, { top: insets.top }]}
       />
-      <Map showsMyLocationButton showsUserLocation />
+      <Map showsMyLocationButton showsUserLocation customStyle={styles.map} />
       <RoundBottom>
         <Text style={styles.firstName}>Bonjour {user?.firstName} !</Text>
         <Text style={styles.title}>Où allez-vous ?</Text>
@@ -137,5 +137,8 @@ const styles = StyleSheet.create({
   fakeInput: {
     fontSize: font.fontSize2,
     color: colors.grey3,
+  },
+  map: {
+    marginBottom: 160,
   },
 });

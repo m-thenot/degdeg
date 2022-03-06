@@ -15,7 +15,7 @@ import { AuthStackParamList } from '@internalTypes/navigation';
 import globalStyles from '@theme/globalStyles';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, layout, font, headerHeight } from '@dagdag/common/theme';
+import { colors, layout, font } from '@dagdag/common/theme';
 
 const SignInWithPhoneNumber: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'signInWithPhoneNumber'>
@@ -103,7 +103,7 @@ export default SignInWithPhoneNumber;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   keyboardContainer: { flex: 1, marginHorizontal: layout.marginHorizontal },
-  main: { flex: 1, marginTop: layout.marginTop },
+  main: { flex: 1, marginTop: layout.marginTop + 15 },
   title: {
     fontSize: font.fontSize4,
     fontWeight: '700',

@@ -90,6 +90,7 @@ const PickPoint: React.FC<
         navigation={navigation}
         style={[styles.header, { top: insets.top }]}
       />
+
       <Map
         showsMyLocationButton
         region={
@@ -122,7 +123,9 @@ const PickPoint: React.FC<
       <Button
         text="Terminer"
         onPress={onPressFinish}
+        onPressIn={onPressFinish}
         style={styles.positionButton}
+        disabled={!draggablePosition}
       />
     </SafeAreaView>
   );
@@ -157,12 +160,12 @@ const styles = StyleSheet.create({
   },
   positionButton: {
     position: 'absolute',
-    bottom: layout.spacer3,
-    marginHorizontal: layout.marginHorizontal,
     left: 0,
     right: 0,
-    width: Dimensions.get('window').width - 2 * layout.marginHorizontal,
+    bottom: layout.spacer3,
+    marginHorizontal: layout.marginHorizontal,
     zIndex: 30,
+    width: Dimensions.get('window').width - 2 * layout.marginHorizontal,
   },
   address: {
     color: colors.black,

@@ -31,7 +31,9 @@ const CancelOrder: React.FC<
       { status: OrderStatus.CANCELED_BY_CUSTOMER, cancelReason: reason },
       order!.uid,
     );
-    navigation.navigate('booking' as any);
+    navigation.navigate('booking' as any, {
+      screen: 'home',
+    });
   };
 
   return (
@@ -72,6 +74,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingTop: layout.spacer8,
+    paddingBottom: layout.spacer3,
     flex: 1,
   },
   title: {

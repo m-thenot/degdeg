@@ -12,11 +12,11 @@ import CallIcon from '@dagdag/common/assets/icons/call.svg';
 import { callNumber } from '@dagdag/common/utils';
 import { OrderStatus } from '@dagdag/common/types';
 
-const snapPoints = [180, 360];
+const snapPoints = [200, 360];
 
 const WaitingDriver: React.FC = () => {
   const { order } = useOrder();
-  const { departureAddress, arrivalAddress, departureAt } = order!;
+  const { departureAddress, arrivalAddress, departureAt, driver } = order!;
 
   return (
     <>
@@ -30,11 +30,12 @@ const WaitingDriver: React.FC = () => {
       </View>
       <CustomBottomSheet style={styles.sheet} snapPoints={snapPoints}>
         <View style={styles.driver}>
-          <ContactProfile firstName="Robert" />
-
+          <ContactProfile firstName={driver?.firstName || ''} />
           <View style={styles.car}>
-            <Text style={styles.licencePlate}>HS785K</Text>
-            <Text style={styles.model}>Volkswagen Jetta</Text>
+            <Text style={styles.licencePlate}>{driver?.car?.plate}</Text>
+            <Text style={styles.model}>
+              {driver?.car?.brand} {driver?.car?.model}
+            </Text>
           </View>
         </View>
 
@@ -47,8 +48,7 @@ const WaitingDriver: React.FC = () => {
       <View style={styles.buttonContainer}>
         <Button
           text="Appeler"
-          /* Replace by phone number driver */
-          onPress={() => callNumber(order?.user.phoneNumber!)}
+          onPress={() => callNumber(driver!.phoneNumber)}
           icon={<CallIcon width={18} height={18} fill={colors.white} />}
           style={styles.button}
         />
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   model: {
     fontSize: font.fontSize1_5,
     color: colors.grey3,
+    marginTop: 2,
   },
   buttonContainer: {
     backgroundColor: colors.white,
@@ -119,5 +120,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: layout.spacer6,
+    marginBottom: layout.spacer3,
   },
 });

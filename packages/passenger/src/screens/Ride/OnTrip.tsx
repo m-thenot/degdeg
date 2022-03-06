@@ -1,3 +1,4 @@
+import { useOrder } from '@context/order';
 import { Button, ContactProfile, RoundBottom } from '@dagdag/common/components';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import React from 'react';
@@ -6,14 +7,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const OnTrip: React.FC = () => {
   const insets = useSafeAreaInsets();
+  const { order } = useOrder();
+  const { firstName, car } = order!.driver!;
 
   return (
     <RoundBottom customStyle={{ bottom: insets.bottom }}>
       <View style={styles.driver}>
-        <ContactProfile firstName="Robert" />
+        <ContactProfile firstName={firstName} />
         <View style={styles.car}>
-          <Text style={styles.licencePlate}>HS785K</Text>
-          <Text style={styles.model}>Volkswagen Jetta</Text>
+          <Text style={styles.licencePlate}>{car?.plate}</Text>
+          <Text style={styles.model}>{car?.model}</Text>
         </View>
       </View>
       <View style={styles.actions}>

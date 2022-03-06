@@ -1,4 +1,4 @@
-import { ICar } from './car';
+import { CarType, ICar } from './car';
 
 export enum OrderStatus {
   NEW = 'NEW',
@@ -50,6 +50,13 @@ export interface IPublicDriver {
   rating?: {
     overall: number;
     count: number;
+  };
+  car?: {
+    model: string;
+    brand: string;
+    color: string;
+    plate?: string | undefined;
+    type: CarType | null;
   };
 }
 

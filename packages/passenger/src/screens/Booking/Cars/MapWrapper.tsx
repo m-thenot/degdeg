@@ -42,6 +42,7 @@ const MapWrapper: React.FC<IMapWrapperProps> = React.memo(({ mapStyle }) => {
         coordinates[0],
         coordinates[coordinates.length - 1],
       ];
+
       mapRef?.current.fitToCoordinates(startStopCoords, {
         edgePadding: {
           top: 70,
@@ -51,6 +52,7 @@ const MapWrapper: React.FC<IMapWrapperProps> = React.memo(({ mapStyle }) => {
         },
         animated: true,
       });
+
       setMetadaRouteState({
         duration,
         distance,
@@ -58,16 +60,19 @@ const MapWrapper: React.FC<IMapWrapperProps> = React.memo(({ mapStyle }) => {
       });
     }
   }, [metadataRoute?.coordinates]);
+
   return (
     <Map mapRef={mapRef} customStyle={mapStyle} showsUserLocation>
-      <MapViewDirections
-        destination={arrivalAddress.coordinates || arrivalAddress.text}
-        origin={departureAddress.coordinates || departureAddress.text}
-        apikey={GOOGLE_MAPS_API_KEY}
-        strokeWidth={3}
-        strokeColor={colors.black}
-        onReady={metadata => setMetadaRoute(metadata)}
-      />
+      {arrivalAddress.isSelected && departureAddress.isSelected && (
+        <MapViewDirections
+          destination={arrivalAddress.coordinates || arrivalAddress.text}
+          origin={departureAddress.coordinates || departureAddress.text}
+          apikey={GOOGLE_MAPS_API_KEY}
+          strokeWidth={3}
+          strokeColor={colors.black}
+          onReady={metadata => setMetadaRoute(metadata)}
+        />
+      )}
 
       {metadataRoute?.coordinates && (
         <>

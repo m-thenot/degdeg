@@ -1,8 +1,4 @@
-enum CarType {
-  ECONOMIC = 'ECONOMIC',
-  PREMIUM = 'PREMIUM',
-  VAN = 'VAN',
-}
+import { CarType } from '@dagdag/common/types';
 
 interface ICar {
   type: CarType;
@@ -59,6 +55,13 @@ export interface IPublicDriver {
   rating?: {
     overall: number;
     count: number;
+  };
+  car?: {
+    model: string;
+    brand: string;
+    color: string;
+    plate?: string | undefined;
+    type: CarType | null;
   };
 }
 

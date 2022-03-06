@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { requestUserPermission, saveTokenToDatabase } from '@services/driver';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
@@ -51,18 +53,19 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   }, []);
 
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
+    const takeOrder = (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
       const newOrder = remoteMessage?.data?.order;
       if (newOrder) {
         setOrders(orders => [...orders, JSON.parse(newOrder)]);
       }
+    };
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      takeOrder(remoteMessage);
     });
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-      Alert.alert(
-        'Message handled in the background!',
-        JSON.stringify(remoteMessage),
-      );
+      takeOrder(remoteMessage);
     });
 
     return unsubscribe;

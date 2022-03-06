@@ -15,6 +15,7 @@ interface IButton {
   style?: StyleProp<ViewStyle>;
   textStyle?: any;
   onPress: () => void;
+  onPressIn?: () => void;
   icon?: any;
   disabled?: boolean;
   type?: 'primary' | 'secondary';
@@ -24,6 +25,7 @@ interface IButton {
 export const Button: React.FC<IButton> = ({
   text,
   onPress,
+  onPressIn,
   style,
   textStyle,
   type = 'primary',
@@ -42,6 +44,7 @@ export const Button: React.FC<IButton> = ({
       ]}
       disabled={disabled}
       activeOpacity={0.4}
+      onPressIn={onPressIn}
       onPress={onPress}>
       {isLoading ? (
         <ActivityIndicator

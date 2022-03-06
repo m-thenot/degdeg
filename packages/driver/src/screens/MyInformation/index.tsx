@@ -58,8 +58,9 @@ const MyInformation: React.FC<
   const hasError = !Boolean(
     Object.keys(errors).length === 0 && errors.constructor === Object,
   );
+
   const [carType, setCarType] = useState<null | CarType>(
-    user?.car.type || null,
+    user?.car?.type || null,
   );
 
   useEffect(() => {
@@ -77,7 +78,7 @@ const MyInformation: React.FC<
 
   const onSubmit = async (data: IData) => {
     if (!hasError) {
-      const result = await updateDriver({ car: { ...data, type: carType } });
+      await updateDriver({ car: { ...data, type: carType } });
       DGToast.show(ToastTypes.DG_SUCCESS, {
         message:
           'Les données de votre véhicule ont été mise à jour avec succès !',
@@ -92,7 +93,7 @@ const MyInformation: React.FC<
           <Text style={styles.title}>Mon véhicule</Text>
           <InlineInput
             name="brand"
-            initialValue={user?.car.brand}
+            initialValue={user?.car?.brand}
             label="Marque"
             control={control}
             rules={{
@@ -105,7 +106,7 @@ const MyInformation: React.FC<
 
           <InlineInput
             name="model"
-            initialValue={user?.car.model}
+            initialValue={user?.car?.model}
             label="Modèle"
             control={control}
             rules={{
@@ -119,7 +120,7 @@ const MyInformation: React.FC<
           <InlineInput
             name="color"
             label="Couleur"
-            initialValue={user?.car.color}
+            initialValue={user?.car?.color}
             control={control}
             rules={{
               required: {
@@ -131,7 +132,7 @@ const MyInformation: React.FC<
 
           <InlineInput
             name="plate"
-            initialValue={user?.car.plate}
+            initialValue={user?.car?.plate}
             label="Plaque d'immatriculation"
             control={control}
             rules={null}

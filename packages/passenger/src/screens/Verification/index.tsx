@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop,
+    marginTop: layout.marginTop + 15,
   },
   title: {
     fontSize: font.fontSize4,

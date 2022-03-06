@@ -1,13 +1,6 @@
 import { FIREBASE_REGION } from '@dagdag/common/constants';
 import { firebase } from '@react-native-firebase/functions';
 
-if (__DEV__) {
-  firebase
-    .app()
-    .functions(FIREBASE_REGION)
-    .useFunctionsEmulator('http://localhost:5001');
-}
-
 interface IRating {
   rating: number;
   overallRating?: number;

@@ -37,7 +37,7 @@ const Map: React.FC<IMap> = React.memo(
           }
         }
         provider={PROVIDER_GOOGLE}
-        mapPadding={{ top: 20, right: 20, bottom: 165, left: 20 }}
+        mapPadding={{ top: 20, right: 20, bottom: 20, left: 20 }}
         {...props}>
         {children}
       </MapView>
