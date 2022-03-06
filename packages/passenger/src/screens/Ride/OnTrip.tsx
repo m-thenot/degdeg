@@ -1,5 +1,5 @@
 import { useOrder } from '@context/order';
-import { Button, ContactProfile, RoundBottom } from '@dagdag/common/components';
+import { ContactProfile, RoundBottom } from '@dagdag/common/components';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
@@ -19,7 +19,12 @@ const OnTrip: React.FC = () => {
           <Text style={styles.model}>{car?.model}</Text>
         </View>
       </View>
-      <View style={styles.actions}>
+
+      <View style={styles.description}>
+        <View style={styles.circle} />
+        <Text style={styles.textDescription}>Vous êtes en chemin...</Text>
+      </View>
+      {/*    <View style={styles.actions}>
         <Button
           text="Évaluer"
           style={[styles.button, styles.rateButton]}
@@ -31,7 +36,7 @@ const OnTrip: React.FC = () => {
           text="Pourboire"
           onPress={() => 0}
         />
-      </View>
+      </View> */}
     </RoundBottom>
   );
 };
@@ -68,5 +73,21 @@ const styles = StyleSheet.create({
   },
   rateButton: {
     marginRight: layout.spacer3,
+  },
+  description: {
+    marginTop: layout.spacer6,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textDescription: {
+    fontSize: font.fontSize3,
+  },
+  circle: {
+    width: 10,
+    height: 10,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+    marginRight: layout.spacer2,
+    marginLeft: layout.spacer1,
   },
 });

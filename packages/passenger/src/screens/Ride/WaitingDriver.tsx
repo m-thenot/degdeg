@@ -30,7 +30,11 @@ const WaitingDriver: React.FC = () => {
       </View>
       <CustomBottomSheet style={styles.sheet} snapPoints={snapPoints}>
         <View style={styles.driver}>
-          <ContactProfile firstName={driver?.firstName || ''} />
+          <ContactProfile
+            firstName={driver?.firstName || ''}
+            image={driver?.image}
+            rating={driver?.rating?.overall}
+          />
           <View style={styles.car}>
             <Text style={styles.licencePlate}>{driver?.car?.plate}</Text>
             <Text style={styles.model}>

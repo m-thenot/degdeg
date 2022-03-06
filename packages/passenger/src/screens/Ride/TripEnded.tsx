@@ -1,23 +1,53 @@
 import { Button, RouteSummary } from '@dagdag/common/components';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { useOrder } from '@context/order';
 import OkIcon from '@dagdag/common/assets/icons/ok.svg';
 import Shape from '@assets/images/triangle-shape.svg';
 import { useNavigation } from '@react-navigation/core';
+import Rating from '@dagdag/common/components/Rating';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { updateRating } from '@dagdag/common/services';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const TripEnded: React.FC = () => {
   const { order } = useOrder();
   const { departureAddress, arrivalAddress, departureAt } = order!;
+  const [isDriverRated, setIsDriverRated] = useState(false);
   const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
 
   const onSubmit = () => {
     navigation.navigate('booking', { screen: 'home' });
   };
 
-  return (
+  const onSubmitRating = async (rating: number) => {
+    try {
+      await updateRating({
+        rating,
+        overallRating: order?.driver?.rating?.overall,
+        ratingsCount: order?.driver?.rating?.count,
+        uid: order?.driver?.uid!,
+        isPassengerRating: false,
+      });
+    } catch (e: any) {
+      console.error(e);
+      crashlytics().recordError(e);
+    }
+
+    setIsDriverRated(true);
+  };
+
+  return !isDriverRated ? (
+    <Rating
+      text="Notez votre chauffeur"
+      personToBeEvaluated={order?.driver!}
+      onSubmit={onSubmitRating}
+      style={{ bottom: insets.bottom }}
+    />
+  ) : (
     <View style={styles.container}>
       <View style={styles.invoice}>
         <View style={styles.invoiceContent}>
