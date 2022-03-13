@@ -1,7 +1,7 @@
 import CustomBottomSheet from '@components/CustomBottomSheet';
 import { Button } from '@dagdag/common/components';
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Pressable } from 'react-native';
 import Car from './Car';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { carState } from '@stores/car.atom';
@@ -27,8 +27,12 @@ import {
 } from 'react-native-safe-area-context';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+import { CREDIT_CARDS } from '@resources/images';
+import { PAYMENT_TYPE } from '@internalTypes/user';
+import CashIcon from '@dagdag/common/assets/icons/cash.svg';
+import PaymentMethodsModal from './PaymentMethodsModal';
 
-const snapPoints = [400, '80%'];
+const snapPoints = [420, '80%'];
 
 const CarsImages = {
   economic: require('@assets/images/standard.png'),
@@ -50,48 +54,65 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
   const { setOrderUid } = useOrder();
   const [isLoading, setIsLoading] = useState(false);
   const insets = useSafeAreaInsets();
+  const [isPaymentModalOpened, setIsPaymentModalOpened] = useState(false);
+  const [isOrdering, setIsOrdering] = useState(false);
 
   useEffect(() => {
     return () => setDepartureAt(undefined);
   }, [navigation]);
 
-  const handleOrder = async () => {
-    const order = {
-      uid: '',
-      createdDate: Date.now(),
-      arrivalAddress: {
-        formattedAddress: arrivalAddress.text,
-        coordinates: metadataRoute!.coordinates[1],
-      },
-      departureAddress: {
-        formattedAddress: departureAddress.text,
-        coordinates: metadataRoute!.coordinates[0],
-      },
-      status: OrderStatus.NEW,
-      user: {
-        id: user!.uid,
-        firstName: user?.firstName,
-        phoneNumber: user?.phoneNumber,
-        image: user?.image,
-        rating: user?.rating,
-      },
-      metadataRoute: metadataRoute!,
-      car: selectedCar!,
-      rideType: isOrderNow ? RideType.NOW : RideType.LATER,
-      departureAt: departureAt?.getTime() || Date.now(),
-      price: null, // TODO: add pricig
-    };
+  useEffect(() => {
+    if (isOrdering && Boolean(user?.defaultPaymentMethod?.type)) {
+      handleOrder();
+    }
+  }, [isOrdering, user?.defaultPaymentMethod]);
 
-    try {
-      setIsLoading(true);
-      const result = await createOrder(order);
-      setOrderUid?.(result.orderUid);
-      await analytics().logEvent('new_order');
-      navigation.navigate('order' as any, { screen: 'ride' });
-    } catch (e: any) {
-      setIsLoading(false);
-      console.error(e);
-      crashlytics().recordError(e);
+  const handleOrder = async () => {
+    setIsOrdering(true);
+
+    // Check if user has a default payment method
+    if (!Boolean(user?.defaultPaymentMethod?.type)) {
+      setIsPaymentModalOpened(true);
+    } else {
+      const order = {
+        uid: '',
+        createdDate: Date.now(),
+        arrivalAddress: {
+          formattedAddress: arrivalAddress.text,
+          coordinates: metadataRoute!.coordinates[1],
+        },
+        departureAddress: {
+          formattedAddress: departureAddress.text,
+          coordinates: metadataRoute!.coordinates[0],
+        },
+        status: OrderStatus.NEW,
+        user: {
+          id: user!.uid,
+          firstName: user?.firstName,
+          phoneNumber: user?.phoneNumber,
+          image: user?.image,
+          rating: user?.rating,
+        },
+        metadataRoute: metadataRoute!,
+        car: selectedCar!,
+        rideType: isOrderNow ? RideType.NOW : RideType.LATER,
+        departureAt: departureAt?.getTime() || Date.now(),
+        price: null, // TODO: add pricig
+      };
+
+      try {
+        setIsLoading(true);
+        const result = await createOrder(order);
+        setOrderUid?.(result.orderUid);
+        await analytics().logEvent('new_order');
+        navigation.navigate('order' as any, { screen: 'ride' });
+      } catch (e: any) {
+        setIsLoading(false);
+        console.error(e);
+        crashlytics().recordError(e);
+      }
+
+      setIsOrdering(false);
     }
   };
 
@@ -133,10 +154,36 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
               price={40}
             />
           </View>
-          <Text style={styles.timeLabel}>Temps de trajet estimé</Text>
-          <Text style={styles.time}>
-            {metadataRoute?.duration && Math.ceil(metadataRoute?.duration)} min
-          </Text>
+          <View style={styles.bottom}>
+            <View>
+              <Text style={styles.timeLabel}>Temps de trajet estimé</Text>
+              <Text style={styles.time}>
+                {metadataRoute?.duration && Math.ceil(metadataRoute?.duration)}{' '}
+                min
+              </Text>
+            </View>
+
+            {user?.defaultPaymentMethod &&
+              (user?.defaultPaymentMethod.type === PAYMENT_TYPE.CREDIT_CARD ? (
+                <Pressable
+                  style={styles.card}
+                  onPress={() => setIsPaymentModalOpened(true)}>
+                  <View style={styles.cardBrand}>
+                    {CREDIT_CARDS[user?.defaultPaymentMethod.brand]}
+                  </View>
+                  <Text style={styles.cardNumber}>
+                    **** {user?.defaultPaymentMethod.last4}
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={styles.card}
+                  onPress={() => setIsPaymentModalOpened(true)}>
+                  <CashIcon width={25} height={25} />
+                  <Text style={styles.cash}>Espèces</Text>
+                </Pressable>
+              ))}
+          </View>
           <View style={styles.buttons}>
             <Button
               text={
@@ -161,6 +208,9 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
           </View>
         </View>
       </CustomBottomSheet>
+      {isPaymentModalOpened && (
+        <PaymentMethodsModal onClose={() => setIsPaymentModalOpened(false)} />
+      )}
     </SafeAreaView>
   );
 };
@@ -209,5 +259,31 @@ const styles = StyleSheet.create({
   },
   textButton: {
     fontSize: font.fontSize2,
+  },
+  bottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: layout.spacer3,
+  },
+  card: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  cardBrand: {
+    transform: [{ scale: 0.6 }],
+    borderWidth: 1,
+    borderColor: colors.grey1,
+    padding: layout.spacer2,
+  },
+  cardNumber: {
+    fontSize: font.fontSize1_5,
+    color: colors.black,
+  },
+  cash: {
+    color: colors.black,
+    fontSize: font.fontSize1_5,
+    marginLeft: layout.spacer2,
   },
 });

@@ -139,6 +139,6 @@ const styles = StyleSheet.create({
     color: colors.grey3,
   },
   map: {
-    marginBottom: 160,
+    marginBottom: 150,
   },
 });

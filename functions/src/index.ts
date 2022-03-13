@@ -55,6 +55,7 @@ export const createOrder = functions.region(REGION).https.onCall(async data => {
   try {
     result = await query.get();
   } catch (error) {
+    functions.logger.error(error);
     if (isApiError(error)) {
       throw new functions.https.HttpsError('unknown', error.message);
     }

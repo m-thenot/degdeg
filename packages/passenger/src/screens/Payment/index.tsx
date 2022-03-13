@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { useStripe } from '@stripe/stripe-react-native';
-import {
-  fetchPaymentMethods,
-  fetchSetupIntentClientSecret,
-} from '@services/checkout';
+import { fetchSetupIntentClientSecret } from '@services/checkout';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { updateUser } from '@services/user';
 import { BackHeader, Button } from '@dagdag/common/components';
@@ -15,27 +12,9 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-
-// CREDIT CARDS ICONS
-import AmexIcon from '@assets/images/amex.svg';
-import VisaIcon from '@assets/images/visa.svg';
-import MasterCardIcon from '@assets/images/mastercard.svg';
-import UnionPayIcon from '@assets/images/union_pay.svg';
-import CreditCardIcon from '@assets/images/credit_card.svg';
 import DGToast, { ToastTypes } from '@utils/toast';
-import { PaymentMethod } from '@internalTypes/payment';
-import crashlytics from '@react-native-firebase/crashlytics';
-
-const CREDIT_CARDS = {
-  amex: <AmexIcon width={50} height={50} />,
-  jcb: <CreditCardIcon width={50} height={35} />,
-  mastercard: <MasterCardIcon width={50} height={18} />,
-  visa: <VisaIcon width={50} height={18} />,
-  unionpay: <UnionPayIcon width={50} height={35} />,
-  unknown: <CreditCardIcon width={50} height={35} />,
-  discover: <CreditCardIcon width={50} height={35} />,
-  dinersclub: <CreditCardIcon width={50} height={35} />,
-};
+import { CREDIT_CARDS } from '@resources/images';
+import usePaymentMethods from '@hooks/usePaymentMethods';
 
 const Payment: React.FC<
   DrawerScreenProps<DrawerNavigatorParamList, 'payment'>
@@ -48,31 +27,9 @@ const Payment: React.FC<
     name: user?.firstName + ' ' + user?.lastName,
     phoneNumber: user?.phoneNumber,
   };
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const insets = useSafeAreaInsets();
+  const { isLoading, paymentMethods, getPaymentMethods } = usePaymentMethods();
 
-  const getPaymentMethods = async () => {
-    try {
-      const newPaymentMethods: { data: PaymentMethod[] } =
-        await fetchPaymentMethods(user?.customerId);
-      if (
-        newPaymentMethods.data.length > 0 &&
-        ((paymentMethods.length > 0 &&
-          newPaymentMethods.data.length > paymentMethods.length) || // Make new payment method as default payment method
-          !newPaymentMethods.data.find(
-            paymentMethod => paymentMethod.id === user?.defaultPaymentMethod, // Change default payment method if it is not exist anymore
-          ))
-      ) {
-        updateUser({ defaultPaymentMethod: newPaymentMethods.data[0].id });
-      }
-      setPaymentMethods(newPaymentMethods?.data || []);
-      setIsLoading(false);
-    } catch (e) {
-      crashlytics().recordError(e as any);
-      console.error(e);
-    }
-  };
+  const insets = useSafeAreaInsets();
 
   const initializePaymentSheet = async () => {
     const {

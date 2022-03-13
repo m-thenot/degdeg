@@ -1,3 +1,8 @@
+export enum PAYMENT_TYPE {
+  CASH = 'CASH',
+  CREDIT_CARD = 'CREDIT_CARD',
+}
+
 export interface IUser {
   phoneNumber: string | null;
   uid: string;
@@ -7,7 +12,12 @@ export interface IUser {
   email?: string;
   image?: string;
   customerId: string;
-  defaultPaymentMethod?: string;
+  defaultPaymentMethod?: {
+    id?: string;
+    last4?: string;
+    brand?: string;
+    type: PAYMENT_TYPE;
+  };
   rating?: {
     overall: number;
     count: number;

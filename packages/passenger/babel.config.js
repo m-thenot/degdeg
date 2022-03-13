@@ -20,6 +20,7 @@ plugins.push([
       '@components': './src/components',
       '@screens': './src/screens',
       '@constants': './src/constants',
+      '@resources': './src/resources',
       '@services': './src/services',
       '@hocs': './src/hocs',
       '@hooks': './src/hooks',
