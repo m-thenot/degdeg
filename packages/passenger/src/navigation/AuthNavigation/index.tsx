@@ -5,7 +5,6 @@ import {
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignInWithPhoneNumber from '@screens/SignInWithPhoneNumber';
-import Start from '@screens/Start';
 import { AuthStackParamList, RootParamList } from '@internalTypes/navigation';
 import { BackHeader } from '@dagdag/common/components';
 import Verification from '@screens/Verification/index';
@@ -82,13 +81,9 @@ const AuthNavigation: React.FC = () => {
         ) : (
           <>
             <Stack.Screen
-              name="start"
-              component={Start}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="signInWithPhoneNumber"
               component={SignInWithPhoneNumber}
+              options={{ headerShown: false }}
             />
             <Stack.Screen name="verification" component={Verification} />
           </>

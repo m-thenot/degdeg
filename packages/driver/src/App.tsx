@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { AuthProvider } from '@context/auth';
 import AuthNavigation from './navigation/AuthNavigation';
@@ -11,6 +11,7 @@ import { ToastConfig } from '@utils/toast';
 import { layout } from '@dagdag/common/theme';
 import { FIREBASE_REGION } from '@dagdag/common/constants';
 import { firebase } from '@react-native-firebase/functions';
+import SplashScreen from 'react-native-splash-screen';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -22,6 +23,10 @@ if (__DEV__) {
 }
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <RecoilRoot>
       <AuthProvider>

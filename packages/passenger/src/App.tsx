@@ -12,6 +12,7 @@ import { firebase } from '@react-native-firebase/functions';
 import { FIREBASE_REGION } from '@dagdag/common/constants';
 import { initStripe } from '@stripe/stripe-react-native';
 import { VehiclesProvider } from '@context/vehicles';
+import SplashScreen from 'react-native-splash-screen';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -24,6 +25,7 @@ if (__DEV__) {
 
 const App: React.FC = () => {
   useEffect(() => {
+    SplashScreen.hide();
     initStripe({
       publishableKey:
         'pk_test_51K3GSwAwMyMMt8Qnk93yvpJtaLj0gJEBGguu0nb9AuXp5cnhKdhM2Ck3k4xU6M4erzltpcZWuXl5Gr6AvCv8sZaZ00uhCYAk3H',
