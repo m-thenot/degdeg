@@ -1,8 +1,7 @@
 import * as geofirestore from 'geofirestore';
 import firestore from '@react-native-firebase/firestore';
 import { ILocation } from '@internalTypes/geo';
-import { firebase } from '@react-native-firebase/functions';
-import { CARS_COLLECTION, FIREBASE_REGION } from '@dagdag/common/constants';
+import { CARS_COLLECTION } from '@dagdag/common/constants';
 
 const GeoFirestore = geofirestore.initializeApp(firestore() as any);
 
@@ -17,6 +16,7 @@ export const updatePosition = (
     driverId: driverId,
     isAvailable: isAvailable,
     coordinates: new firestore.GeoPoint(location.latitude, location.longitude),
+    // add vehicule type
   });
 };
 

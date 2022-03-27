@@ -116,7 +116,7 @@ const History: React.FC<
             <Text style={styles.label}>Gains</Text>
             <Text style={styles.number}>
               {orders.length > 0 ? orders.reduce((a, b) => a + b?.price, 0) : 0}{' '}
-              €
+              DJF
             </Text>
           </View>
         </View>

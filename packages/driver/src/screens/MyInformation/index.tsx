@@ -10,7 +10,7 @@ import { BackHeader, Button, InlineInput } from '@dagdag/common/components';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { useForm } from 'react-hook-form';
 import RNPickerSelect from 'react-native-picker-select';
-import { CarType } from '@dagdag/common/types';
+import { VehicleType } from '@dagdag/common/types';
 import { RoundIconButton } from '@dagdag/common/components/RoundIconButton';
 import PlusIcon from '@dagdag/common/assets/icons/plus.svg';
 import globalStyles from '@theme/globalStyles';
@@ -22,19 +22,19 @@ import { ScrollView } from 'react-native-gesture-handler';
 const carsTypes = [
   {
     label: 'Économique',
-    value: CarType.ECONOMIC,
+    value: VehicleType.ECONOMIC,
   },
   {
     label: 'Premium',
-    value: CarType.PREMIUM,
+    value: VehicleType.PREMIUM,
   },
   {
     label: 'Van',
-    value: CarType.VAN,
+    value: VehicleType.VAN,
   },
   {
     label: 'Taxi',
-    value: CarType.TAXI,
+    value: VehicleType.TAXI,
   },
 ];
 
@@ -59,7 +59,7 @@ const MyInformation: React.FC<
     Object.keys(errors).length === 0 && errors.constructor === Object,
   );
 
-  const [carType, setCarType] = useState<null | CarType>(
+  const [VehicleType, setVehicleType] = useState<null | VehicleType>(
     user?.car?.type || null,
   );
 
@@ -78,7 +78,7 @@ const MyInformation: React.FC<
 
   const onSubmit = async (data: IData) => {
     if (!hasError) {
-      await updateDriver({ car: { ...data, type: carType } });
+      await updateDriver({ car: { ...data, type: VehicleType } });
       DGToast.show(ToastTypes.DG_SUCCESS, {
         message:
           'Les données de votre véhicule ont été mise à jour avec succès !',
@@ -141,9 +141,9 @@ const MyInformation: React.FC<
             <Text style={styles.label}>Classe de véhicule</Text>
 
             <RNPickerSelect
-              onValueChange={value => setCarType(value)}
+              onValueChange={value => setVehicleType(value)}
               placeholder={
-                carType
+                VehicleType
                   ? {}
                   : {
                       label: 'sélectionner',
@@ -151,7 +151,7 @@ const MyInformation: React.FC<
                       color: colors.grey3,
                     }
               }
-              value={carType}
+              value={VehicleType}
               style={{
                 viewContainer: styles.select,
                 placeholder: styles.placeholder,

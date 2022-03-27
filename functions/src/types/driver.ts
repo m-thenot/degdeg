@@ -1,4 +1,4 @@
-import { CarType } from '@dagdag/common/types';
+import { VehicleType } from '@dagdag/common/types';
 
 export interface IDriver {
   phoneNumber: string | null;
@@ -17,6 +17,6 @@ export interface IDriver {
     brand: string;
     color: string;
     plate?: string | undefined;
-    type: CarType | null;
+    type: VehicleType | null;
   };
 }

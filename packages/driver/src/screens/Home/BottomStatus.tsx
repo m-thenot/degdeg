@@ -20,7 +20,10 @@ const BottomStatus: React.FC = () => {
   return (
     <>
       {isOnline ? (
-        <RoundBottom customStyle={{ bottom: insets.bottom }}>
+        <RoundBottom
+          customStyle={{
+            bottom: insets.bottom,
+          }}>
           <Text style={styles.text}>
             Vous êtes <Text style={globalStyles.bold}>en ligne</Text>.
           </Text>

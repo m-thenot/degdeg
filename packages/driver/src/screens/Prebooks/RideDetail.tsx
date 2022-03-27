@@ -59,7 +59,7 @@ const RideDetail: React.FC<IRideDetailProps> = ({
             rating={order?.user.rating?.overall}
           />
           <View>
-            <Text style={styles.price}>{order?.car.price}€</Text>
+            <Text style={styles.price}>{order?.price} DJF</Text>
             <Text style={styles.distance}>
               {Math.round(order?.metadataRoute.distance)} km
             </Text>

@@ -11,6 +11,7 @@ import { layout } from '@dagdag/common/theme';
 import { firebase } from '@react-native-firebase/functions';
 import { FIREBASE_REGION } from '@dagdag/common/constants';
 import { initStripe } from '@stripe/stripe-react-native';
+import { VehiclesProvider } from '@context/vehicles';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -32,12 +33,14 @@ const App: React.FC = () => {
   return (
     <RecoilRoot>
       <AuthProvider>
-        <OrderProvider>
-          <SafeAreaProvider>
-            <AuthNavigation />
-            <Toast config={ToastConfig} topOffset={40 + layout.spacer4} />
-          </SafeAreaProvider>
-        </OrderProvider>
+        <VehiclesProvider>
+          <OrderProvider>
+            <SafeAreaProvider>
+              <AuthNavigation />
+              <Toast config={ToastConfig} topOffset={40 + layout.spacer4} />
+            </SafeAreaProvider>
+          </OrderProvider>
+        </VehiclesProvider>
       </AuthProvider>
     </RecoilRoot>
   );

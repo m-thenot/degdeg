@@ -1,10 +1,9 @@
-import CustomBottomSheet from '@components/CustomBottomSheet';
-import { Button } from '@dagdag/common/components';
+import { Button, RoundBottom } from '@dagdag/common/components';
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, View, Pressable } from 'react-native';
 import Car from './Car';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { carState } from '@stores/car.atom';
+import { vehicleState } from '@stores/vehicle.atom';
 import { BackHeader } from '@dagdag/common/components';
 import {
   arrivalAddressState,
@@ -17,9 +16,9 @@ import MapWrapper from './MapWrapper';
 import { departureAtState, metadataRouteState } from '@stores/route.atom';
 import { colors, layout, font } from '@dagdag/common/theme';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
-import { OrderStatus, RideType, CarType } from '@dagdag/common/types';
+import { OrderStatus, RideType } from '@dagdag/common/types';
 import { createOrder } from '@services/order';
-import { getFormateDate } from '@dagdag/common/utils';
+import { getFormateDate, sortByPrice } from '@dagdag/common/utils';
 import { useOrder } from '@context/order';
 import {
   SafeAreaView,
@@ -31,19 +30,15 @@ import { CREDIT_CARDS } from '@resources/images';
 import { PAYMENT_TYPE } from '@internalTypes/user';
 import CashIcon from '@dagdag/common/assets/icons/cash.svg';
 import PaymentMethodsModal from './PaymentMethodsModal';
+import { useVehicles } from '@context/vehicles';
 
-const snapPoints = [420, '80%'];
-
-const CarsImages = {
-  economic: require('@assets/images/standard.png'),
-  premium: require('@assets/images/exec.png'),
-  van: require('@assets/images/van.png'),
-};
+//const snapPoints = [420, '80%'];
 
 const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
   navigation,
 }) => {
-  const selectedCar = useRecoilValue(carState);
+  const selectedVehicle = useRecoilValue(vehicleState);
+  const { vehicles } = useVehicles();
   const [arrivalAddress, setArrivalAddress] =
     useRecoilState(arrivalAddressState);
   const metadataRoute = useRecoilValue(metadataRouteState);
@@ -94,10 +89,13 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
           rating: user?.rating,
         },
         metadataRoute: metadataRoute!,
-        car: selectedCar!,
+        vehicle: selectedVehicle!,
         rideType: isOrderNow ? RideType.NOW : RideType.LATER,
         departureAt: departureAt?.getTime() || Date.now(),
-        price: null, // TODO: add pricig
+        price:
+          selectedVehicle!.price.base +
+          Math.ceil(metadataRoute?.duration || 1) *
+            selectedVehicle!.price.perMinute,
       };
 
       try {
@@ -129,85 +127,70 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       />
       <MapWrapper mapStyle={styles.map} />
 
-      <CustomBottomSheet snapPoints={snapPoints}>
-        <View style={styles.container}>
-          <View style={styles.list}>
-            <Car
-              label="économique"
-              type={CarType.ECONOMIC}
-              description="Économique, rapide et fiable"
-              image={CarsImages.economic}
-              price={25}
-            />
-            <Car
-              label="premium"
-              type={CarType.PREMIUM}
-              description="Voitures spacieuses et chauffeurs les mieux notés"
-              image={CarsImages.premium}
-              price={33}
-            />
-            <Car
-              label="van"
-              type={CarType.VAN}
-              description="Véhicules haut de gamme jusqu'à 6 passagers"
-              image={CarsImages.van}
-              price={40}
-            />
-          </View>
-          <View style={styles.bottom}>
-            <View>
-              <Text style={styles.timeLabel}>Temps de trajet estimé</Text>
-              <Text style={styles.time}>
-                {metadataRoute?.duration && Math.ceil(metadataRoute?.duration)}{' '}
-                min
-              </Text>
-            </View>
+      <RoundBottom
+        customStyle={{ bottom: insets.bottom, paddingBottom: layout.spacer5 }}>
+        <View style={styles.list}>
+          {vehicles.sort(sortByPrice).map(vehicle => {
+            const price =
+              vehicle.price.base +
+              Math.ceil(metadataRoute?.duration || 1) * vehicle.price.perMinute;
 
-            {user?.defaultPaymentMethod &&
-              (user?.defaultPaymentMethod.type === PAYMENT_TYPE.CREDIT_CARD ? (
-                <Pressable
-                  style={styles.card}
-                  onPress={() => setIsPaymentModalOpened(true)}>
-                  <View style={styles.cardBrand}>
-                    {CREDIT_CARDS[user?.defaultPaymentMethod.brand]}
-                  </View>
-                  <Text style={styles.cardNumber}>
-                    **** {user?.defaultPaymentMethod.last4}
-                  </Text>
-                </Pressable>
-              ) : (
-                <Pressable
-                  style={styles.card}
-                  onPress={() => setIsPaymentModalOpened(true)}>
-                  <CashIcon width={25} height={25} />
-                  <Text style={styles.cash}>Espèces</Text>
-                </Pressable>
-              ))}
-          </View>
-          <View style={styles.buttons}>
-            <Button
-              text={
-                isOrderNow
-                  ? 'Commander maintenant'
-                  : `Commander ${getFormateDate(departureAt)}`
-              }
-              onPress={handleOrder}
-              style={[styles.button, styles.nowButton]}
-              textStyle={styles.textButton}
-              disabled={!selectedCar}
-              isLoading={isLoading}
-            />
-            <Button
-              text={isOrderNow ? 'Plus tard' : 'Modifier'}
-              type="secondary"
-              textStyle={styles.textButton}
-              onPress={() => navigation.navigate('selectDate')}
-              style={[styles.button, styles.laterButton]}
-              disabled={!selectedCar}
-            />
-          </View>
+            return <Car key={vehicle.type} vehicle={vehicle} price={price} />;
+          })}
         </View>
-      </CustomBottomSheet>
+        <View style={styles.bottom}>
+          <View>
+            <Text style={styles.timeLabel}>Temps de trajet estimé</Text>
+            <Text style={styles.time}>
+              {metadataRoute?.duration && Math.ceil(metadataRoute?.duration)}{' '}
+              min
+            </Text>
+          </View>
+
+          {user?.defaultPaymentMethod &&
+            (user?.defaultPaymentMethod.type === PAYMENT_TYPE.CREDIT_CARD ? (
+              <Pressable
+                style={styles.card}
+                onPress={() => setIsPaymentModalOpened(true)}>
+                <View style={styles.cardBrand}>
+                  {CREDIT_CARDS[user?.defaultPaymentMethod.brand]}
+                </View>
+                <Text style={styles.cardNumber}>
+                  **** {user?.defaultPaymentMethod.last4}
+                </Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.card}
+                onPress={() => setIsPaymentModalOpened(true)}>
+                <CashIcon width={25} height={25} />
+                <Text style={styles.cash}>Espèces</Text>
+              </Pressable>
+            ))}
+        </View>
+        <View style={styles.buttons}>
+          <Button
+            text={
+              isOrderNow
+                ? 'Commander maintenant'
+                : `Commander ${getFormateDate(departureAt)}`
+            }
+            onPress={handleOrder}
+            style={[styles.button, styles.nowButton]}
+            textStyle={styles.textButton}
+            disabled={!selectedVehicle}
+            isLoading={isLoading}
+          />
+          <Button
+            text={isOrderNow ? 'Plus tard' : 'Modifier'}
+            type="secondary"
+            textStyle={styles.textButton}
+            onPress={() => navigation.navigate('selectDate')}
+            style={[styles.button, styles.laterButton]}
+            disabled={!selectedVehicle}
+          />
+        </View>
+      </RoundBottom>
       {isPaymentModalOpened && (
         <PaymentMethodsModal onClose={() => setIsPaymentModalOpened(false)} />
       )}

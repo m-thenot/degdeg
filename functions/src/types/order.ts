@@ -1,9 +1,4 @@
-import { CarType } from '@dagdag/common/types';
-
-interface ICar {
-  type: CarType;
-  price: number;
-}
+import { VehicleType, IVehicle } from '@dagdag/common/types';
 
 enum OrderStatus {
   NEW = 'NEW',
@@ -61,7 +56,7 @@ export interface IPublicDriver {
     brand: string;
     color: string;
     plate?: string | undefined;
-    type: CarType | null;
+    type: VehicleType | null;
   };
 }
 
@@ -74,9 +69,9 @@ export interface IOrder {
   cancelReason?: string;
   user: IUser;
   metadataRoute: IMetadataRoute;
-  car: ICar;
+  vehicle: IVehicle;
   rideType: RideType;
   departureAt: number;
-  price: any;
+  price: number;
   driver?: IPublicDriver;
 }

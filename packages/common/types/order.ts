@@ -1,4 +1,4 @@
-import { CarType, ICar } from './car';
+import { IVehicle, VehicleType } from './vehicle';
 
 export enum OrderStatus {
   NEW = 'NEW',
@@ -56,7 +56,7 @@ export interface IPublicDriver {
     brand: string;
     color: string;
     plate?: string | undefined;
-    type: CarType | null;
+    type: VehicleType | null;
   };
 }
 
@@ -69,7 +69,7 @@ export interface IOrder {
   cancelReason?: string;
   user: IUser;
   metadataRoute: IMetadataRoute;
-  car: ICar;
+  vehicle: IVehicle;
   rideType: RideType;
   departureAt: number;
   price: any;

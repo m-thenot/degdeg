@@ -87,7 +87,7 @@ const Wallet: React.FC<
           {index === activeDay && (
             <View style={styles.dayPriceContainer}>
               <View style={styles.dayPrice}>
-                <Text>{ordersOfTheDay.length > 0 ? height : 0} €</Text>
+                <Text>{ordersOfTheDay.length > 0 ? height : 0} DJF</Text>
               </View>
               <View style={styles.line} />
             </View>
@@ -114,7 +114,7 @@ const Wallet: React.FC<
             </TouchableOpacity>
             <Text style={styles.total}>
               {orders.length > 0 ? orders.reduce((a, b) => a + b?.price, 0) : 0}{' '}
-              €
+              DJF
             </Text>
             <TouchableOpacity
               style={styles.arrowButton}

@@ -78,7 +78,7 @@ const RideRequest: React.FC = () => {
             rating={orderRequest.user.rating?.overall}
           />
           <View>
-            <Text style={styles.price}>{orderRequest.car.price}€</Text>
+            <Text style={styles.price}>{orderRequest.price} DJF</Text>
             <Text style={styles.distance}>
               {Math.round(orderRequest.metadataRoute.distance)} km
             </Text>
