@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { Logger } from './Logger';
 
 export const storeStringData = async (value: string, key: string) => {
   try {
     await AsyncStorage.setItem(key, value);
   } catch (e: any) {
-    crashlytics().recordError(e);
+    Logger.error(e);
   }
 };
 
@@ -15,7 +15,7 @@ export const storeObjectData = async (value: any, key: string) => {
 
     await AsyncStorage.setItem(key, jsonValue);
   } catch (e: any) {
-    crashlytics().recordError(e);
+    Logger.error(e);
   }
 };
 
@@ -27,7 +27,7 @@ export const getStringData = async (key: string) => {
       return value;
     }
   } catch (e: any) {
-    crashlytics().recordError(e);
+    Logger.error(e);
   }
 };
 
@@ -39,7 +39,7 @@ export const getObjectData = async (key: string) => {
       return value;
     }
   } catch (e: any) {
-    crashlytics().recordError(e);
+    Logger.error(e);
   }
 };
 
@@ -47,6 +47,6 @@ export const removeData = async (key: string) => {
   try {
     await AsyncStorage.removeItem(key);
   } catch (e: any) {
-    crashlytics().recordError(e);
+    Logger.error(e);
   }
 };

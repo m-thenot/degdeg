@@ -18,7 +18,7 @@ import { sendEmail } from '@dagdag/common/services';
 import DGToast, { ToastTypes } from '@utils/toast';
 import { DRIVER } from '@dagdag/common/constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { Logger } from '@dagdag/common/utils';
 
 const Help: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'help'>> = ({
   navigation,
@@ -62,8 +62,7 @@ const Help: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'help'>> = ({
         });
       }
     } catch (e: any) {
-      console.error(e);
-      crashlytics().recordError(e);
+      Logger.error(e);
       DGToast.show(ToastTypes.DG_ERROR, {
         message: "Une erreur innattendue s'est produite. Veuillez réessayer.",
       });

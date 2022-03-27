@@ -1,4 +1,5 @@
 import { Linking, Platform } from 'react-native';
+import { Logger } from './Logger';
 
 export const callNumber = (phoneNumber: string) => {
   let phoneNumberLink =
@@ -12,5 +13,5 @@ export const callNumber = (phoneNumber: string) => {
         return Linking.openURL(phoneNumberLink);
       }
     })
-    .catch(err => console.error(err));
+    .catch(err => Logger.error(err));
 };

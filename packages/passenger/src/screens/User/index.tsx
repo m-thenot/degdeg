@@ -22,7 +22,7 @@ import {
 } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import { Image } from 'react-native';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { Logger } from '@dagdag/common/utils';
 
 const options: ImageLibraryOptions = {
   mediaType: 'photo',
@@ -84,8 +84,7 @@ const User: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'user'>> = ({
           getImage();
         })
         .catch(e => {
-          console.error(e);
-          crashlytics().recordError(e);
+          Logger.error(e);
         });
     }
 

@@ -2,9 +2,9 @@ import { fetchPaymentMethods } from '@services/checkout';
 import { updateUser } from '@services/user';
 import { PaymentMethod } from '@internalTypes/payment';
 import { useState } from 'react';
-import crashlytics from '@react-native-firebase/crashlytics';
 import useFirebaseAuthentication from './useFirebaseAuthentification';
 import { PAYMENT_TYPE } from '@dagdag/common/types';
+import { Logger } from '@dagdag/common/utils';
 
 const usePaymentMethods = () => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
@@ -35,8 +35,7 @@ const usePaymentMethods = () => {
       setPaymentMethods(newPaymentMethods?.data || []);
       setIsLoading(false);
     } catch (e) {
-      crashlytics().recordError(e as any);
-      console.error(e);
+      Logger.error(e);
     }
   };
 

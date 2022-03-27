@@ -4,12 +4,12 @@ import { Platform } from 'react-native';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import Geolocation from 'react-native-geolocation-service';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-import crashlytics from '@react-native-firebase/crashlytics';
 
 import { ILocation } from '@internalTypes/geo';
 import { updatePosition } from '@services/cars';
 import { useRecoilValue } from 'recoil';
 import { isAvailableState } from '@stores/driver.atom';
+import { Logger } from '@dagdag/common/utils';
 
 interface IContextProps {
   location: ILocation;
@@ -44,8 +44,7 @@ const LocationProvider: React.FC = ({ children }) => {
               setLocation({ latitude, longitude });
             },
             error => {
-              console.log(error);
-              crashlytics().recordError(error as any);
+              Logger.error(error);
             },
             {
               enableHighAccuracy: true,
@@ -63,8 +62,7 @@ const LocationProvider: React.FC = ({ children }) => {
         }
       })
       .catch(error => {
-        console.error(error);
-        crashlytics().recordError(error);
+        Logger.error(error);
       });
   }, []);
 

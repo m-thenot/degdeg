@@ -27,7 +27,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, layout } from '@dagdag/common/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BackHeader } from '@dagdag/common/components';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { Logger } from '@dagdag/common/utils';
 
 const GOOGLE_PACES_API_BASE_URL = 'https://maps.googleapis.com/maps/api/place';
 
@@ -120,8 +120,7 @@ const Addresses: React.FC<
         setCurrentPredictionsType(type);
       }
     } catch (e: any) {
-      console.error(e);
-      crashlytics().recordError(e);
+      Logger.error(e);
     }
   };
 

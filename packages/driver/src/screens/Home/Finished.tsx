@@ -3,8 +3,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentOrderState, ordersState } from '@stores/orders.atom';
 import { updateRating } from '@dagdag/common/services';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import crashlytics from '@react-native-firebase/crashlytics';
 import Rating from '@dagdag/common/components/Rating';
+import { Logger } from '@dagdag/common/utils';
 
 const Finished: React.FC = () => {
   const currentOrder = useRecoilValue(currentOrderState);
@@ -21,8 +21,7 @@ const Finished: React.FC = () => {
         isPassengerRating: true,
       });
     } catch (e: any) {
-      console.error(e);
-      crashlytics().recordError(e);
+      Logger.error(e);
     }
 
     // Remove current order from orders request

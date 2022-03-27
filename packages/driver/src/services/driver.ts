@@ -3,7 +3,7 @@ import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import { CARS_COLLECTION, DRIVERS_COLLECTION } from '@dagdag/common/constants';
 import { IDriver } from '@internalTypes/driver';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { Logger } from '@dagdag/common/utils';
 
 interface newDriver {
   firstName: string;
@@ -35,10 +35,9 @@ export const requestUserPermission = async () => {
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
   if (enabled) {
-    console.log('Authorization status:', authStatus);
-    crashlytics().log('Authorization status: ' + authStatus);
+    Logger.log('Authorization status: ' + authStatus);
   } else {
-    crashlytics().log('Failed to get messaging permission');
+    Logger.log('Failed to get messaging permission');
   }
 };
 

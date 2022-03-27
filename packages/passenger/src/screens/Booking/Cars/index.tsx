@@ -18,13 +18,12 @@ import { colors, layout, font } from '@dagdag/common/theme';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { OrderStatus, PAYMENT_TYPE, RideType } from '@dagdag/common/types';
 import { createOrder } from '@services/order';
-import { getFormateDate, sortByPrice } from '@dagdag/common/utils';
+import { getFormateDate, Logger, sortByPrice } from '@dagdag/common/utils';
 import { useOrder } from '@context/order';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import { CREDIT_CARDS } from '@resources/images';
 import CashIcon from '@dagdag/common/assets/icons/cash.svg';
@@ -113,7 +112,6 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
         setIsLoading(true);
 
         if (user?.defaultPaymentMethod?.type === PAYMENT_TYPE.CREDIT_CARD) {
-          console.log('IS PAYING');
           const data = await proceedToPayment(
             user.customerId,
             user.defaultPaymentMethod.id,
@@ -127,8 +125,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
         }
       } catch (e: any) {
         setIsLoading(false);
-        console.error(e);
-        crashlytics().recordError(e);
+        Logger.error(e);
 
         if (e.message && e.message === 'PAYMENT_ERROR') {
           DGToast.show(

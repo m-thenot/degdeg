@@ -25,7 +25,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { StackScreenProps } from '@react-navigation/stack';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { Logger } from '@dagdag/common/utils';
 
 const Home: React.FC<StackScreenProps<BookingStackParamList, 'home'>> = ({
   navigation,
@@ -59,8 +59,7 @@ const Home: React.FC<StackScreenProps<BookingStackParamList, 'home'>> = ({
             });
           },
           error => {
-            crashlytics().recordError(error as any);
-            console.error(error.code, error.message);
+            Logger.error(error);
           },
           {
             enableHighAccuracy: true,

@@ -11,6 +11,7 @@ import Rating from '@dagdag/common/components/Rating';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { updateRating } from '@dagdag/common/services';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { Logger } from '@dagdag/common/utils';
 
 const TripEnded: React.FC = () => {
   const { order } = useOrder();
@@ -33,8 +34,7 @@ const TripEnded: React.FC = () => {
         isPassengerRating: false,
       });
     } catch (e: any) {
-      console.error(e);
-      crashlytics().recordError(e);
+      Logger.error(e);
     }
 
     setIsDriverRated(true);

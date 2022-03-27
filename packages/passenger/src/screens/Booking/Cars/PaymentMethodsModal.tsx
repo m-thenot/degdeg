@@ -14,9 +14,9 @@ import usePaymentMethods from '@hooks/usePaymentMethods';
 import CashIcon from '@dagdag/common/assets/icons/cash.svg';
 import { updateUser } from '@services/user';
 import { PaymentMethod } from '@internalTypes/payment';
-import { Logger } from '@utils/Logger';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { PAYMENT_TYPE } from '@dagdag/common/types';
+import { Logger } from '@dagdag/common/utils';
 
 interface IPaymentMethodsModalProps {
   onClose: () => void;
