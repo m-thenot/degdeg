@@ -16,7 +16,7 @@ import MapWrapper from './MapWrapper';
 import { departureAtState, metadataRouteState } from '@stores/route.atom';
 import { colors, layout, font } from '@dagdag/common/theme';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
-import { OrderStatus, RideType } from '@dagdag/common/types';
+import { OrderStatus, PAYMENT_TYPE, RideType } from '@dagdag/common/types';
 import { createOrder } from '@services/order';
 import { getFormateDate, sortByPrice } from '@dagdag/common/utils';
 import { useOrder } from '@context/order';
@@ -27,10 +27,11 @@ import {
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import { CREDIT_CARDS } from '@resources/images';
-import { PAYMENT_TYPE } from '@internalTypes/user';
 import CashIcon from '@dagdag/common/assets/icons/cash.svg';
 import PaymentMethodsModal from './PaymentMethodsModal';
 import { useVehicles } from '@context/vehicles';
+import { proceedToPayment } from '@services/checkout';
+import DGToast, { ToastTypes } from '@utils/toast';
 
 //const snapPoints = [420, '80%'];
 
@@ -63,12 +64,17 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
   }, [isOrdering, user?.defaultPaymentMethod]);
 
   const handleOrder = async () => {
-    setIsOrdering(true);
-
     // Check if user has a default payment method
     if (!Boolean(user?.defaultPaymentMethod?.type)) {
+      setIsOrdering(true);
       setIsPaymentModalOpened(true);
     } else {
+      setIsOrdering(false);
+      const price =
+        selectedVehicle!.price.base +
+        Math.ceil(metadataRoute?.duration || 1) *
+          selectedVehicle!.price.perMinute;
+
       const order = {
         uid: '',
         createdDate: Date.now(),
@@ -88,29 +94,62 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
           image: user?.image,
           rating: user?.rating,
         },
+        paymentType: user?.defaultPaymentMethod?.type,
         metadataRoute: metadataRoute!,
         vehicle: selectedVehicle!,
         rideType: isOrderNow ? RideType.NOW : RideType.LATER,
         departureAt: departureAt?.getTime() || Date.now(),
-        price:
-          selectedVehicle!.price.base +
-          Math.ceil(metadataRoute?.duration || 1) *
-            selectedVehicle!.price.perMinute,
+        price: price,
       };
 
-      try {
-        setIsLoading(true);
+      const createOrderAndNavigate = async () => {
         const result = await createOrder(order);
         setOrderUid?.(result.orderUid);
         await analytics().logEvent('new_order');
         navigation.navigate('order' as any, { screen: 'ride' });
+      };
+
+      try {
+        setIsLoading(true);
+
+        if (user?.defaultPaymentMethod?.type === PAYMENT_TYPE.CREDIT_CARD) {
+          console.log('IS PAYING');
+          const data = await proceedToPayment(
+            user.customerId,
+            user.defaultPaymentMethod.id,
+            Math.ceil(price / 2), // conversion to euro cents
+          );
+          if (data.success) {
+            createOrderAndNavigate();
+          }
+        } else {
+          createOrderAndNavigate();
+        }
       } catch (e: any) {
         setIsLoading(false);
         console.error(e);
         crashlytics().recordError(e);
-      }
 
-      setIsOrdering(false);
+        if (e.message && e.message === 'PAYMENT_ERROR') {
+          DGToast.show(
+            ToastTypes.DG_ERROR,
+            {
+              message:
+                'Impossible de procéder au paiement ! Essayer de changer de moyen de paiement ou contactez le support technique.',
+            },
+            15000,
+          );
+        } else {
+          DGToast.show(
+            ToastTypes.DG_ERROR,
+            {
+              message:
+                "Une erreur innattendue s'est produite. Veuillez réessayer.",
+            },
+            5000,
+          );
+        }
+      }
     }
   };
 

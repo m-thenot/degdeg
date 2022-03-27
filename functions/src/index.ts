@@ -240,19 +240,12 @@ exports.proceedToPayment = functions.region(REGION).https.onCall(async data => {
         functions.logger.error('PI retrieved: ' + paymentIntentRetrieved?.id);
       }
 
-      throw new functions.https.HttpsError(
-        'unknown',
-        'PROCEED TO PAYMENT ERROR',
-        {
-          message: err.message,
-          code: err.code,
-        },
-      );
+      throw new functions.https.HttpsError('unknown', 'PAYMENT_ERROR', {
+        message: err.message,
+        code: err.code,
+      });
     } else {
-      throw new functions.https.HttpsError(
-        'unknown',
-        'UNKNOWN PROCEED TO PAYMENT ERROR',
-      );
+      throw new functions.https.HttpsError('unknown', 'PAYMENT_ERROR');
     }
   }
 

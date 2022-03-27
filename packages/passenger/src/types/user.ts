@@ -1,7 +1,4 @@
-export enum PAYMENT_TYPE {
-  CASH = 'CASH',
-  CREDIT_CARD = 'CREDIT_CARD',
-}
+import { PAYMENT_TYPE } from '@dagdag/common/types';
 
 export interface IUser {
   phoneNumber: string | null;

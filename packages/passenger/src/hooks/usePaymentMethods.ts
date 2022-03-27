@@ -1,10 +1,10 @@
-import { PAYMENT_TYPE } from '@internalTypes/user';
 import { fetchPaymentMethods } from '@services/checkout';
 import { updateUser } from '@services/user';
 import { PaymentMethod } from '@internalTypes/payment';
 import { useState } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import useFirebaseAuthentication from './useFirebaseAuthentification';
+import { PAYMENT_TYPE } from '@dagdag/common/types';
 
 const usePaymentMethods = () => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);

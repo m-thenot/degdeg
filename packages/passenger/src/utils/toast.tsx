@@ -21,11 +21,11 @@ interface ISimpleToast {
 type ToastOptions = ISimpleToast;
 
 export default class DGToast {
-  static show(type: ToastTypes, options: ToastOptions) {
+  static show(type: ToastTypes, options: ToastOptions, visibilityTime = 3000) {
     Toast.show({
       type: type,
       props: options,
-      visibilityTime: 3000,
+      visibilityTime: visibilityTime,
       autoHide: true,
     });
   }

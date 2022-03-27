@@ -1,5 +1,11 @@
 import { IVehicle, VehicleType } from './vehicle';
 
+export enum PAYMENT_TYPE {
+  CASH = 'CASH',
+  CREDIT_CARD = 'CREDIT_CARD',
+  D_MONEY = 'D_MONEY',
+}
+
 export enum OrderStatus {
   NEW = 'NEW',
   ACCEPTED = 'ACCEPTED',
@@ -74,4 +80,5 @@ export interface IOrder {
   departureAt: number;
   price: any;
   driver?: IPublicDriver;
+  paymentType: PAYMENT_TYPE;
 }

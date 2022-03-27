@@ -1,4 +1,4 @@
-import { VehicleType, IVehicle } from '@dagdag/common/types';
+import { VehicleType, IVehicle, PAYMENT_TYPE } from '@dagdag/common/types';
 
 enum OrderStatus {
   NEW = 'NEW',
@@ -74,4 +74,5 @@ export interface IOrder {
   departureAt: number;
   price: number;
   driver?: IPublicDriver;
+  paymentType: PAYMENT_TYPE;
 }
