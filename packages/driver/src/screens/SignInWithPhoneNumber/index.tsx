@@ -13,14 +13,12 @@ import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@internalTypes/navigation';
 import globalStyles from '@theme/globalStyles';
-import { useHeaderHeight } from '@react-navigation/elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, layout, font } from '@dagdag/common/theme';
 
 const SignInWithPhoneNumber: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'signInWithPhoneNumber'>
 > = ({ navigation }) => {
-  const headerHeight = useHeaderHeight();
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
   const [valid, setValid] = useState<boolean | null>();
@@ -42,9 +40,7 @@ const SignInWithPhoneNumber: React.FC<
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
-        keyboardVerticalOffset={
-          Platform.OS === 'ios' ? headerHeight + 5 : headerHeight + 105
-        }
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 5 : 25}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.main}>
           <Text style={styles.title}>

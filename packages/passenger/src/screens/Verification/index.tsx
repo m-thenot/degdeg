@@ -64,7 +64,7 @@ const Verification: React.FC<
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         keyboardVerticalOffset={
-          Platform.OS === 'ios' ? headerHeight + 5 : -headerHeight
+          Platform.OS === 'ios' ? headerHeight + 5 : headerHeight + 25
         }
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.main}>
@@ -131,7 +131,8 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop + 15,
+    marginTop:
+      Platform.OS === 'ios' ? layout.marginTop + 15 : layout.marginTop + 35,
   },
   title: {
     fontSize: font.fontSize4,

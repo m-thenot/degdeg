@@ -4,7 +4,14 @@ import {
   DrawerItem,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  Pressable,
+  Platform,
+} from 'react-native';
 import { LinkButton } from '@dagdag/common/components';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import EditIcon from '@assets/icons/ic_edit.svg';
@@ -32,7 +39,10 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           <EditIcon
             height={50}
             width={50}
-            style={[styles.edit, { top: insets.top - 25 }]}
+            style={[
+              styles.edit,
+              { top: Platform.OS === 'ios' ? insets.top - 25 : insets.top - 5 },
+            ]}
           />
           {user?.image ? (
             <Image
@@ -64,6 +74,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
       <View style={styles.menu}>
         <DrawerItem
           label="Mes courses"
+          pressColor={colors.grey1}
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {
@@ -72,6 +83,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
         />
         <DrawerItem
           label="Paiement"
+          pressColor={colors.grey1}
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {
@@ -79,6 +91,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           }}
         />
         <DrawerItem
+          pressColor={colors.grey1}
           label="Besoin d'aide ?"
           style={styles.item}
           labelStyle={styles.label}
@@ -89,6 +102,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
         {__DEV__ && (
           <DrawerItem
             label="Dev"
+            pressColor={colors.grey1}
             style={styles.item}
             labelStyle={styles.label}
             onPress={() => {

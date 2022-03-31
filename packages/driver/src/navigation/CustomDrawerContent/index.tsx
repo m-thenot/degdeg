@@ -4,7 +4,14 @@ import {
   DrawerItem,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  Pressable,
+  Platform,
+} from 'react-native';
 import { LinkButton } from '@dagdag/common/components';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import EditIcon from '@assets/icons/ic_edit.svg';
@@ -31,7 +38,10 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
           <EditIcon
             height={50}
             width={50}
-            style={[styles.edit, { top: insets.top - 25 }]}
+            style={[
+              styles.edit,
+              { top: Platform.OS === 'ios' ? insets.top - 25 : insets.top - 5 },
+            ]}
           />
           {user?.image ? (
             <Image
@@ -66,6 +76,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
       <View style={styles.menu}>
         <DrawerItem
           label="Historique"
+          pressColor={colors.grey1}
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {
@@ -75,6 +86,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
         <DrawerItem
           label="Mes gains"
           style={styles.item}
+          pressColor={colors.grey1}
           labelStyle={styles.label}
           onPress={() => {
             props.navigation.navigate('wallet');
@@ -82,6 +94,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
         />
         <DrawerItem
           label="Mes informations"
+          pressColor={colors.grey1}
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {
@@ -90,6 +103,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
         />
         <DrawerItem
           label="Besoin d'aide ?"
+          pressColor={colors.grey1}
           style={styles.item}
           labelStyle={styles.label}
           onPress={() => {
@@ -100,6 +114,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = props => {
         {__DEV__ && (
           <DrawerItem
             label="Dev"
+            pressColor={colors.grey1}
             style={styles.item}
             labelStyle={styles.label}
             onPress={() => {
@@ -155,7 +170,7 @@ const styles = StyleSheet.create({
   },
   edit: {
     position: 'absolute',
-    left: 80,
+    left: 60,
     zIndex: 15,
   },
   menu: {

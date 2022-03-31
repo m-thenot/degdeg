@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { BackHeader } from '@dagdag/common/components';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -24,7 +24,7 @@ const History: React.FC<
   const insets = useSafeAreaInsets();
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [orders, setOrders] = useState<IOrder[]>([]);
+  const [orders, setOrders] = useState<IOrder[] | null>(null);
   const { user } = useFirebaseAuthentication();
 
   useEffect(() => {
@@ -102,27 +102,39 @@ const History: React.FC<
         ))}
       </ScrollView>
 
-      <View style={styles.stats}>
-        <View style={styles.stat}>
-          <CarIcon width={35} height={35} />
-          <View style={styles.textStat}>
-            <Text style={styles.label}>Courses</Text>
-            <Text style={styles.number}>{orders.length}</Text>
+      {orders ? (
+        <>
+          <View style={styles.stats}>
+            <View style={styles.stat}>
+              <CarIcon width={35} height={35} />
+              <View style={styles.textStat}>
+                <Text style={styles.label}>Courses</Text>
+                <Text style={styles.number}>{orders.length}</Text>
+              </View>
+            </View>
+            <View style={styles.stat}>
+              <MoneyIcon width={35} height={35} />
+              <View style={styles.textStat}>
+                <Text style={styles.label}>Gains</Text>
+                <Text style={styles.number}>
+                  {orders.length > 0
+                    ? orders.reduce((a, b) => a + b?.price, 0)
+                    : 0}{' '}
+                  DJF
+                </Text>
+              </View>
+            </View>
           </View>
-        </View>
-        <View style={styles.stat}>
-          <MoneyIcon width={35} height={35} />
-          <View style={styles.textStat}>
-            <Text style={styles.label}>Gains</Text>
-            <Text style={styles.number}>
-              {orders.length > 0 ? orders.reduce((a, b) => a + b?.price, 0) : 0}{' '}
-              DJF
-            </Text>
-          </View>
-        </View>
-      </View>
 
-      <OrdersHistory orders={orders} />
+          <OrdersHistory orders={orders} />
+        </>
+      ) : (
+        <ActivityIndicator
+          size="large"
+          color={colors.primary}
+          style={styles.loader}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -187,5 +199,10 @@ const styles = StyleSheet.create({
   scrollView: {
     maxHeight: 54,
     marginBottom: layout.spacer3,
+  },
+  loader: {
+    flex: 1,
+    alignSelf: 'center',
+    marginTop: -50,
   },
 });

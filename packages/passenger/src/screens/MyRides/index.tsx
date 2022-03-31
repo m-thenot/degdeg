@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import { colors, layout } from '@dagdag/common/theme';
@@ -17,7 +17,7 @@ const MyRides: React.FC<
   DrawerScreenProps<DrawerNavigatorParamList, 'myRides'>
 > = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const [orders, setOrders] = useState<IOrder[]>([]);
+  const [orders, setOrders] = useState<IOrder[] | null>(null);
   const { user } = useFirebaseAuthentication();
 
   useEffect(() => {
@@ -44,7 +44,15 @@ const MyRides: React.FC<
 
   return (
     <SafeAreaView style={styles.container}>
-      <OrdersHistory orders={orders} isPassengerHistory />
+      {orders ? (
+        <OrdersHistory orders={orders} isPassengerHistory />
+      ) : (
+        <ActivityIndicator
+          size="large"
+          color={colors.primary}
+          style={styles.loader}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -57,5 +65,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: layout.marginHorizontal,
     paddingTop: layout.spacer9,
+  },
+  loader: {
+    flex: 1,
+    alignSelf: 'center',
+    marginTop: -100,
   },
 });

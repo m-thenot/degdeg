@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button, RoundBottom } from '@dagdag/common/components';
 import {
   ViewStyle,
   StyleProp,
@@ -12,6 +11,8 @@ import StarIcon from '@dagdag/common/assets/icons/rating.svg';
 import { layout, colors, font } from '@dagdag/common/theme';
 import PhotoUser from '@assets/icons/photo-user.svg';
 import { IPublicDriver, IUser } from '../types';
+import { RoundBottom } from './RoundBottom';
+import { Button } from './Button';
 
 interface IRating {
   style?: StyleProp<ViewStyle>;

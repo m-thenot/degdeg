@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginTop: layout.marginTop + 15,
+    marginTop:
+      Platform.OS === 'ios' ? layout.marginTop + 15 : layout.marginTop + 35,
   },
   title: {
     fontSize: font.fontSize4,
