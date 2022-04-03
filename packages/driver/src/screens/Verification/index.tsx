@@ -59,10 +59,8 @@ const Verification: React.FC<
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
-        keyboardVerticalOffset={
-          Platform.OS === 'ios' ? headerHeight + 5 : -headerHeight
-        }
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight + 5 : -50}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
         <View style={styles.main}>
           <Text style={styles.title}>
             Saisissez le code reçu à votre numéro de téléphone

@@ -72,7 +72,7 @@ const SignInWithPhoneNumber: React.FC<
         <Text style={styles.text}>
           Si vous continuez, nous vous enverrons un code de vérification pour
           nous assurer que vous êtes bien réel. Des frais de messagerie SMS et
-          de transfert de donner peuvent s'appliquer.
+          de transfert de données peuvent s'appliquer.
         </Text>
         <Button
           text="Suivant"

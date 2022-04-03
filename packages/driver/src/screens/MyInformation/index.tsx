@@ -59,7 +59,7 @@ const MyInformation: React.FC<
     Object.keys(errors).length === 0 && errors.constructor === Object,
   );
 
-  const [VehicleType, setVehicleType] = useState<null | VehicleType>(
+  const [carType, setCarType] = useState<null | VehicleType>(
     user?.car?.type || null,
   );
 
@@ -78,7 +78,7 @@ const MyInformation: React.FC<
 
   const onSubmit = async (data: IData) => {
     if (!hasError) {
-      await updateDriver({ car: { ...data, type: VehicleType } });
+      await updateDriver({ car: { ...data, type: carType } });
       DGToast.show(ToastTypes.DG_SUCCESS, {
         message:
           'Les données de votre véhicule ont été mise à jour avec succès !',
@@ -141,9 +141,9 @@ const MyInformation: React.FC<
             <Text style={styles.label}>Classe de véhicule</Text>
 
             <RNPickerSelect
-              onValueChange={value => setVehicleType(value)}
+              onValueChange={value => setCarType(value)}
               placeholder={
-                VehicleType
+                carType
                   ? {}
                   : {
                       label: 'sélectionner',
@@ -151,22 +151,26 @@ const MyInformation: React.FC<
                       color: colors.grey3,
                     }
               }
-              value={VehicleType}
+              value={carType}
               style={{
                 viewContainer: styles.select,
                 placeholder: styles.placeholder,
                 inputIOS: styles.selectValue,
+                inputAndroid: styles.selectValue,
               }}
+              useNativeAndroidPickerStyle={false}
+              fixAndroidTouchableBug
               items={carsTypes}
             />
           </View>
+
           {hasError && (
             <Text style={[globalStyles.error, styles.error]}>
               {errors[Object.keys(errors)[0]]?.message}
             </Text>
           )}
           <Button
-            disabled={!isDirty}
+            disabled={!isDirty && carType === (user?.car?.type || null)}
             textStyle={styles.buttonText}
             text="Sauvegarder"
             style={styles.button}
@@ -226,10 +230,13 @@ const styles = StyleSheet.create({
   select: {
     alignItems: 'center',
     justifyContent: 'center',
+    color: colors.black,
+    backgroundColor: colors.white,
   },
   placeholder: {
     fontStyle: 'italic',
     fontSize: font.fontSize2,
+    flex: 1,
   },
   selectValue: {
     fontSize: font.fontSize2,

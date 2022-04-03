@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { requestUserPermission, saveTokenToDatabase } from '@services/driver';
 import messaging, {
   FirebaseMessagingTypes,
@@ -60,15 +60,29 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
       }
     };
 
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
+    const unsubscribeMessage = messaging().onMessage(async remoteMessage => {
       takeOrder(remoteMessage);
     });
 
+    // works only on android
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-      takeOrder(remoteMessage);
+      if (Platform.OS === 'android') {
+        takeOrder(remoteMessage);
+      }
     });
 
-    return unsubscribe;
+    const unsubscribeOnNotificationOpened = messaging().onNotificationOpenedApp(
+      async remoteMessage => {
+        if (Platform.OS === 'ios') {
+          takeOrder(remoteMessage);
+        }
+      },
+    );
+
+    return () => {
+      unsubscribeMessage();
+      unsubscribeOnNotificationOpened();
+    };
   }, []);
 
   useEffect(() => {

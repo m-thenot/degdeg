@@ -65,8 +65,10 @@ const Wallet: React.FC<
 
     weekdays.map((day, index) => {
       const ordersOfTheDay = ordersByWeekdays.filter(
-        order => order.departureAt === startOfWeekDate.getDate() + index,
+        order =>
+          order.departureAt === addDays(startOfWeekDate, index).getDate(),
       );
+
       const height =
         ordersOfTheDay.length > 0
           ? ordersOfTheDay.reduce((a, b) => a + b?.price, 10)
