@@ -12,6 +12,7 @@ import SearchForDriver from './SearchForDriver';
 import WaitingDriver from './WaitingDriver';
 import OnTrip from './OnTrip';
 import TripEnded from './TripEnded';
+import CancelByDriver from './CancelByDriver';
 
 const marginBottomMap = {
   [OrderStatus.NEW]: 220,
@@ -56,6 +57,8 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
         return <OnTrip />;
       case OrderStatus.FINISHED:
         return <TripEnded />;
+      case OrderStatus.CANCELED_BY_DRIVER:
+        return <CancelByDriver />;
       default:
         return null;
     }

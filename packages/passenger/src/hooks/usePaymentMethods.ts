@@ -5,6 +5,7 @@ import { useState } from 'react';
 import useFirebaseAuthentication from './useFirebaseAuthentification';
 import { PAYMENT_TYPE } from '@dagdag/common/types';
 import { Logger } from '@dagdag/common/utils';
+import DGToast, { ToastTypes } from '@utils/toast';
 
 const usePaymentMethods = () => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
@@ -36,6 +37,11 @@ const usePaymentMethods = () => {
       setIsLoading(false);
     } catch (e) {
       Logger.error(e);
+      setIsLoading(false);
+      DGToast.show(ToastTypes.DG_ERROR, {
+        message:
+          "Une erreur innattendue s'est produite. Veuillez réessayer plus tard.",
+      });
     }
   };
 

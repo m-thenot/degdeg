@@ -1,6 +1,6 @@
 import { Button, RoundBottom } from '@dagdag/common/components';
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, Pressable } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import Car from './Car';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { vehicleState } from '@stores/vehicle.atom';
@@ -25,12 +25,11 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import analytics from '@react-native-firebase/analytics';
-import { CREDIT_CARDS } from '@resources/images';
-import CashIcon from '@dagdag/common/assets/icons/cash.svg';
 import PaymentMethodsModal from './PaymentMethodsModal';
 import { useVehicles } from '@context/vehicles';
 import { proceedToPayment } from '@services/checkout';
 import DGToast, { ToastTypes } from '@utils/toast';
+import DefaultPaymentMethod from '@components/DefaultPaymentMethod';
 
 //const snapPoints = [420, '80%'];
 
@@ -183,26 +182,7 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
             </Text>
           </View>
 
-          {user?.defaultPaymentMethod &&
-            (user?.defaultPaymentMethod.type === PAYMENT_TYPE.CREDIT_CARD ? (
-              <Pressable
-                style={styles.card}
-                onPress={() => setIsPaymentModalOpened(true)}>
-                <View style={styles.cardBrand}>
-                  {CREDIT_CARDS[user?.defaultPaymentMethod.brand]}
-                </View>
-                <Text style={styles.cardNumber}>
-                  **** {user?.defaultPaymentMethod.last4}
-                </Text>
-              </Pressable>
-            ) : (
-              <Pressable
-                style={styles.card}
-                onPress={() => setIsPaymentModalOpened(true)}>
-                <CashIcon width={25} height={25} />
-                <Text style={styles.cash}>Espèces</Text>
-              </Pressable>
-            ))}
+          <DefaultPaymentMethod onPress={() => setIsPaymentModalOpened(true)} />
         </View>
         <View style={styles.buttons}>
           <Button
@@ -284,25 +264,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: layout.spacer3,
-  },
-  card: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  cardBrand: {
-    transform: [{ scale: 0.6 }],
-    borderWidth: 1,
-    borderColor: colors.grey1,
-    padding: layout.spacer2,
-  },
-  cardNumber: {
-    fontSize: font.fontSize1_5,
-    color: colors.black,
-  },
-  cash: {
-    color: colors.black,
-    fontSize: font.fontSize1_5,
-    marginLeft: layout.spacer2,
   },
 });

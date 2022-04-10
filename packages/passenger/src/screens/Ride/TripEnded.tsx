@@ -10,8 +10,8 @@ import { useNavigation } from '@react-navigation/core';
 import Rating from '@dagdag/common/components/Rating';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { updateRating } from '@dagdag/common/services';
-import crashlytics from '@react-native-firebase/crashlytics';
 import { Logger } from '@dagdag/common/utils';
+import DefaultPaymentMethod from '@components/DefaultPaymentMethod';
 
 const TripEnded: React.FC = () => {
   const { order } = useOrder();
@@ -66,8 +66,8 @@ const TripEnded: React.FC = () => {
             departureAt={departureAt}
           />
           <View style={styles.payment}>
-            {/* TODO: Add payment method */}
-            <Text style={styles.price}>7€</Text>
+            <DefaultPaymentMethod />
+            <Text style={styles.price}>{order?.price} DJF</Text>
           </View>
         </View>
         <Shape style={styles.shape} width="100%" />

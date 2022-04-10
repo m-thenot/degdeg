@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { Text, StyleSheet, View, Pressable } from 'react-native';
+import { Text, StyleSheet, View, Pressable, ScrollView } from 'react-native';
 import { BackHeader } from '@dagdag/common/components';
 import { border, colors, font, layout } from '@dagdag/common/theme';
 import ArrowIcon from '@dagdag/common/assets/icons/left-arrow.svg';
@@ -69,10 +69,9 @@ const Wallet: React.FC<
           order.departureAt === addDays(startOfWeekDate, index).getDate(),
       );
 
-      const height =
-        ordersOfTheDay.length > 0
-          ? ordersOfTheDay.reduce((a, b) => a + b?.price, 10)
-          : 5;
+      const dayIncomes = ordersOfTheDay.reduce((a, b) => a + b?.price, 10);
+
+      const height = ordersOfTheDay.length > 0 ? dayIncomes / 200 : 5;
 
       ret.push(
         <Pressable
@@ -89,7 +88,7 @@ const Wallet: React.FC<
           {index === activeDay && (
             <View style={styles.dayPriceContainer}>
               <View style={styles.dayPrice}>
-                <Text>{ordersOfTheDay.length > 0 ? height : 0} DJF</Text>
+                <Text>{ordersOfTheDay.length > 0 ? dayIncomes : 0} DJF</Text>
               </View>
               <View style={styles.line} />
             </View>
@@ -102,66 +101,75 @@ const Wallet: React.FC<
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.date}>
-            {format(startOfWeekDate, 'MMM', { locale: fr })}{' '}
-            {startOfWeekDate.getDate()}-{addDays(startOfWeekDate, 7).getDate()}
-          </Text>
-          <View style={styles.navigation}>
-            <TouchableOpacity
-              style={styles.arrowButton}
-              onPress={() => setCurrentDate(subDays(currentDate, 7).getTime())}>
-              <ArrowIcon width={15} height={15} />
-            </TouchableOpacity>
-            <Text style={styles.total}>
-              {orders.length > 0 ? orders.reduce((a, b) => a + b?.price, 0) : 0}{' '}
-              DJF
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.date}>
+              {format(startOfWeekDate, 'MMM', { locale: fr })}{' '}
+              {startOfWeekDate.getDate()}-
+              {addDays(startOfWeekDate, 7).getDate()}
             </Text>
-            <TouchableOpacity
-              style={styles.arrowButton}
-              disabled={isLastWeek}
-              onPress={() => setCurrentDate(addDays(currentDate, 7).getTime())}>
-              <ArrowIcon
-                width={15}
-                height={15}
-                opacity={isLastWeek ? 0.3 : 1}
-                style={[styles.arrowRight]}
-              />
-            </TouchableOpacity>
+            <View style={styles.navigation}>
+              <TouchableOpacity
+                style={styles.arrowButton}
+                onPress={() =>
+                  setCurrentDate(subDays(currentDate, 7).getTime())
+                }>
+                <ArrowIcon width={15} height={15} />
+              </TouchableOpacity>
+              <Text style={styles.total}>
+                {orders.length > 0
+                  ? orders.reduce((a, b) => a + b?.price, 0)
+                  : 0}{' '}
+                DJF
+              </Text>
+              <TouchableOpacity
+                style={styles.arrowButton}
+                disabled={isLastWeek}
+                onPress={() =>
+                  setCurrentDate(addDays(currentDate, 7).getTime())
+                }>
+                <ArrowIcon
+                  width={15}
+                  height={15}
+                  opacity={isLastWeek ? 0.3 : 1}
+                  style={[styles.arrowRight]}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.graph}>{renderBars()}</View>
+          <View style={styles.separator} />
+          <View style={styles.footer}>
+            <View>
+              <Text style={styles.metaLabel}>Courses</Text>
+              <Text style={styles.metaValue}>{orders.length}</Text>
+            </View>
+            <View>
+              <Text style={styles.metaLabel}>Temps en course</Text>
+              <Text style={styles.metaValue}>
+                {orders.length > 0
+                  ? Math.round(
+                      orders.reduce((a, b) => a + b?.metadataRoute.duration, 0),
+                    )
+                  : 0}{' '}
+                min
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.metaLabel}>Distance</Text>
+              <Text style={styles.metaValue}>
+                {orders.length > 0
+                  ? Math.round(
+                      orders.reduce((a, b) => a + b?.metadataRoute.distance, 0),
+                    )
+                  : 0}{' '}
+                km
+              </Text>
+            </View>
           </View>
         </View>
-        <View style={styles.graph}>{renderBars()}</View>
-        <View style={styles.separator} />
-        <View style={styles.footer}>
-          <View>
-            <Text style={styles.metaLabel}>Courses</Text>
-            <Text style={styles.metaValue}>{orders.length}</Text>
-          </View>
-          <View>
-            <Text style={styles.metaLabel}>Temps en course</Text>
-            <Text style={styles.metaValue}>
-              {orders.length > 0
-                ? Math.round(
-                    orders.reduce((a, b) => a + b?.metadataRoute.duration, 0),
-                  )
-                : 0}{' '}
-              min
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.metaLabel}>Distance</Text>
-            <Text style={styles.metaValue}>
-              {orders.length > 0
-                ? Math.round(
-                    orders.reduce((a, b) => a + b?.metadataRoute.distance, 0),
-                  )
-                : 0}{' '}
-              km
-            </Text>
-          </View>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -172,14 +180,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: layout.marginHorizontal,
     paddingTop: layout.spacer9,
+  },
+  scrollContainer: {
+    flex: 1,
+    paddingHorizontal: layout.marginHorizontal,
+    backgroundColor: colors.white,
   },
   content: {
     backgroundColor: colors.white,
     borderRadius: border.radius4,
     paddingHorizontal: layout.spacer3,
     paddingVertical: layout.spacer4,
+    marginBottom: layout.spacer4,
     shadowColor: colors.grey3,
     shadowOffset: {
       width: 0,

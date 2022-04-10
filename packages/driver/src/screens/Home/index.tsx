@@ -23,6 +23,7 @@ import InProgress from './InProgress';
 import Finished from './Finished';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import OrderAlreadyTakenModal from '@components/OrderAlreadyTakenModal';
+import CancelByCustomer from './CancelByCustomer';
 
 const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
   navigation,
@@ -117,6 +118,8 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
         return <InProgress />;
       case OrderStatus.FINISHED:
         return <Finished />;
+      case OrderStatus.CANCELED_BY_CUSTOMER:
+        return <CancelByCustomer />;
       default:
         return null;
     }

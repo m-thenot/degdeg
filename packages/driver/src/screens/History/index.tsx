@@ -15,7 +15,7 @@ import CarIcon from '@assets/icons/car.svg';
 import MoneyIcon from '@assets/icons/money.svg';
 import { getOrdersByDate } from '@services/order';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
-import { IOrder } from '@dagdag/common/types';
+import { IOrder, OrderStatus } from '@dagdag/common/types';
 import OrdersHistory from '@dagdag/common/components/OrdersHistory';
 
 const History: React.FC<
@@ -69,6 +69,12 @@ const History: React.FC<
     getOrders();
   }, [currentDate]);
 
+  const nonCanceledOrders = orders?.filter(
+    order =>
+      order.status !== OrderStatus.CANCELED_BY_CUSTOMER &&
+      order.status !== OrderStatus.CANCELED_BY_DRIVER,
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -102,14 +108,14 @@ const History: React.FC<
         ))}
       </ScrollView>
 
-      {orders ? (
+      {nonCanceledOrders && orders ? (
         <>
           <View style={styles.stats}>
             <View style={styles.stat}>
               <CarIcon width={35} height={35} />
               <View style={styles.textStat}>
                 <Text style={styles.label}>Courses</Text>
-                <Text style={styles.number}>{orders.length}</Text>
+                <Text style={styles.number}>{nonCanceledOrders.length}</Text>
               </View>
             </View>
             <View style={styles.stat}>
@@ -117,8 +123,8 @@ const History: React.FC<
               <View style={styles.textStat}>
                 <Text style={styles.label}>Gains</Text>
                 <Text style={styles.number}>
-                  {orders.length > 0
-                    ? orders.reduce((a, b) => a + b?.price, 0)
+                  {nonCanceledOrders.length > 0
+                    ? nonCanceledOrders.reduce((a, b) => a + b?.price, 0)
                     : 0}{' '}
                   DJF
                 </Text>
@@ -197,6 +203,7 @@ const styles = StyleSheet.create({
     marginLeft: layout.spacer4,
   },
   scrollView: {
+    minHeight: 54,
     maxHeight: 54,
     marginBottom: layout.spacer3,
   },

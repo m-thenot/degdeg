@@ -52,7 +52,7 @@ const OrdersHistory: React.FC<IOrdersHistoryProps> = ({
 
             <Text style={styles.price}>
               {order.status === OrderStatus.FINISHED || hasPriceDisplayed ? (
-                `${order.price} €`
+                `${order.price} DJF`
               ) : order.status.startsWith('CANCEL') ? (
                 <Text style={styles.canceled}>ANNULÉ</Text>
               ) : (
