@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as functions from 'firebase-functions';
 import * as geofirestore from 'geofirestore';
 import * as admin from 'firebase-admin';
@@ -14,6 +15,21 @@ import { IOrder } from './types/order';
 import { IEmail } from './types/email';
 import { sendMessages } from './services/sendMessages';
 import nodemailer = require('nodemailer');
+import { google } from 'googleapis';
+
+const CLIENT_EMAIL = process.env.CLIENT_EMAIL;
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+
+const OAuth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI,
+);
+
+OAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
@@ -119,29 +135,42 @@ export const generateCars = functions.region(REGION).https.onCall(data => {
 /**
  * SendEmail to DagDag Support
  */
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'dagdag.contact@gmail.com',
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
 
-exports.sendEmail = functions.region(REGION).https.onCall(data => {
+exports.sendEmail = functions.region(REGION).https.onCall(async data => {
   const email: IEmail = data.email;
 
-  const mailOptions = {
-    from: 'Support <dagdag.contact@gmail.com>',
-    to: 'dagdag.contact@gmail.com',
-    subject: `[SUPPORT] Message de ${email.firstName} (uid: ${email.uid}) `,
-    text: email.from + '\n' + email.userType + ' \n\n' + email.message,
-  };
+  try {
+    const accessToken = await OAuth2Client.getAccessToken();
 
-  transporter.sendMail(mailOptions, error => {
-    if (error) {
-      throw new functions.https.HttpsError('unknown', error.message);
-    }
-  });
+    const transporter = nodemailer.createTransport({
+      // @ts-ignore
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: CLIENT_EMAIL,
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+
+    const mailOptions = {
+      from: 'Support <dagdag.contact@gmail.com>',
+      to: 'dagdag.contact@gmail.com',
+      subject: `[SUPPORT] Message de ${email.firstName} (uid: ${email.uid}) `,
+      text: email.from + '\n' + email.userType + ' \n\n' + email.message,
+    };
+
+    transporter.sendMail(mailOptions, error => {
+      if (error) {
+        throw new functions.https.HttpsError('unknown', error.message);
+      }
+    });
+  } catch (error) {
+    functions.logger.error(error);
+    throw new functions.https.HttpsError('unknown', 'EMAIL_ERROR');
+  }
 
   return { success: true };
 });
