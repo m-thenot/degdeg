@@ -59,7 +59,6 @@ const OrderProvider: React.FC = ({ children }) => {
   }, [orderUid]);
 
   const resetOrder = async () => {
-    console.log('reset');
     setOrder(null);
     setOrderUid(undefined);
     await removeData('currentOrder');

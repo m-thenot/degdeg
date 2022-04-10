@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
-import { colors, layout } from '@dagdag/common/theme';
+import { colors, font, layout } from '@dagdag/common/theme';
 import { BackHeader, Tabs } from '@dagdag/common/components';
 import {
   SafeAreaView,
@@ -37,10 +37,10 @@ const MyRides: React.FC<
   const { user } = useFirebaseAuthentication();
   const [activeTab, setActiveTab] = useState<TABS | string>(TABS.HISTORY);
 
-  const ollOrders =
-    orders?.filter(order => order.departureAt < Date.now()) || [];
-  const upcomingOrders =
-    orders?.filter(order => order.departureAt > Date.now()) || [];
+  const ordersToDisplay =
+    activeTab === TABS.UPCOMING
+      ? orders?.filter(order => order.departureAt > Date.now())
+      : orders?.filter(order => order.departureAt < Date.now());
 
   useEffect(() => {
     navigation.setOptions({
@@ -69,13 +69,24 @@ const MyRides: React.FC<
       <View style={styles.tabs}>
         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={tabs} />
       </View>
-      {orders ? (
-        <OrdersHistory
-          orders={activeTab === TABS.UPCOMING ? upcomingOrders : ollOrders}
-          isPassengerHistory
-          hasStatusDisplayed={activeTab === TABS.HISTORY}
-          sortByMostRecent={activeTab === TABS.HISTORY}
-        />
+
+      {ordersToDisplay ? (
+        ordersToDisplay.length > 0 ? (
+          <OrdersHistory
+            orders={ordersToDisplay}
+            isPassengerHistory
+            hasStatusDisplayed={activeTab === TABS.HISTORY}
+            sortByMostRecent={activeTab === TABS.HISTORY}
+          />
+        ) : (
+          <View style={styles.noRidesContainer}>
+            <Text style={styles.noRides}>
+              {activeTab === TABS.HISTORY
+                ? "Vous n'avez réservez aucune course pour le moment."
+                : 'Vous n’avez aucune course planifiée.'}
+            </Text>
+          </View>
+        )
       ) : (
         <ActivityIndicator
           size="large"
@@ -103,5 +114,15 @@ const styles = StyleSheet.create({
   tabs: {
     marginHorizontal: layout.marginHorizontal,
     paddingBottom: layout.spacer2,
+  },
+  noRides: {
+    textAlign: 'center',
+    fontSize: font.fontSize2,
+    color: colors.black,
+  },
+  noRidesContainer: {
+    justifyContent: 'center',
+    paddingHorizontal: layout.marginHorizontal,
+    flex: 0.8,
   },
 });
