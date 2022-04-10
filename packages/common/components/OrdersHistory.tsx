@@ -8,7 +8,11 @@ import {
 } from 'react-native';
 import { border, colors, font, layout } from '../theme';
 import { IOrder, OrderStatus } from '../types';
-import { getFormateDate, sortByDepartureAtDesc } from '../utils';
+import {
+  getFormateDate,
+  sortByDepartureAtAsc,
+  sortByDepartureAtDesc,
+} from '../utils';
 import { RouteSummary } from './RouteSummary';
 
 interface IOrdersHistoryProps {
@@ -16,7 +20,10 @@ interface IOrdersHistoryProps {
   isPassengerHistory?: boolean;
   hasPriceDisplayed?: boolean;
   hasDateDisplayed?: boolean;
+  hasStatusDisplayed?: boolean;
+  scrollEnabled?: boolean;
   onPress?: (uid: string) => void;
+  sortByMostRecent?: boolean;
 }
 
 const OrdersHistory: React.FC<IOrdersHistoryProps> = ({
@@ -24,13 +31,21 @@ const OrdersHistory: React.FC<IOrdersHistoryProps> = ({
   isPassengerHistory = false,
   hasPriceDisplayed = false,
   hasDateDisplayed = false,
+  hasStatusDisplayed = true,
+  scrollEnabled = true,
+  sortByMostRecent = true,
   onPress,
 }) => {
   const styles = createStyles();
-  const sortOrders = orders.sort(sortByDepartureAtDesc);
+  const sortOrders = orders.sort(
+    sortByMostRecent ? sortByDepartureAtDesc : sortByDepartureAtAsc,
+  );
 
   return (
-    <ScrollView style={styles.jobs} contentContainerStyle={styles.jobsContent}>
+    <ScrollView
+      scrollEnabled={scrollEnabled}
+      style={styles.jobs}
+      contentContainerStyle={styles.jobsContent}>
       {sortOrders.map(order => (
         <TouchableOpacity
           style={styles.job}
@@ -51,13 +66,15 @@ const OrdersHistory: React.FC<IOrdersHistoryProps> = ({
             )}
 
             <Text style={styles.price}>
-              {order.status === OrderStatus.FINISHED || hasPriceDisplayed ? (
-                `${order.price} DJF`
-              ) : order.status.startsWith('CANCEL') ? (
-                <Text style={styles.canceled}>ANNULÉ</Text>
-              ) : (
-                <Text style={styles.inprogress}>EN COURS</Text>
-              )}
+              {order.status === OrderStatus.FINISHED || hasPriceDisplayed
+                ? `${order.price} DJF`
+                : order.status.startsWith('CANCEL')
+                ? hasStatusDisplayed && (
+                    <Text style={styles.canceled}>ANNULÉ</Text>
+                  )
+                : hasStatusDisplayed && (
+                    <Text style={styles.inprogress}>EN COURS</Text>
+                  )}
             </Text>
           </View>
           <View style={styles.separator} />
@@ -121,7 +138,7 @@ const createStyles = () => {
       fontWeight: 'bold',
     },
     jobs: {
-      paddingHorizontal: layout.spacer2,
+      paddingHorizontal: layout.marginHorizontal,
     },
     canceled: {
       color: colors.error,

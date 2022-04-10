@@ -139,14 +139,6 @@ const topStyles = (insetTop: number): StyleProp<ViewStyle> => ({
   top: Platform.OS === 'ios' ? headerHeight + insetTop : headerHeight,
   width: '100%',
   paddingHorizontal: layout.spacer5,
-  shadowColor: colors.black,
-  shadowOffset: {
-    width: 0,
-    height: 8,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
-  elevation: 5,
 });
 
 const styles = StyleSheet.create({

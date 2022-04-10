@@ -65,6 +65,7 @@ const SelectDate: React.FC<
       </View>
       <DatePicker
         date={date}
+        minimumDate={new Date()}
         onDateChange={setDate}
         minuteInterval={5}
         locale="fr"

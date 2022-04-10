@@ -4,19 +4,10 @@ import {
 } from '@internalTypes/navigation';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import React, { useEffect, useState } from 'react';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-import {
-  Text,
-  StyleSheet,
-  View,
-  Pressable,
-  ActivityIndicator,
-} from 'react-native';
-import { CrossHeaderWithLabel } from '@dagdag/common/components';
-import { border, colors, font, layout } from '@dagdag/common/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, StyleSheet, View, ActivityIndicator } from 'react-native';
+import { CrossHeaderWithLabel, Tabs } from '@dagdag/common/components';
+import { colors, font, layout } from '@dagdag/common/theme';
 import { getMyPrebookOrders, getPrebookOrders } from '@services/order';
 import { IOrder } from '@dagdag/common/types';
 import OrdersHistory from '@dagdag/common/components/OrdersHistory';
@@ -29,6 +20,17 @@ enum TABS {
   MY_RIDES = 'my_rides',
 }
 
+const tabs = [
+  {
+    value: TABS.ALL,
+    label: 'Tout',
+  },
+  {
+    value: TABS.MY_RIDES,
+    label: 'Mes courses',
+  },
+];
+
 type PrebookslNavigationProps = CompositeScreenProps<
   DrawerScreenProps<DrawerNavigatorParamList, 'prebooks'>,
   StackScreenProps<PrebooksStackParamList, 'list'>
@@ -38,7 +40,6 @@ const Prebooks: React.FC<PrebookslNavigationProps> = ({
   navigation,
   route,
 }) => {
-  const insets = useSafeAreaInsets();
   const { user } = useFirebaseAuthentication();
   const [activeTab, setActiveTab] = useState<TABS | string>(
     route?.params?.activeTab || TABS.ALL,
@@ -68,40 +69,17 @@ const Prebooks: React.FC<PrebookslNavigationProps> = ({
 
   return (
     <SafeAreaView style={[styles.container]}>
-      <CrossHeaderWithLabel navigation={navigation} title="Réservations" />
-      <View style={styles.tabs}>
-        <Pressable
-          onPress={() => setActiveTab(TABS.ALL)}
-          style={[
-            styles.tab,
-            styles.tabLeft,
-            activeTab === TABS.ALL && styles.activeTab,
-          ]}>
-          <Text
-            style={[
-              styles.label,
-              activeTab === TABS.ALL && styles.activeLabel,
-            ]}>
-            Tout
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setActiveTab(TABS.MY_RIDES)}
-          style={[
-            styles.tab,
-            styles.tabRight,
-            activeTab === TABS.MY_RIDES && styles.activeTab,
-          ]}>
-          <Text
-            style={[
-              styles.label,
-              activeTab === TABS.MY_RIDES && styles.activeLabel,
-            ]}>
-            Mes courses
-          </Text>
-        </Pressable>
-      </View>
-
+      <CrossHeaderWithLabel
+        navigation={navigation}
+        title="Réservations"
+        hasPaddingHorizontal
+      />
+      <Tabs
+        activeTab={activeTab}
+        tabs={tabs}
+        setActiveTab={setActiveTab}
+        customStyle={styles.margin}
+      />
       {isLoading ? (
         <ActivityIndicator
           size="large"
@@ -134,40 +112,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: layout.marginHorizontal,
     paddingTop: layout.spacer2,
   },
-  tabs: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderRadius: border.radius2,
-    marginTop: layout.spacer2,
-  },
-  tab: {
-    width: '50%',
-    paddingVertical: layout.spacer3,
-    borderWidth: 1,
-    borderColor: colors.primary,
-  },
-  tabLeft: {
-    borderTopLeftRadius: border.radius2,
-    borderBottomLeftRadius: border.radius2,
-  },
-  tabRight: {
-    borderTopRightRadius: border.radius2,
-    borderBottomRightRadius: border.radius2,
-  },
-  label: {
-    textAlign: 'center',
-    fontSize: font.fontSize1_5,
-    textTransform: 'uppercase',
-    fontWeight: '700',
-  },
-  activeTab: {
-    backgroundColor: colors.primary,
-  },
-  activeLabel: {
-    color: colors.white,
+  margin: {
+    marginHorizontal: layout.marginHorizontal,
   },
   loader: {
     flex: 0.8,
@@ -181,6 +129,7 @@ const styles = StyleSheet.create({
   },
   noRidesContainer: {
     justifyContent: 'center',
+    paddingHorizontal: layout.marginHorizontal,
     flex: 0.8,
   },
 });

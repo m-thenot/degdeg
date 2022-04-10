@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -11,7 +11,7 @@ import Verification from '@screens/Verification/index';
 import MainNavigation from '@navigation/MainNavigation';
 import Information from '@screens/Information';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
-import SplashScreen from '@screens/SplashScreen';
+import SplashScreen from 'react-native-splash-screen';
 import { colors } from '@dagdag/common/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import analytics from '@react-native-firebase/analytics';
@@ -26,9 +26,12 @@ const AuthNavigation: React.FC = () => {
   const routeNameRef = useRef<string>();
   const navigationRef = useNavigationContainerRef<RootParamList>();
 
-  if (isLoading || orderUid === null) {
-    return <SplashScreen />;
-  }
+  useEffect(() => {
+    if (!isLoading && orderUid !== null) {
+      SplashScreen.hide();
+    }
+  }, [isLoading, orderUid]);
+
   return (
     <NavigationContainer
       ref={navigationRef}

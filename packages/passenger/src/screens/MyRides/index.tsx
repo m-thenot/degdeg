@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import { colors, layout } from '@dagdag/common/theme';
-import { BackHeader } from '@dagdag/common/components';
+import { BackHeader, Tabs } from '@dagdag/common/components';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -13,12 +13,34 @@ import { IOrder } from '@dagdag/common/types';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import OrdersHistory from '@dagdag/common/components/OrdersHistory';
 
+enum TABS {
+  HISTORY = 'history',
+  UPCOMING = 'upcoming',
+}
+
+const tabs = [
+  {
+    value: TABS.HISTORY,
+    label: 'Historique',
+  },
+  {
+    value: TABS.UPCOMING,
+    label: 'À venir',
+  },
+];
+
 const MyRides: React.FC<
   DrawerScreenProps<DrawerNavigatorParamList, 'myRides'>
 > = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [orders, setOrders] = useState<IOrder[] | null>(null);
   const { user } = useFirebaseAuthentication();
+  const [activeTab, setActiveTab] = useState<TABS | string>(TABS.HISTORY);
+
+  const ollOrders =
+    orders?.filter(order => order.departureAt < Date.now()) || [];
+  const upcomingOrders =
+    orders?.filter(order => order.departureAt > Date.now()) || [];
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,8 +66,16 @@ const MyRides: React.FC<
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.tabs}>
+        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={tabs} />
+      </View>
       {orders ? (
-        <OrdersHistory orders={orders} isPassengerHistory />
+        <OrdersHistory
+          orders={activeTab === TABS.UPCOMING ? upcomingOrders : ollOrders}
+          isPassengerHistory
+          hasStatusDisplayed={activeTab === TABS.HISTORY}
+          sortByMostRecent={activeTab === TABS.HISTORY}
+        />
       ) : (
         <ActivityIndicator
           size="large"
@@ -63,12 +93,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: layout.marginHorizontal,
-    paddingTop: layout.spacer9,
+    paddingTop: layout.spacer8,
   },
   loader: {
     flex: 1,
     alignSelf: 'center',
     marginTop: -100,
+  },
+  tabs: {
+    marginHorizontal: layout.marginHorizontal,
+    paddingBottom: layout.spacer2,
   },
 });

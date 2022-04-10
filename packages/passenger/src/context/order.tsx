@@ -10,6 +10,7 @@ import {
 
 interface IContextProps {
   order: IOrder | null;
+  resetOrder: () => void;
   setOrderUid: React.Dispatch<React.SetStateAction<string | null | undefined>>;
   orderUid: string | null | undefined;
 }
@@ -57,8 +58,15 @@ const OrderProvider: React.FC = ({ children }) => {
     }
   }, [orderUid]);
 
+  const resetOrder = async () => {
+    console.log('reset');
+    setOrder(null);
+    setOrderUid(undefined);
+    await removeData('currentOrder');
+  };
+
   return (
-    <OrderContext.Provider value={{ order, setOrderUid, orderUid }}>
+    <OrderContext.Provider value={{ order, resetOrder, setOrderUid, orderUid }}>
       {children}
     </OrderContext.Provider>
   );

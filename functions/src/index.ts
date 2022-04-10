@@ -11,7 +11,7 @@ admin.initializeApp();
 import db from './utils/db';
 import { generateRandomLocation } from './utils/generateRandomLocation';
 import { isApiError, isStripeError } from './utils/error';
-import { IOrder } from './types/order';
+import { IOrder, RideType } from './types/order';
 import { IEmail } from './types/email';
 import { sendMessages } from './services/sendMessages';
 import nodemailer = require('nodemailer');
@@ -52,6 +52,13 @@ export const createOrder = functions.region(REGION).https.onCall(async data => {
   const orderUid = uuidv4();
   order.uid = orderUid;
   db.orders.doc(orderUid).set(order);
+
+  // Do not send notifications if this is a prebook
+  if (order.rideType === RideType.LATER) {
+    return {
+      orderUid,
+    };
+  }
 
   // Notify drivers for this order within a radius of 4km
   const geocollection = GeoFirestore.collection(CARS_COLLECTION);

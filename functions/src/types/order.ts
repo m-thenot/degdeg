@@ -10,7 +10,7 @@ enum OrderStatus {
   CANCELED_BY_DRIVER = 'CANCELED_BY_DRIVER',
 }
 
-enum RideType {
+export enum RideType {
   NOW = 'NOW',
   LATER = 'LATER',
 }

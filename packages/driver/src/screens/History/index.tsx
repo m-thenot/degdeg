@@ -80,16 +80,17 @@ const History: React.FC<
       <ScrollView
         horizontal
         style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContainer}
         ref={scrollViewRef}
         onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}>
-        {getLast15Days().map(date => (
+        {getLast15Days().map((date, index) => (
           <TouchableOpacity
             style={[
               styles.date,
               currentDate.getDate() === date.day && styles.active,
             ]}
             onPress={() => setCurrentDate(date.completeDate)}
-            key={date.date}>
+            key={index}>
             <Text
               style={[
                 styles.dayweek,
@@ -151,7 +152,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: layout.marginHorizontal,
     paddingTop: layout.spacer9,
   },
   date: {
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: layout.spacer2,
+    paddingHorizontal: layout.marginHorizontal,
   },
   stat: {
     backgroundColor: colors.grey4,
@@ -206,6 +207,9 @@ const styles = StyleSheet.create({
     minHeight: 54,
     maxHeight: 54,
     marginBottom: layout.spacer3,
+  },
+  scrollViewContainer: {
+    paddingHorizontal: layout.marginHorizontal,
   },
   loader: {
     flex: 1,

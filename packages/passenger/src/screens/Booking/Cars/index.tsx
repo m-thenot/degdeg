@@ -101,10 +101,19 @@ const Cars: React.FC<NativeStackScreenProps<BookingStackParamList, 'cars'>> = ({
       };
 
       const createOrderAndNavigate = async () => {
-        const result = await createOrder(order);
-        setOrderUid?.(result.orderUid);
+        try {
+          const result = await createOrder(order);
+          setOrderUid?.(result.orderUid);
+
+          if (result.orderUid && order.rideType === RideType.NOW) {
+            navigation.navigate('order' as any, { screen: 'ride' });
+          } else if (result.orderUid) {
+            navigation.navigate('prebookConfirmation');
+          }
+        } catch (e) {
+          Logger.error(e + order.uid);
+        }
         await analytics().logEvent('new_order');
-        navigation.navigate('order' as any, { screen: 'ride' });
       };
 
       try {

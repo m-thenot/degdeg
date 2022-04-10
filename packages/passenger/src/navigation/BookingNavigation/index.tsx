@@ -10,6 +10,7 @@ import Addresses from '@screens/Booking/Addresses';
 import PickPoint from '@screens/Booking/PickPoint';
 import SelectDate from '@screens/Booking/SelectDate';
 import { DrawerScreenProps } from '@react-navigation/drawer';
+import PrebookConfirmation from '@screens/Booking/PrebookConfirmation';
 
 const BookingStack = createStackNavigator<BookingStackParamList>();
 
@@ -25,6 +26,10 @@ const BookingNavigation: React.FC<
       <BookingStack.Screen name="addresses" component={Addresses} />
       <BookingStack.Screen name="pickPoint" component={PickPoint} />
       <BookingStack.Screen name="cars" component={Cars} />
+      <BookingStack.Screen
+        name="prebookConfirmation"
+        component={PrebookConfirmation}
+      />
       <BookingStack.Screen
         name="selectDate"
         component={SelectDate}

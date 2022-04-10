@@ -16,6 +16,7 @@ export type BookingStackParamList = {
     type: AddressType;
   };
   selectDate: undefined;
+  prebookConfirmation: undefined;
 };
 
 export type RideStackParamList = {
