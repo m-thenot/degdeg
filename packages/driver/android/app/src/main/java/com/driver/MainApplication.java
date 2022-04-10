@@ -1,4 +1,5 @@
 package com.dagdag.driver;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.Application;
 import android.content.Context;
@@ -52,6 +53,7 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
   }
 
   /**
