@@ -11,7 +11,10 @@ import { ToastConfig } from '@utils/toast';
 import { layout } from '@dagdag/common/theme';
 import { FIREBASE_REGION } from '@dagdag/common/constants';
 import { firebase } from '@react-native-firebase/functions';
+import { GOOGLE_MAPS_API_KEY } from '@env';
+import Geocoder from 'react-native-geocoding';
 
+Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'fr' });
 LogBox.ignoreLogs(['Setting a timer']);
 
 if (__DEV__) {

@@ -7,12 +7,11 @@ import {
   Platform,
 } from 'react-native';
 import { BookingStackParamList } from '@internalTypes/navigation';
-import { MenuHeader, RoundBottom } from '@dagdag/common/components';
-import Map from '@components/Map';
+import { MenuHeader, RoundBottom, Map } from '@dagdag/common/components';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   arrivalAddressState,
   currentPositionState,
@@ -26,12 +25,20 @@ import {
 } from 'react-native-safe-area-context';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Logger } from '@dagdag/common/utils';
+import {
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
+  LATITUDE_DELTA,
+  LONGITUDE_DELTA,
+} from '@dagdag/common/constants';
+import { GOOGLE_MAPS_API_KEY } from '@constants/maps';
 
 const Home: React.FC<StackScreenProps<BookingStackParamList, 'home'>> = ({
   navigation,
 }) => {
   const { user } = useFirebaseAuthentication();
-  const setCurrentPosition = useSetRecoilState(currentPositionState);
+  const [currentPosition, setCurrentPosition] =
+    useRecoilState(currentPositionState);
   const setArrivalAddress = useSetRecoilState(arrivalAddressState);
   const insets = useSafeAreaInsets();
 
@@ -78,19 +85,32 @@ const Home: React.FC<StackScreenProps<BookingStackParamList, 'home'>> = ({
         backgroundColor="transparent"
         style={[styles.header, { top: insets.top }]}
       />
-      <Map showsMyLocationButton showsUserLocation customStyle={styles.map} />
+      <Map
+        apiKey={GOOGLE_MAPS_API_KEY}
+        showsMyLocationButton
+        showsUserLocation
+        customStyle={styles.map}
+        region={{
+          latitude: currentPosition?.coords.latitude || INITIAL_LATITUDE,
+          longitude: currentPosition?.coords.longitude || INITIAL_LONGITUDE,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
+      />
       <RoundBottom>
-        <Text style={styles.firstName}>Bonjour {user?.firstName} !</Text>
-        <Text style={styles.title}>Où allez-vous ?</Text>
-        <View style={styles.shadow}>
-          <TouchableHighlight
-            activeOpacity={1}
-            underlayColor={colors.grey4}
-            onPress={() => navigation.navigate('addresses')}
-            style={styles.departure}>
-            <Text style={styles.fakeInput}>Saisir votre destination</Text>
-          </TouchableHighlight>
-        </View>
+        <>
+          <Text style={styles.firstName}>Bonjour {user?.firstName} !</Text>
+          <Text style={styles.title}>Où allez-vous ?</Text>
+          <View style={styles.shadow}>
+            <TouchableHighlight
+              activeOpacity={1}
+              underlayColor={colors.grey4}
+              onPress={() => navigation.navigate('addresses')}
+              style={styles.departure}>
+              <Text style={styles.fakeInput}>Saisir votre destination</Text>
+            </TouchableHighlight>
+          </View>
+        </>
       </RoundBottom>
     </SafeAreaView>
   );

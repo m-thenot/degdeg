@@ -1,5 +1,6 @@
 import { ORDERS_COLLECTION } from '@dagdag/common/constants';
-import { IOrder, OrderStatus, RideType } from '@dagdag/common/types';
+import { getOrder } from '@dagdag/common/services';
+import { OrderStatus, RideType } from '@dagdag/common/types';
 import firestore from '@react-native-firebase/firestore';
 
 export const updateOrderStatus = (orderStatus: OrderStatus, uid: string) => {
@@ -8,13 +9,23 @@ export const updateOrderStatus = (orderStatus: OrderStatus, uid: string) => {
   });
 };
 
-export const acceptOrder = async (driver: any, uid: string) => {
+export const acceptOrder = async (
+  driver: any,
+  uid: string,
+  rideType?: RideType,
+) => {
   const order = await getOrder(uid);
   if (!order.driver && OrderStatus.NEW) {
-    firestore().collection(ORDERS_COLLECTION).doc(uid).update({
-      status: OrderStatus.ACCEPTED,
-      driver,
-    });
+    firestore()
+      .collection(ORDERS_COLLECTION)
+      .doc(uid)
+      .update({
+        status:
+          rideType === RideType.NOW
+            ? OrderStatus.DRIVER_ON_THE_WAY
+            : OrderStatus.ACCEPTED,
+        driver,
+      });
     return false;
   } else {
     return true;
@@ -52,12 +63,4 @@ export const getMyPrebookOrders = async (driverId: string) => {
     .where('status', '==', OrderStatus.ACCEPTED)
     .get();
   return docs.docs;
-};
-
-export const getOrder = async (orderId: string) => {
-  const doc = await firestore()
-    .collection(ORDERS_COLLECTION)
-    .doc(orderId)
-    .get();
-  return doc?.data() as IOrder;
 };

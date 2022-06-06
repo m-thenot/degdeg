@@ -24,7 +24,10 @@
       "**/react-native-dev-menu",
       "**/react-native-svg",
       "**/react-native-reanimated",
-      "@react-native-firebase/functions"
+      "**/@react-native-firebase/functions",
+      "**/@react-native-firebase/firestore",
+      "**/react-native-maps",
+      "**/react-native-maps-directions"
     ]
   }
 }

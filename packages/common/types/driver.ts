@@ -20,4 +20,5 @@ export interface IDriver {
     plate?: string;
     type: VehicleType | null;
   };
+  memberSince: number;
 }

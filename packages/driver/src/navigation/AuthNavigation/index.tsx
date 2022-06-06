@@ -19,10 +19,10 @@ const AuthNavigation: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    if (isLoading) {
+    if (!isLoading) {
       SplashScreen.hide();
     }
-  }, []);
+  }, [isLoading]);
 
   return (
     <NavigationContainer>

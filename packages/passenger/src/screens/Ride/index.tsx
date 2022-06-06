@@ -16,7 +16,7 @@ import CancelByDriver from './CancelByDriver';
 
 const marginBottomMap = {
   [OrderStatus.NEW]: 220,
-  [OrderStatus.ACCEPTED]: 90,
+  [OrderStatus.DRIVER_ON_THE_WAY]: 90,
   [OrderStatus.ON_SPOT]: 90,
   [OrderStatus.IN_PROGRESS]: 120,
 };
@@ -49,7 +49,7 @@ const Ride: React.FC<NativeStackScreenProps<RideStackParamList, 'ride'>> = ({
     switch (status) {
       case OrderStatus.NEW:
         return <SearchForDriver />;
-      case OrderStatus.ACCEPTED:
+      case OrderStatus.DRIVER_ON_THE_WAY:
         return <WaitingDriver />;
       case OrderStatus.ON_SPOT:
         return <WaitingDriver />;

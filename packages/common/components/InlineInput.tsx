@@ -7,9 +7,9 @@ import { colors, font } from '@dagdag/common/theme';
 interface IInlineInputProps extends TextInputProps {
   label: string;
   name: string;
-  control: Control<FieldValues, object>;
+  control?: Control<FieldValues, object>;
   initialValue?: string;
-  rules: any;
+  rules?: any;
 }
 
 export const InlineInput: React.FC<IInlineInputProps> = ({

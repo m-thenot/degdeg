@@ -9,6 +9,7 @@ export enum PAYMENT_TYPE {
 export enum OrderStatus {
   NEW = 'NEW',
   ACCEPTED = 'ACCEPTED',
+  DRIVER_ON_THE_WAY = 'DRIVER_ON_THE_WAY',
   ON_SPOT = 'ON_SPOT',
   IN_PROGRESS = 'IN_PROGRESS',
   FINISHED = 'FINISHED',

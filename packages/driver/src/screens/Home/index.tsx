@@ -107,6 +107,7 @@ const Home: React.FC<DrawerScreenProps<DrawerNavigatorParamList, 'home'>> = ({
       case OrderStatus.NEW:
         return <RideRequest />;
       case OrderStatus.ACCEPTED:
+      case OrderStatus.DRIVER_ON_THE_WAY:
         return currentOrder?.driver?.uid === user?.uid ? (
           <PickUp />
         ) : (

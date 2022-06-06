@@ -8,7 +8,7 @@ import {
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { getOrder, updateOrderStatus } from '@services/order';
+import { updateOrderStatus } from '@services/order';
 import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
@@ -23,6 +23,7 @@ import { isOnlineState } from '@stores/driver.atom';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import { colors, font } from '@dagdag/common/theme';
 import OrderAlreadyTakenModal from '@components/OrderAlreadyTakenModal';
+import { getOrder } from '@dagdag/common/services';
 
 type PrebookDetailNavigationProps = CompositeScreenProps<
   DrawerScreenProps<DrawerNavigatorParamList, 'prebooks'>,
@@ -76,6 +77,7 @@ const PrebookDetail: React.FC<PrebookDetailNavigationProps> = ({
     setOrders(newOrders);
     navigation.popToTop();
     navigation.navigate('home');
+    updateOrderStatus(OrderStatus.DRIVER_ON_THE_WAY, orderId!);
   };
 
   const onPressStart = () => {

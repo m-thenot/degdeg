@@ -4,7 +4,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import { DRIVERS_COLLECTION } from '@dagdag/common/constants';
-import { IDriver } from '@internalTypes/driver';
+import { IDriver } from '@dagdag/common/types';
 
 interface IContextProps {
   user: IDriver | null | FirebaseFirestoreTypes.DocumentData;

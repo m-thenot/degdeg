@@ -24,9 +24,19 @@ export type RideStackParamList = {
   cancelOrder: undefined;
 };
 
+export type MyRidesStackParamList = {
+  innerMyRides: undefined;
+  rideDetails: {
+    orderId: string;
+  };
+  driverDetails: {
+    driverId: string;
+  };
+};
+
 export type DrawerNavigatorParamList = {
   booking: undefined;
-  myRides: undefined;
+  myRides: MyRidesStackParamList;
   payment: undefined;
   help: undefined;
   order: undefined;

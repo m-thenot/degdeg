@@ -59,7 +59,13 @@ const Prebooks: React.FC<PrebookslNavigationProps> = ({
           activeTab === TABS.ALL
             ? await getPrebookOrders()
             : await getMyPrebookOrders(user?.uid);
-        setOrders(orders.map(order => order.data()) as IOrder[]);
+        setOrders(
+          orders
+            .map(order => order.data())
+            .filter(
+              o => o.departureAt > new Date().setHours(0, 0, 0, 0),
+            ) as IOrder[],
+        );
         orders && setIsLoading(false);
       };
 
@@ -91,6 +97,7 @@ const Prebooks: React.FC<PrebookslNavigationProps> = ({
           orders={orders}
           hasPriceDisplayed
           hasDateDisplayed
+          sortByMostRecent={false}
           onPress={uid => navigation.navigate('detail', { orderId: uid })}
         />
       ) : (

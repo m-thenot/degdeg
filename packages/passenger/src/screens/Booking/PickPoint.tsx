@@ -15,9 +15,8 @@ import {
   departureAddressState,
 } from '@stores/address.atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { BackHeader, Button } from '@dagdag/common/components';
+import { BackHeader, Button, Map } from '@dagdag/common/components';
 import { DEPARTURE } from '@constants/address';
-import Map from '@components/Map';
 import { LatLng, Marker } from 'react-native-maps';
 import {
   INITIAL_LATITUDE,
@@ -32,6 +31,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { GOOGLE_MAPS_API_KEY } from '@constants/maps';
 
 interface IDraggablePosition {
   coordinates: LatLng;
@@ -92,6 +92,7 @@ const PickPoint: React.FC<
       />
 
       <Map
+        apiKey={GOOGLE_MAPS_API_KEY}
         showsMyLocationButton
         region={
           draggablePosition?.coordinates && {

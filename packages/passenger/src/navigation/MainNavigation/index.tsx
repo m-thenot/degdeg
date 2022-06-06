@@ -3,7 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from '../CustomDrawerContent';
 import Payment from '@screens/Payment';
 import Help from '@screens/Help';
-import MyRides from '@screens/MyRides';
+import MyRidesNavigation from '../MyRidesNavigation';
 import User from '@screens/User';
 import { DrawerNavigatorParamList } from '@internalTypes/navigation';
 import BookingNavigation from '@navigation/BookingNavigation';
@@ -49,7 +49,11 @@ const MainNavigation: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Drawer.Screen name="user" component={User} />
-      <Drawer.Screen name="myRides" component={MyRides} />
+      <Drawer.Screen
+        name="myRides"
+        component={MyRidesNavigation}
+        options={{ headerShown: false }}
+      />
       <Drawer.Screen name="payment" component={Payment} />
       <Drawer.Screen name="help" component={Help} />
       {__DEV__ && <Drawer.Screen name="dev" component={Dev} />}

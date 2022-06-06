@@ -59,6 +59,7 @@ const createStyles = () => {
       borderColor: 'rgba(151, 173, 182, 0.2)',
       padding: layout.spacer3,
       marginTop: layout.spacer5,
+      backgroundColor: colors.white,
     },
     elements: {
       alignItems: 'center',

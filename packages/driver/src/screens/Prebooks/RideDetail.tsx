@@ -40,7 +40,11 @@ const RideDetail: React.FC<IRideDetailProps> = ({
     delete driver?.email;
     delete driver?.tokens;
     delete driver?.lastName;
-    const orderAlreadyTaken = await acceptOrder(driver, order.uid);
+    const orderAlreadyTaken = await acceptOrder(
+      driver,
+      order.uid,
+      order.rideType,
+    );
 
     if (orderAlreadyTaken) {
       setOrderIsNotAvailable(true);

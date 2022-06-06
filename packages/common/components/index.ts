@@ -11,3 +11,5 @@ export * from './SimpleToast';
 export * from './OrdersHistory';
 export * from './Rating';
 export * from './Tabs';
+export * from './Map';
+export * from './Loader';

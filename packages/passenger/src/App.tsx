@@ -12,6 +12,10 @@ import { firebase } from '@react-native-firebase/functions';
 import { FIREBASE_REGION } from '@dagdag/common/constants';
 import { initStripe } from '@stripe/stripe-react-native';
 import { VehiclesProvider } from '@context/vehicles';
+import { GOOGLE_MAPS_API_KEY } from '@constants/maps';
+import Geocoder from 'react-native-geocoding';
+
+Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'fr' });
 
 LogBox.ignoreLogs(['Setting a timer']);
 

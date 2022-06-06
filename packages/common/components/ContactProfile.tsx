@@ -9,33 +9,46 @@ interface IContactProfileProps {
   firstName: string;
   image?: string;
   rating?: number;
+  car?: string;
+  size?: 'large' | 'small';
 }
 
 export const ContactProfile: React.FC<IContactProfileProps> = ({
   firstName,
   image,
+  car,
   rating,
+  size = 'small',
 }) => {
-  const styles = createStyles();
+  const styles = createStyles(size);
+  const sizeMutliplicator = size === 'large' ? 1.2 : 1;
   return (
     <View style={styles.contact}>
       {image ? (
         <Image
-          width={70}
-          height={70}
+          width={sizeMutliplicator * 70}
+          height={sizeMutliplicator * 70}
           style={styles.image}
           source={{
             uri: image,
           }}
         />
       ) : (
-        <PhotoUser height={70} width={70} />
+        <PhotoUser
+          height={sizeMutliplicator * 70}
+          width={sizeMutliplicator * 70}
+        />
       )}
+
       <View style={styles.contactText}>
         <Text style={styles.name}>{firstName}</Text>
+        {car && <Text style={styles.car}>{car}</Text>}
         {rating && (
           <View style={styles.scoreContainer}>
-            <Start height={13} width={13} />
+            <Start
+              height={sizeMutliplicator * 13}
+              width={sizeMutliplicator * 13}
+            />
             <Text style={styles.score}>{rating}</Text>
           </View>
         )}
@@ -44,7 +57,7 @@ export const ContactProfile: React.FC<IContactProfileProps> = ({
   );
 };
 
-const createStyles = () =>
+const createStyles = (size: string) =>
   StyleSheet.create({
     contact: {
       flexDirection: 'row',
@@ -67,8 +80,12 @@ const createStyles = () =>
       marginTop: layout.spacer1,
     },
     name: {
-      fontSize: font.fontSize2,
+      fontSize: size === 'large' ? font.fontSize3 : font.fontSize2,
       color: colors.black,
       fontWeight: '700',
+    },
+    car: {
+      fontSize: font.fontSize1_5,
+      color: colors.black,
     },
   });

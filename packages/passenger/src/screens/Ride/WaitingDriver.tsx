@@ -11,19 +11,21 @@ import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import CallIcon from '@dagdag/common/assets/icons/call.svg';
 import { callNumber } from '@dagdag/common/utils';
 import { OrderStatus } from '@dagdag/common/types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const snapPoints = [200, 360];
+const snapPoints = [240, 400];
 
 const WaitingDriver: React.FC = () => {
   const { order } = useOrder();
   const { departureAddress, arrivalAddress, departureAt, driver } = order!;
+  const insets = useSafeAreaInsets();
 
   return (
     <>
-      <View style={styles.top}>
+      <View style={[styles.top, { top: 70 + insets.top }]}>
         <View style={styles.circle} />
         <Text style={styles.status}>
-          {order?.status === OrderStatus.ACCEPTED
+          {order?.status === OrderStatus.DRIVER_ON_THE_WAY
             ? 'Votre chauffeur est en chemin...'
             : 'Votre chauffeur est arrivé.'}
         </Text>
@@ -49,7 +51,7 @@ const WaitingDriver: React.FC = () => {
           departureAt={departureAt}
         />
       </CustomBottomSheet>
-      <View style={styles.buttonContainer}>
+      <View style={[styles.buttonContainer, { paddingBottom: insets.bottom }]}>
         <Button
           text="Appeler"
           onPress={() => callNumber(driver!.phoneNumber)}
@@ -66,7 +68,6 @@ export default WaitingDriver;
 const styles = StyleSheet.create({
   top: {
     position: 'absolute',
-    top: 70,
     width: Dimensions.get('screen').width - layout.spacer6,
     backgroundColor: colors.white,
     padding: layout.spacer3,
@@ -119,6 +120,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   buttonContainer: {
+    bottom: 0,
+    position: 'absolute',
+    width: '100%',
     backgroundColor: colors.white,
     paddingHorizontal: layout.spacer4,
   },

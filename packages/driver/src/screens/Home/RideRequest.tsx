@@ -53,7 +53,8 @@ const RideRequest: React.FC = () => {
 
   useEffect(() => {
     if (
-      orderRequest.status === OrderStatus.ACCEPTED &&
+      (orderRequest.status === OrderStatus.ACCEPTED ||
+        orderRequest.status === OrderStatus.DRIVER_ON_THE_WAY) &&
       orderRequest?.driver?.uid !== user?.uid
     ) {
       setOrderIsNotAvailable(true);

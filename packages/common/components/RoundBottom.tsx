@@ -4,6 +4,7 @@ import { border, colors, layout } from '@dagdag/common/theme';
 
 interface IRoundBottomProps {
   customStyle?: StyleProp<ViewStyle>;
+  children: React.ReactNode;
 }
 
 export const RoundBottom: React.FC<IRoundBottomProps> = ({

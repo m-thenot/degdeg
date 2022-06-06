@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
-import { DrawerScreenProps } from '@react-navigation/drawer';
-import { DrawerNavigatorParamList } from '@internalTypes/navigation';
+import { MyRidesStackParamList } from '@internalTypes/navigation';
 import { colors, font, layout } from '@dagdag/common/theme';
 import { BackHeader, Tabs } from '@dagdag/common/components';
 import {
@@ -12,6 +11,7 @@ import { getUserOrders } from '@services/order';
 import { IOrder } from '@dagdag/common/types';
 import useFirebaseAuthentication from '@hooks/useFirebaseAuthentification';
 import OrdersHistory from '@dagdag/common/components/OrdersHistory';
+import { StackScreenProps } from '@react-navigation/stack';
 
 enum TABS {
   HISTORY = 'history',
@@ -30,7 +30,7 @@ const tabs = [
 ];
 
 const MyRides: React.FC<
-  DrawerScreenProps<DrawerNavigatorParamList, 'myRides'>
+  StackScreenProps<MyRidesStackParamList, 'innerMyRides'>
 > = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [orders, setOrders] = useState<IOrder[] | null>(null);
@@ -62,7 +62,7 @@ const MyRides: React.FC<
     };
 
     getOrders();
-  }, []);
+  }, [user?.uid]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,6 +77,9 @@ const MyRides: React.FC<
             isPassengerHistory
             hasStatusDisplayed={activeTab === TABS.HISTORY}
             sortByMostRecent={activeTab === TABS.HISTORY}
+            onPress={uid =>
+              navigation.navigate('rideDetails', { orderId: uid })
+            }
           />
         ) : (
           <View style={styles.noRidesContainer}>

@@ -3,6 +3,7 @@ import { VehicleType, IVehicle, PAYMENT_TYPE } from '@dagdag/common/types';
 enum OrderStatus {
   NEW = 'NEW',
   ACCEPTED = 'ACCEPTED',
+  DRIVER_ON_THE_WAY = 'DRIVER_ON_THE_WAY',
   ON_SPOT = 'ON_SPOT',
   IN_PROGRESS = 'IN_PROGRESS',
   FINISHED = 'FINISHED',

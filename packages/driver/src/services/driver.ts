@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import { CARS_COLLECTION, DRIVERS_COLLECTION } from '@dagdag/common/constants';
-import { IDriver } from '@internalTypes/driver';
+import { IDriver } from '@dagdag/common/types';
 import { Logger } from '@dagdag/common/utils';
 
 interface newDriver {
@@ -21,7 +21,11 @@ export const createDriver = async (newUser: newDriver) => {
   return await firestore()
     .collection(DRIVERS_COLLECTION)
     .doc(newUser.uid)
-    .set({ ...newUser, displayName: newUser.firstName });
+    .set({
+      ...newUser,
+      displayName: newUser.firstName,
+      memberSince: Date.now(),
+    });
 };
 
 export const logout = () => {
